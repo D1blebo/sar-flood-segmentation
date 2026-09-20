@@ -1,0 +1,177 @@
+# Candidate values and plans, fixed BEFORE any tuning or test scoring (see results/evaluation_protocol.md
+# and its Amendments). Everything under "search_space" is a menu of candidates, not a chosen value.
+# Chosen values are written later to results/frozen_config.yaml by the tuning script, never here.
+# Amendment 2 (2026-09-20) added: abstention_guard, m1 fit_subsample, search_plan, grid_extension,
+# compute, two-level bootstrap. Amendment 3 (2026-09-20) added: search_plan.selection and stage2_union,
+# evaluation.heldout_scoring, seed_sensitivity. Original values are unchanged.
+
+seed: 42
+
+paths:
+  data_dir: data/sen1floods11
+  cache_dir: data/cache
+  results_dir: results
+
+# ---------------------------------------------------------------------------------------------
+# Preprocessing (applied identically to EVERY method, including the threshold baselines)
+# Order: keep NaN mask -> clip (dB) -> median filter (NaN-safe) -> method.
+# ---------------------------------------------------------------------------------------------
+preprocess:
+  # Fixed dB ranges [lo, hi] per band. "none" leaves the data untouched.
+  # Chosen from radar physics (water is roughly -30 to -20 dB VV, bright urban/rock above 0 dB),
+  # NOT from scores. Which one is used is chosen on tuning chips only.
+  clip_options:
+    none: null
+    wide:   {vv: [-40.0, 10.0], vh: [-45.0, 0.0]}
+    medium: {vv: [-30.0, 5.0],  vh: [-35.0, -5.0]}
+    narrow: {vv: [-25.0, 0.0],  vh: [-30.0, -8.0]}
+  # Median filter window in pixels (odd). 0 = no speckle filtering.
+  median_window_options: [0, 3, 5, 7]
+
+# ---------------------------------------------------------------------------------------------
+# Methods: candidate values only
+# ---------------------------------------------------------------------------------------------
+search_space:
+  b1_fixed_threshold:
+    band: vv
+    threshold_db: {start: -30, stop: -8, step: 1}   # pixel is water if VV < threshold
+    # Under a clip whose VV floor is lo, VV < t is empty for every t <= lo, so those are skipped.
+    skip_thresholds_at_or_below_clip_floor: true
+  b2_otsu:
+    bands: [vv, vh]                                  # run separately, one Otsu threshold per chip
+  m1_pixel_kmeans:
+    k: [2, 3, 4, 5]
+    features: [vv, vh]                               # raw dB, no rescaling
+    # Fit k-means on a random subsample of valid pixels, then assign all pixels. Adopted (value set
+    # to the candidate size) only if scripts/verify_speed_checks.py passes its pre-declared rule.
+    fit_subsample: null
+    fit_subsample_candidate: 50000
+  m2_slic_kmeans:
+    k: [2, 3, 4, 5]
+    # skimage rescales each chip to [0,1] by its own min/max before SLIC, so compactness acts on that
+    # scale, and the clip changes that scale: clip and compactness are therefore chosen jointly.
+    # Colour range 1 and the seed spacing (~11 px for 2000 segments, ~36 px for 200) are comparable
+    # when compactness is about 1/spacing = 0.03-0.09; the grid brackets that by ~1.5 decades.
+    n_segments: [200, 500, 1000, 2000]
+    compactness: [0.01, 0.05, 0.2, 1.0]
+    # Per-segment features fed to k-means (all in dB, unscaled):
+    #   vv          : mean VV
+    #   vv_vh       : mean VV, mean VH
+    #   vv_vh_std   : mean VV, mean VH, std VV, std VH
+    #   vv_vh_diff  : mean VV, mean VH, mean (VV - VH)
+    features: [vv, vv_vh, vv_vh_std, vv_vh_diff]
+  # Abstention guard: NEW CANDIDATES (variants B2g, M1g, M2g), not a replacement. The plain rule stays
+  # the a-priori method. A predicted water region counts as water only if its mean VV (after clip and
+  # median) is below the ceiling; otherwise the chip gets no predicted flood. Ceilings are from radar
+  # physics (assumed: calm open water is roughly -20 dB VV or darker, land usually brighter than about
+  # -12 dB), NOT from scores: strict, moderate, permissive. B1 has no guarded variant (its threshold
+  # is already an absolute dB value). The ceiling is a hyperparameter of the guarded variants.
+  abstention_guard:
+    ceilings_db: [-18.0, -15.0, -12.0]
+    applies_to: [b2_otsu, m1_pixel_kmeans, m2_slic_kmeans]
+
+kmeans:
+  n_init: 3
+  max_iter: 300
+
+slic:
+  max_num_iter: 10
+  enforce_connectivity: true
+  convert2lab: false        # only meaningful for 3-channel RGB
+
+# Cluster-to-water rule, fixed a priori: the cluster whose PIXELS have the lowest mean VV is water.
+# The VV it sees is the VV after clip and median filter (the array the method clustered).
+cluster_rule: lowest_mean_vv
+
+# ---------------------------------------------------------------------------------------------
+# Search plan (staged, declared before running; see protocol Amendment 2, item 3).
+# One "tuning set" = one leave-one-event-out fold (11) or the official validation split (1).
+# Per-chip confusion counts are cached, so every tuning set just sums a different subset.
+# ---------------------------------------------------------------------------------------------
+search_plan:
+  ranking: mean_per_chip_flood_only_iou      # over tuning chips with >= 1 flood-only truth pixel
+  # Amendment 3 (replaces the earlier 'ranked by its best ceiling'):
+  #  * plain methods (B1, B2-VV, B2-VH, M1, M2) are selected on their UNGUARDED scores only;
+  #  * guarded variants (B2g, M1g, M2g) are separate methods with their own selection at every stage,
+  #    whose candidates are (configuration, ceiling) pairs, so the ceiling is chosen jointly with the
+  #    configuration. Their chosen configuration may differ from the plain method's.
+  selection:
+    plain: unguarded_scores_only
+    guarded: own_selection_with_ceiling_chosen_jointly
+  # Stage 2 works on the UNION over all tuning sets (and over plain and guarded variants) of each
+  # method's stage-1 top-two preprocessing options; each option is computed once for all chips and
+  # cached, and each tuning set still ranks only within its OWN top two.
+  stage2_union: {compute_once_share_cache: true, each_tuning_set_ranks_only_its_own_top_two: true,
+                 report_union_size_and_projected_cost_before_starting: true}
+  stage1:                                    # preprocessing: 4 clips x 4 median windows = 16 options
+    b1: {thresholds: all, preprocessing: all}          # exhaustive, cheap
+    b2: {bands: [vv, vh], preprocessing: all}          # exhaustive, cheap
+    m1: {k: 3, preprocessing: all}
+    m2: {k: 3, n_segments: 500, compactness: 0.05, features: vv_vh, preprocessing: all}
+    keep_best_preprocessing: 2                         # per method, per tuning set
+  stage2:
+    m1: {k: [2, 3, 4, 5], on: best_two_preprocessing}
+    m2: {n_segments: [200, 500, 1000, 2000], compactness: [0.01, 0.05, 0.2, 1.0],
+         k: 3, features: vv_vh, on: best_two_preprocessing}
+    choose_clip_and_compactness_jointly: true  # keep BOTH preprocessing options through stage 2
+  stage3:
+    m2: {k: [2, 3, 4, 5], features: [vv, vv_vh, vv_vh_std, vv_vh_diff],
+         on: best_config_from_stage2, uses: segmentation_cache}
+
+# Grid edges: if the winner of a tuning set sits on the edge of a NUMERIC grid, extend that grid by one
+# step for that tuning set only, using that tuning set's data only, and log it (dated) in
+# results/grid_extension_log.md. Categorical options (clip) are never extended; k is never extended
+# below 2 and the median window never below 0.
+grid_extension:
+  decided_per_tuning_set: true
+  max_extensions_per_parameter: 2
+  log: results/grid_extension_log.md
+  step:
+    b1_threshold_db: {kind: add, value: 1.0}
+    median_window: {kind: add, value: 2}          # 7 -> 9
+    n_segments: {kind: multiply, value: 2.0}      # 2000 -> 4000, 200 -> 100
+    compactness: {kind: multiply, value: 5.0}     # 1.0 -> 5.0, 0.01 -> 0.002
+    k: {kind: add, value: 1}                      # 5 -> 6 only
+    ceiling_db: {kind: add, value: 3.0}           # -12 -> -9, -18 -> -21
+
+# Laptop: Intel i7-8665U, 4 physical cores / 8 threads, 15 GB RAM (measured with nproc/lscpu/free).
+compute:
+  n_jobs: 4               # one worker process per physical core, parallel across chips
+  threads_per_worker: 1   # BLAS/OpenMP threads inside each worker
+
+# ---------------------------------------------------------------------------------------------
+# Evaluation
+# ---------------------------------------------------------------------------------------------
+evaluation:
+  primary_protocol: leave_one_event_out      # all 11 events, Bolivia included
+  secondary_protocol: official_split         # tune on valid only, score test once, Bolivia separately
+  primary_metric: flood_only                 # LabelHand==1 & JRC==0, JRC applied to prediction and truth
+  secondary_metric: all_water
+  selection_criterion: mean_per_chip_iou     # over tuning chips with >=1 flood truth pixel
+  flood_fraction_bins: [0.05, 0.30]          # strata: none, <5%, 5-30%, >30%
+  bootstrap:
+    n_resamples: 1000
+    confidence: 0.95
+    seed: 42
+    over_events: two_level                   # resample events, then chips within each sampled event
+    per_event: chips_within_event            # treats chips as independent: understates uncertainty
+    official_split: chips                    # same caveat
+  report_flood_free_false_positives: [b1, b2, b2g, m1, m1g, m2, m2g]   # every method and variant
+  # Tuning and held-out scoring are separate (Amendment 3, A3.4): tuning logs show tuning-set metrics
+  # only; held-out scoring is its own script, run once, after ALL frozen per-fold configurations exist.
+  heldout_scoring:
+    script: scripts/04_evaluate.py
+    requires_all_frozen_configs: true
+    runs_once: true
+    recompute_counts_from_frozen_config: true   # do not read per-chip counts from the tuning cache
+
+# Amendment 3, A3.3: does M1's lowest-VV (water) cluster depend on the k-means seed? Tuning chips only
+# (official TRAIN chips), no labels used. seeds[0] is the reference (= the config seed).
+seed_sensitivity:
+  method: m1_pixel_kmeans
+  k: [4, 5]
+  seeds: [42, 0, 1, 2, 3]
+  n_chips: 40
+  chips_from: official_train
+  preprocessing: [{clip: none, median: 0}, {clip: medium, median: 3}]
+  changed_if_water_mask_iou_below: 0.95
