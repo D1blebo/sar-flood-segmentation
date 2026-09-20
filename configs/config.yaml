@@ -40,7 +40,10 @@ search_space:
   b2_otsu:
     bands: [vv, vh]                                  # run separately, one Otsu threshold per chip
   m1_pixel_kmeans:
-    k: [2, 3, 4, 5]
+    # Amendment 4 (A4.3): k = 4 and 5 were dropped because the water mask changed with the k-means seed
+    # in 24% (k=4) and 21-28% (k=5) of comparisons even at n_init=10, above the owner's 10% limit.
+    k: [2, 3]
+    n_init_by_k: {2: 3, 3: 10}                       # k=3 unstable at n_init=3 (12.5%), 8.8% at n_init=10
     features: [vv, vh]                               # raw dB, no rescaling
     # Fit k-means on a random subsample of valid pixels, then assign all pixels. Adopted (value set
     # to the candidate size) only if scripts/verify_speed_checks.py passes its pre-declared rule.
@@ -106,17 +109,17 @@ search_plan:
   stage1:                                    # preprocessing: 4 clips x 4 median windows = 16 options
     b1: {thresholds: all, preprocessing: all}          # exhaustive, cheap
     b2: {bands: [vv, vh], preprocessing: all}          # exhaustive, cheap
-    m1: {k: 3, preprocessing: all}
+    m1: {k: 3, n_init: 10, preprocessing: all}
     m2: {k: 3, n_segments: 500, compactness: 0.05, features: vv_vh, preprocessing: all}
     keep_best_preprocessing: 2                         # per method, per tuning set
   stage2:
-    m1: {k: [2, 3, 4, 5], on: best_two_preprocessing}
+    m1: {k: [2], over: best_two_preprocessing}   # k=3 (n_init 10) already done in stage 1
     m2: {n_segments: [200, 500, 1000, 2000], compactness: [0.01, 0.05, 0.2, 1.0],
-         k: 3, features: vv_vh, on: best_two_preprocessing}
+         k: 3, features: vv_vh, over: best_two_preprocessing}
     choose_clip_and_compactness_jointly: true  # keep BOTH preprocessing options through stage 2
   stage3:
     m2: {k: [2, 3, 4, 5], features: [vv, vv_vh, vv_vh_std, vv_vh_diff],
-         on: best_config_from_stage2, uses: segmentation_cache}
+         over: best_config_from_stage2, uses: segmentation_cache}
 
 # Grid edges: if the winner of a tuning set sits on the edge of a NUMERIC grid, extend that grid by one
 # step for that tuning set only, using that tuning set's data only, and log it (dated) in
@@ -131,7 +134,7 @@ grid_extension:
     median_window: {kind: add, value: 2}          # 7 -> 9
     n_segments: {kind: multiply, value: 2.0}      # 2000 -> 4000, 200 -> 100
     compactness: {kind: multiply, value: 5.0}     # 1.0 -> 5.0, 0.01 -> 0.002
-    k: {kind: add, value: 1}                      # 5 -> 6 only
+    k: {kind: add, value: 1, applies_to: [m2]}    # 5 -> 6, M2 only; M1 is never extended (A4.3)
     ceiling_db: {kind: add, value: 3.0}           # -12 -> -9, -18 -> -21
 
 # Laptop: Intel i7-8665U, 4 physical cores / 8 threads, 15 GB RAM (measured with nproc/lscpu/free).

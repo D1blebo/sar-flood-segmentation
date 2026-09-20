@@ -452,10 +452,73 @@ Tuning uses the single config seed (42) for M1. **M1 is not scored over several 
 **final evaluation only**, the frozen M1 (and M1g) configuration is run with the 5 seeds {42, 0, 1, 2, 3} and
 the **spread** across seeds is reported next to the seed-42 score (per held-out event and in the summary).
 
+### A4.3 Follow-up result and the rule's consequences (2026-09-20, `results/seed_followup_output.txt`; measured, tuning chips only, no labels)
+
+Water-mask "changed" rate (IoU < 0.95 with the reference seed), 160 comparisons per row, 95% Wilson interval:
+
+| `n_init` | k | no clip, median 0 | medium clip, median 3 |
+|---|---|---|---|
+| 3 | 3 | 12.5% [8.2, 18.5], 10 of 40 chips | 7.5% [4.3, 12.7], 5 of 40 chips |
+| 10 | 3 | 8.8% [5.3, 14.2], 6 of 40 chips | 7.5% [4.3, 12.7], 4 of 40 chips |
+| 10 | 4 | 23.8% [17.8, 30.9], 15 of 40 chips | 7.5% [4.3, 12.7], 9 of 40 chips |
+| 10 | 5 | 28.1% [21.7, 35.5], 20 of 40 chips | 20.6% [15.1, 27.5], 17 of 40 chips |
+
+(For comparison, the first check at `n_init` 3 gave k=4: 23.1% and 18.8%, k=5: 37.5% and 35.0%.)
+
+**The pre-declared rule applied mechanically:**
+
+- **k = 4: dropped from M1.** The no-clip rate, 23.8%, is 10% or more, and its whole interval is above 10%, so this
+  verdict is robust. (The script also printed "borderline" for k=4; that flag came from the other condition, 7.5%.)
+- **k = 5: dropped from M1.** Both conditions are above 10%.
+- **k = 3: unstable at `n_init` 3** (12.5% in the no-clip condition), so **Stage 1's M1 uses `n_init` 10**; at
+  `n_init` 10 it is below 10% in both conditions, so rule item 3 (the uncovered case) is not triggered.
+- k = 2 keeps `n_init` 3. M1's k grid is now {2, 3}; the same applies to M1g. The config records
+  `n_init_by_k` and the reduced grid; M1's k is never extended by the grid-edge rule.
+
+**Caveats, stated because they matter for how much weight the rule's outcome deserves:**
+
+- The k = 3 decision is **borderline**: the 12.5% interval [8.2, 18.5] straddles 10%, and the `n_init` 10 interval
+  [5.3, 14.2] does too. The two settings cannot be told apart statistically, so `n_init` 10 for k = 3 costs 3x on
+  M1 for a benefit that is **not demonstrated**. It is applied because the rule says so.
+- More restarts help little: k=4 no clip went from 23.1% to 23.8%, and k=5 from 35-38% to 21-28%. The
+  instability at k >= 4 is therefore **not mainly an initialisation problem**; the mask really depends on how the
+  data are partitioned. This was not investigated further.
+- **The owner's guess (tiny outlier clusters, especially with no clip) is not supported:** of 154 changed
+  comparisons at `n_init` 10 and 32 at `n_init` 3, **none** involved a water cluster below 1% of valid pixels.
+  Changed comparisons have water clusters of about 12% to 32% of valid pixels (median), and the two seeds' clusters
+  are about the same size, so the seeds pick similar-sized but different pixel sets. Changed comparisons also
+  involve larger water clusters than unchanged ones (for example k=3: about 31% vs 18%). Only the 1% threshold was
+  tested (fixed in advance); smaller-but-not-tiny clusters (1% to 5%) were not separately examined.
+- **Not checked:** whether M2's k-means (on superpixel features) has the same seed dependence. M2 stage 1 uses
+  k = 3 and stage 3 tries k up to 5, both at `n_init` 3.
+
+**New time estimate (M1 fit measured at `n_init` 10: 1.31 s vs 0.43 s at `n_init` 3, one thread, k = 3, 10 chips,
+so 3.0x; per-chip evaluation overhead of about 0.2 s assumed):**
+
+| | Before (`n_init` 3) | Now |
+|---|---|---|
+| Stage 1, serial | 2.5 h (1.25 s per chip per option) | 4.3 h (2.15 s per chip per option: B 0.1 + M2 0.55 + M1 1.5) |
+| Stage 1 at the measured 2x / hoped 4x | 74 / 37 min | **128 / 64 min** |
+| Stage 2, M1 part | k in {2,3,4,5}: about 13 min serial per option | k = 2 only: about 5 min serial per option |
+| Stage 2, M1 + M2 at 2x, U = 2 / 4 / 8 / 16 | 1.3 / 2.7 / 5.3 / 10.5 h | **1.2 / 2.4 / 4.7 / 9.3 h** |
+| Stage 2, M1 + M2 at 4x, U = 2 / 4 / 8 / 16 | 0.7 / 1.3 / 2.7 / 5.3 h | **0.5 / 1.2 / 2.4 / 4.7 h** |
+
+(M2's part of stage 2 is unchanged; dropping k = 4 and 5 from M1 made M1's stage 2 cheaper, while `n_init` 10 made
+its stage 1 dearer.) The 4x column is still unmeasured.
+
+### A4.4 Config correction: YAML `on:` keys (2026-09-20, before any tuning)
+
+YAML 1.1 reads a bare `on:` as the boolean `True`, so the three `on:` keys in `search_plan` (introduced in
+Amendment 2) parsed as `True` and the plan could not have been read by name. They are renamed `over:` (no meaning
+change), and a test now fails if any config key is a boolean or a number (except the intentional `n_init_by_k`
+map). Found by printing the parsed config after the A4.3 edit; nothing had read those keys yet.
+
 ---
 `configs/config.yaml` sha256 history:
 
 - when this protocol was first written: `3e8b2fb240b85a7903b30f0a2a788d86b17f8ba9216eb5ea9d354e1321364991`
 - after Amendment 2: `136947f34c7f8c0b6fabdf2398b05106e2178dbded353bd4170405b45b33c96d`
 - after Amendment 3: `c026bb49ecae6c61fa91d9b38955c8c6d57a82b6f45718de7fa1b6b64bc15b90`
-- after Amendment 4, decision rule written, follow-up not yet run (current, before any tuning): `eb9edf20abb31c69ff200024502db888384c7e0d12fcd354e94fffc007045bb4`
+- after Amendment 4, decision rule written, follow-up not yet run: `eb9edf20abb31c69ff200024502db888384c7e0d12fcd354e94fffc007045bb4`
+- after A4.3, rule's consequences applied (superseded within minutes by the next line): `4b0762340323783b83884fe74d6c570af4d0e8b508f20239e4e368baf849179d`
+- after the A4.4 YAML-key fix (current, before any tuning): `9148fbc3d098e8e3403d521ee3eef768f15354a82e354ad50d0b94582617744e`

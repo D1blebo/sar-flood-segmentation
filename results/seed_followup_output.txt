@@ -1,0 +1,49 @@
+M1 seed follow-up, 40 official TRAIN chips (same as the first check), seeds=[42, 0, 1, 2, 3] (reference 42); 'changed' = water-mask IoU < 0.95; no labels.
+tiny water cluster (descriptive) = below 1% of valid pixels
+
+[n_init=3, k=[3]: 320 comparisons in 63 s]
+[n_init=10, k=[3, 4, 5]: 960 comparisons in 716 s]
+
+=== A. How often does the water mask change? ===
+n_init preprocessing           k | changed / comparisons  rate   [95% CI]        | chips with any change | IoU median  worst
+     3 clip=medium,median=3    3 |      12 / 160          7.5% [ 4.3%, 12.7%] |        5 of 40       |     0.992  0.067
+     3 clip=none,median=0      3 |      20 / 160         12.5% [ 8.2%, 18.5%] |       10 of 40       |     0.990  0.872
+    10 clip=medium,median=3    3 |      12 / 160          7.5% [ 4.3%, 12.7%] |        4 of 40       |     0.992  0.023
+    10 clip=medium,median=3    4 |      12 / 160          7.5% [ 4.3%, 12.7%] |        9 of 40       |     0.986  0.852
+    10 clip=medium,median=3    5 |      33 / 160         20.6% [15.1%, 27.5%] |       17 of 40       |     0.984  0.000
+    10 clip=none,median=0      3 |      14 / 160          8.8% [ 5.3%, 14.2%] |        6 of 40       |     0.989  0.816
+    10 clip=none,median=0      4 |      38 / 160         23.8% [17.8%, 30.9%] |       15 of 40       |     0.983  0.014
+    10 clip=none,median=0      5 |      45 / 160         28.1% [21.7%, 35.5%] |       20 of 40       |     0.975  0.818
+
+=== B. Size of the chosen water cluster (share of valid pixels), changed vs unchanged ===
+n_init preprocessing           k | changed: n  median ref  median alt  share with a tiny cluster (<1%) | unchanged: median
+     3 clip=medium,median=3    3 |          12    31.427%    31.300%    0 of  12 ( 0.0%) |   17.807%
+     3 clip=none,median=0      3 |          20    30.894%    30.615%    0 of  20 ( 0.0%) |   17.881%
+    10 clip=medium,median=3    3 |          12    32.214%    31.639%    0 of  12 ( 0.0%) |   17.807%
+    10 clip=medium,median=3    4 |          12    18.306%    17.696%    0 of  12 ( 0.0%) |   13.483%
+    10 clip=medium,median=3    5 |          33    12.032%    11.903%    0 of  33 ( 0.0%) |   10.772%
+    10 clip=none,median=0      3 |          14    31.027%    30.523%    0 of  14 ( 0.0%) |   19.077%
+    10 clip=none,median=0      4 |          38    15.095%    14.634%    0 of  38 ( 0.0%) |   12.135%
+    10 clip=none,median=0      5 |          45    12.743%    12.543%    0 of  45 ( 0.0%) |    9.192%
+
+=== C. Test of the guess 'tiny outlier clusters, especially with no clip' (changed comparisons) ===
+  n_init= 3 clip=medium,median=3  :   0 of  12 changed comparisons ( 0.0%) involve a tiny water cluster
+  n_init= 3 clip=none,median=0    :   0 of  20 changed comparisons ( 0.0%) involve a tiny water cluster
+  n_init=10 clip=medium,median=3  :   0 of  57 changed comparisons ( 0.0%) involve a tiny water cluster
+  n_init=10 clip=none,median=0    :   0 of  97 changed comparisons ( 0.0%) involve a tiny water cluster
+
+=== D. Timing, one thread, first 10 chips, no clip / median 0 (seconds per k-means fit) ===
+  k=3 n_init= 3: 0.43 s
+  k=3 n_init=10: 1.31 s
+  k=4 n_init= 3: 0.55 s
+  k=4 n_init=10: 1.76 s
+  k=5 n_init= 3: 0.67 s
+  k=5 n_init=10: 2.24 s
+
+=== E. PRE-DECLARED DECISION RULE (protocol A4.1), applied mechanically ===
+  k=4: n_init=10 rates ['7.5%', '23.8%'] -> DROP this k from M1 (report as a finding)   [BORDERLINE: within 4 points of the limit]
+  k=5: n_init=10 rates ['20.6%', '28.1%'] -> DROP this k from M1 (report as a finding)
+  k=3 at n_init=3: rates ['7.5%', '12.5%'] -> UNSTABLE: Stage 1's M1 uses n_init=10; new time estimate required   [BORDERLINE]
+  k=3 at n_init=10: rates ['7.5%', '8.8%'] -> below the limit
+  M1 fit time at k=3: 0.43 s (n_init=3) -> 1.31 s (n_init=10), x3.0
+exit=0

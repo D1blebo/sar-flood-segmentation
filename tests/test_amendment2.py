@@ -163,3 +163,22 @@ def test_seed_rows_shape_and_identical_seeds_agree_on_separated_data(toy_chip):
     assert rows[0]["reference_water_px"] == 500            # the 20 x 25 dark block, nothing else
     assert rows[0]["seed_water_px"] == 500 and rows[0]["valid_px"] == 4060   # 64*64 minus 36 NaN px
     assert rows[0]["reference_mean_vv"] < -20                # the water cluster is the dark one
+
+
+# ---- config hygiene -------------------------------------------------------------------------
+
+def test_config_has_no_accidental_boolean_or_numeric_keys():
+    """YAML reads a bare `on:` or `no:` as True/False; keys must be strings (n_init_by_k is the one int-keyed map)."""
+    cfg = load_config()
+
+    def walk(node, path=""):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                allowed_int_keys = path.endswith("n_init_by_k")
+                assert isinstance(key, str) or (allowed_int_keys and isinstance(key, int)
+                                                and not isinstance(key, bool)), f"bad key {key!r} at {path}"
+                walk(value, f"{path}.{key}")
+        elif isinstance(node, list):
+            for item in node:
+                walk(item, path)
+    walk(cfg)
