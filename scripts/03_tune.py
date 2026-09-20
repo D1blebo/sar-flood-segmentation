@@ -142,12 +142,13 @@ def rank(dry=None):
     print("\n=== MEASURED STAGE-1 TIMING AND PROJECTED STAGE-2 COST ===")
     print("mean seconds per unit (serial): " + ", ".join(f"{k} {np.mean(v):.2f}" for k, v in seconds.items())
           + f"; total {sum(np.mean(v) for v in seconds.values()):.2f}")
-    print(f"parallel speedup measured on the stage-1 run: {speed if speed else 'not found in the log; 2.0 assumed'}")
+    print(f"worker utilisation in the stage-1 run (sum of per-unit times / wall): {speed if speed else 'not found in the log; 2.0 assumed'}; "
+          f"this shows the 4 workers were kept busy, it is not a comparison with an uncontended serial run")
     print(f"stage 2 needs {cost['m2_options']} distinct M2 options and {cost['m1_options']} distinct M1 options "
           f"(plain and guarded share an option when they coincide)")
-    print(f"projected stage-2 time: {cost['serial_h']:.1f} h serial, "
-          f"{cost['wall_h']:.1f} h at the speedup above (M1 stage 2 is ASSUMED to cost 30% of a stage-1 M1 unit; "
-          f"M2: 15 new (n_segments, compactness) configurations per option)")
+    print(f"projected stage-2 time: sum of measured per-unit times {cost['serial_h']:.1f} h (each measured while 4 workers "
+          f"ran at once), so about {cost['wall_h']:.1f} h of wall time on 4 workers (M1 stage 2 is ASSUMED to cost 30% of a "
+          f"stage-1 M1 unit; M2: 15 new (n_segments, compactness) configurations per option)")
     print("\nSTOP: stage 2 does not start until the project owner approves this union and cost.")
 
     out = {"config_sha256": sha, "tuning_sets": {n: int(m.sum()) for n, m in sets.items()},
