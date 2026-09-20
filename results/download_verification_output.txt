@@ -1,0 +1,24 @@
+Chips listed in the four split files: 446 (unique: 446)
+
+S1Hand: 446 .tif files on disk, 446 pass all 4 criteria
+  (count, dtype, H, W) seen: {(2, 'float32', 512, 512): 446}
+  summed bytes  local: 729,495,935   bucket: 729,495,935   equal: True
+
+LabelHand: 446 .tif files on disk, 446 pass all 4 criteria
+  (count, dtype, H, W) seen: {(1, 'int16', 512, 512): 446}
+  summed bytes  local: 2,553,880   bucket: 2,553,880   equal: True
+
+JRCWaterHand: 446 .tif files on disk, 446 pass all 4 criteria
+  (count, dtype, H, W) seen: {(1, 'uint8', 512, 512): 446}
+  summed bytes  local: 515,103   bucket: 515,103   equal: True
+
+S1OtsuLabelHand: 446 .tif files on disk, 446 pass all 4 criteria
+  (count, dtype, H, W) seen: {(1, 'int16', 512, 512): 446}
+  summed bytes  local: 1,712,242   bucket: 1,712,242   equal: True
+
+Total data bytes  local: 734,277,160   bucket: 734,277,160
+  = 734.3 MB (decimal, 10^6) = 700.3 MiB (binary, 2^20)
+  split CSVs add 24,070 bytes
+  the earlier 'du -sh' figure (705M) is in MiB and counts disk blocks, the earlier bucket-listing figure (734.3) was decimal MB.
+
+All 1,784 files pass all four criteria.

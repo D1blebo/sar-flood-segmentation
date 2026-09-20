@@ -175,3 +175,14 @@ seed_sensitivity:
   chips_from: official_train
   preprocessing: [{clip: none, median: 0}, {clip: medium, median: 3}]
   changed_if_water_mask_iou_below: 0.95
+
+# Amendment 4: follow-up to the seed check, with more k-means restarts. Seeds, chips, preprocessing and the
+# IoU threshold are reused from seed_sensitivity above (two preprocessing settings). The decision rule is in
+# results/evaluation_protocol.md (A4.1) and was written before this ran.
+seed_sensitivity_followup:
+  runs:
+    - {label: "n_init=3", k: [3], n_init: 3}          # k=3 was not measured before; Stage 1 depends on it
+    - {label: "n_init=10", k: [3, 4, 5], n_init: 10}
+  changed_fraction_limit: 0.10                        # project owner's threshold
+  tiny_cluster_fraction: 0.01                         # DESCRIPTIVE only: water cluster < 1% of valid pixels
+  timing_chips: 10

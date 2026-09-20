@@ -383,9 +383,79 @@ project, which is not touched). A repository was initialised in `sar_flood/` and
 `tests/` and this file were committed **before any tuning**; the commit hash is reported in the session
 summary. Later edits to tracked files show up as diffs against that snapshot.
 
+### A3.3 result (2026-09-20, `results/seed_sensitivity_output.txt`; measured, tuning chips only, no labels)
+
+40 official train chips, seeds {42 (reference), 0, 1, 2, 3}, `n_init` 3, 640 comparisons. "Changed" means the
+water mask has IoU < 0.95 with the reference seed's mask.
+
+| Preprocessing | k | Comparisons changed | Chips with any change | Median IoU | Worst IoU |
+|---|---|---|---|---|---|
+| no clip, median 0 | 4 | 37 / 160 (23.1%) | 17 of 40 | 0.985 | 0.002 |
+| no clip, median 0 | 5 | 60 / 160 (37.5%) | 26 of 40 | 0.969 | 0.000 |
+| medium clip, median 3 | 4 | 30 / 160 (18.8%) | 19 of 40 | 0.984 | 0.678 |
+| medium clip, median 3 | 5 | 56 / 160 (35.0%) | 26 of 40 | 0.968 | 0.000 |
+
+Per non-reference seed, the water mask changed on 25.6% to 33.1% of comparisons. Reading: most comparisons
+agree closely (median IoU about 0.97 to 0.99), but a heavy tail of chips gets a very different water mask
+(worst IoU 0.000 to 0.002), and about one in five (k=4) to one in three (k=5) comparisons changes. So with a
+single seed, M1's score at k >= 4 carries seed noise of unknown but non-trivial size, and selecting k or a
+preprocessing option on one seed's scores can partly select noise. **Limitation of the measure:** it
+counts a changed mask, and does not separate "the rule picked a different cluster" from "the same cluster
+with a different boundary". No change to the plan was made from this; the options are put to the project
+owner.
+
+---
+
+## Amendment 4 (2026-09-20, before any tuning and before any test scoring; written BEFORE the follow-up ran)
+
+### A4.1 M1 seed follow-up: design and decision rule
+
+**Why:** the first seed check (A3.3) found M1's water mask changes for 19% to 38% of comparisons at k = 4 and
+5 with `n_init` = 3, and did not measure k = 3, on which Stage 1 depends.
+
+**Design (config `seed_sensitivity_followup`, fixed before running).** Same 40 official TRAIN chips, same 5
+seeds (42 as reference, 0, 1, 2, 3), same "changed" definition (water-mask IoU with the reference seed below
+0.95), no labels. Runs: **k = 3 at `n_init` 3** (new: needed to judge whether k = 3 is stable at the current
+setting) and **k = 3, 4, 5 at `n_init` 10**. **Correction to how the request was worded:** the first check used
+**two** preprocessing settings (no clip with median 0; medium clip with median 3), not four; the four rows of
+its table were 2 settings x 2 values of k. The follow-up uses those same two settings, and "all conditions"
+below means both of them at the k in question. If more settings are wanted they can be added.
+For every comparison where the mask changed, the size of the chosen water cluster is reported as a share of
+valid pixels (both the reference and the other seed's cluster), plus the mean VV of the cluster, to test the
+project owner's guess that the changes come from **tiny outlier clusters, especially with no clip**. "Tiny" is
+below 1% of valid pixels; that number is **[my choice]**, is descriptive only, and plays no part in the rule.
+
+**Decision rule (the project owner's; 10% is the owner's threshold):**
+
+1. **k = 4 and k = 5:** if, at `n_init` 10, the changed fraction is **below 10% in every condition** at that
+   k, M1 uses `n_init` 10 at that k. If it is still **10% or more** in any condition, **that k is dropped from
+   M1 (and M1g)** and the instability is reported as a finding.
+2. **k = 3:** if it is unstable at `n_init` 3 (changed fraction 10% or more in any condition), **Stage 1's M1
+   uses `n_init` 10**, and the new time estimate is given before Stage 1 starts. Otherwise k = 3 keeps
+   `n_init` 3.
+3. **Case the rule does not cover (my contingency, stated in advance):** if k = 3 is unstable at `n_init` 3
+   and is still 10% or more at `n_init` 10, I do **not** drop k = 3 (Stage 1 depends on it); I stop and ask.
+4. k = 2 is not part of this check and keeps `n_init` 3. The `n_init` chosen per k is written to the config
+   afterwards and applies to M1 and M1g alike.
+5. **Borderline flag [my addition, does not change the rule]:** a rate within 4 percentage points of 10% is
+   labelled borderline in the report, and the rule is still applied as written.
+
+**On the 10% threshold (I was asked to say now if another is better):** I would keep it. One caveat: with 160
+comparisons per (setting, k) the binomial standard error near 10% is about 2.4 percentage points, so 9% versus
+11% cannot be told apart; and the 4 non-reference seeds on a chip share one reference, so the 40 chips are the
+effective independent units. I therefore report 95% Wilson intervals and the number of chips with any change
+next to each rate, but the decision uses the plain rate against 10% as instructed.
+
+### A4.2 No multi-seed scoring during tuning
+
+Tuning uses the single config seed (42) for M1. **M1 is not scored over several seeds during tuning.** For the
+**final evaluation only**, the frozen M1 (and M1g) configuration is run with the 5 seeds {42, 0, 1, 2, 3} and
+the **spread** across seeds is reported next to the seed-42 score (per held-out event and in the summary).
+
 ---
 `configs/config.yaml` sha256 history:
 
 - when this protocol was first written: `3e8b2fb240b85a7903b30f0a2a788d86b17f8ba9216eb5ea9d354e1321364991`
 - after Amendment 2: `136947f34c7f8c0b6fabdf2398b05106e2178dbded353bd4170405b45b33c96d`
-- after Amendment 3 (current, before any tuning): `c026bb49ecae6c61fa91d9b38955c8c6d57a82b6f45718de7fa1b6b64bc15b90`
+- after Amendment 3: `c026bb49ecae6c61fa91d9b38955c8c6d57a82b6f45718de7fa1b6b64bc15b90`
+- after Amendment 4, decision rule written, follow-up not yet run (current, before any tuning): `eb9edf20abb31c69ff200024502db888384c7e0d12fcd354e94fffc007045bb4`

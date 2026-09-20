@@ -1,0 +1,75 @@
+
+=== Split / file-count verification ===
+train: 252 chips listed in split file
+valid: 89 chips listed in split file
+test: 90 chips listed in split file
+bolivia: 15 chips listed in split file
+Total chips across all splits: 446 (dataset README states 446)
+No missing or empty files. All chips present for all 4 layers.
+
+=== Grid alignment check: LabelHand vs JRCWaterHand ===
+Checked 446 chips.
+All checked chips: LabelHand and JRCWaterHand share the same CRS, transform, and dimensions.
+
+=== Band / label statistics (measured across available chips) ===
+Chips checked: 446
+S1 VV range: [-89.79, 36.83] dB
+S1 VH range: [-103.88, 17.38] dB
+S1 NaN count: VV=2511705, VH=2511705
+LabelHand value counts (pooled): {-1: 15932910, 0: 90277709, 1: 10705605} (nodata frac=0.1363, water frac=0.0916)
+
+All-water pixels (LabelHand==1): 10705605
+Flood-only pixels (LabelHand==1 & JRCWaterHand==0): 7643377
+Pixels removed by JRC permanent-water mask (LabelHand==1 & JRCWaterHand==1): 3062228
+  -> JRC mask removes 28.60% of all-water-labeled pixels
+
+=== NaN pixels in S1 imagery (pooled over all splits) ===
+Chips with any NaN: 46 of 446 (per split: {'train': 23, 'valid': 9, 'test': 6, 'bolivia': 8})
+VV and VH NaN masks identical on every chip: True
+NaN pixels total: 2511705
+  under LabelHand -1: 2350195, under 0: 100698, under 1 (water): 60812
+Fully-NaN chips: [('Paraguay_34417', 'test')]
+Per-chip VV percentiles over 445 chips with any valid pixel (min..max across chips): 0.01th -60.2..-16.1, median -25.1..-5.7, 99.99th -5.1..26.2 dB
+
+=== Masking rules: NaN by event, water removed, chip exclusions ===
+NaN by event (chips with any NaN / chips, NaN pixels):
+  Bolivia      8 /  15     406,204 px
+  Ghana        6 /  53     562,927 px
+  India        7 /  68     390,801 px
+  Mekong       3 /  30       1,473 px
+  Nigeria      3 /  18     158,986 px
+  Pakistan     1 /  28         733 px
+  Paraguay     6 /  67     417,748 px
+  Somalia      2 /  26       1,691 px
+  Spain        0 /  30           0 px
+  Sri-Lanka    1 /  42     138,913 px
+  USA          9 /  69     432,229 px
+All-water pixels (label==1): 10,705,605; kept after NaN + label masking: 10,644,793; removed by NaN masking: 60,812
+Flood-only truth pixels (label==1 & JRC==0): 7,643,377; kept after masking: 7,584,036; removed by NaN masking: 59,341
+Chips with ZERO valid pixels (excluded from that metric): {'all_water': [('Ghana_26376', 'train'), ('Ghana_5079', 'valid'), ('Ghana_234935', 'valid'), ('Ghana_277', 'valid'), ('Ghana_83483', 'test'), ('Paraguay_34417', 'test')], 'flood_only': [('Ghana_26376', 'train'), ('Ghana_5079', 'valid'), ('Ghana_234935', 'valid'), ('Ghana_277', 'valid'), ('Ghana_83483', 'test'), ('Paraguay_34417', 'test')]}
+Flood-fraction strata (flood-only truth / valid pixels), chips per official split:
+  train    {'no flood': 32, '<5%': 136, '5-30%': 70, '>30%': 13}
+  valid    {'no flood': 9, '<5%': 49, '5-30%': 19, '>30%': 9}
+  test     {'no flood': 6, '<5%': 55, '5-30%': 18, '>30%': 9}
+  bolivia  {'no flood': 0, '<5%': 8, '5-30%': 3, '>30%': 4}
+
+=== Pixels changed by each clip range (official train + valid chips) ===
+Chips: 341; valid (non-NaN) pixels: 87,846,399
+  none   : no clipping (0 pixels changed)
+  wide    vv: [ -40.0,  10.0] dB -> below      3,837 ( 0.004%), above      7,883 ( 0.009%)
+  wide    vh: [ -45.0,   0.0] dB -> below    147,252 ( 0.168%), above      6,521 ( 0.007%)
+  medium  vv: [ -30.0,   5.0] dB -> below     75,021 ( 0.085%), above     41,453 ( 0.047%)
+  medium  vh: [ -35.0,  -5.0] dB -> below    761,506 ( 0.867%), above     73,946 ( 0.084%)
+  narrow  vv: [ -25.0,   0.0] dB -> below    629,229 ( 0.716%), above    314,228 ( 0.358%)
+  narrow  vh: [ -30.0,  -8.0] dB -> below  2,176,044 ( 2.477%), above    347,897 ( 0.396%)
+
+=== Saving 6 example chips to /home/dara/sar_flood/results/figures ===
+  saved results/figures/example_Ghana_103272.png
+  saved results/figures/example_India_285297.png
+  saved results/figures/example_Mekong_221789.png
+  saved results/figures/example_Nigeria_529525.png
+  saved results/figures/example_Pakistan_909806.png
+  saved results/figures/example_Paraguay_721886.png
+
+Done.
+exit=0

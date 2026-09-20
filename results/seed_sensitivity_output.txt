@@ -1,0 +1,17 @@
+M1 seed sensitivity, 40 official TRAIN chips, k=[4, 5], seeds=[42, 0, 1, 2, 3] (reference seed 42), n_init=3
+'changed' = water-mask IoU with the reference seed < 0.95. No labels used.
+
+(640 comparisons in 166 s)
+
+preprocessing           k | comparisons  changed  rate | chips with any change | IoU median  worst
+clip=medium,median=3    4 |         160       30 18.8% |       19 of 40        |     0.984  0.678
+clip=medium,median=3    5 |         160       56 35.0% |       26 of 40        |     0.968  0.000
+clip=none,median=0      4 |         160       37 23.1% |       17 of 40        |     0.985  0.002
+clip=none,median=0      5 |         160       60 37.5% |       26 of 40        |     0.969  0.000
+
+per seed (all k and preprocessing pooled):
+  seed 0: changed on 33.1% of 160 comparisons
+  seed 1: changed on 28.7% of 160 comparisons
+  seed 2: changed on 26.9% of 160 comparisons
+  seed 3: changed on 25.6% of 160 comparisons
+exit=0

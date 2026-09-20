@@ -161,3 +161,5 @@ def test_seed_rows_shape_and_identical_seeds_agree_on_separated_data(toy_chip):
     assert len(rows) == 2                                    # one row per non-reference seed
     assert all(r["iou"] == 1.0 for r in rows)                # two clean blobs: every seed agrees
     assert rows[0]["reference_water_px"] == 500            # the 20 x 25 dark block, nothing else
+    assert rows[0]["seed_water_px"] == 500 and rows[0]["valid_px"] == 4060   # 64*64 minus 36 NaN px
+    assert rows[0]["reference_mean_vv"] < -20                # the water cluster is the dark one

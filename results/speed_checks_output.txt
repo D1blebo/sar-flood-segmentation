@@ -1,0 +1,23 @@
+(a) M1 subsample fit: 50,000 pixels vs full fit, 20 official TRAIN chips
+chips: ['India_287642', 'Pakistan_1036366', 'Sri-Lanka_178753', 'Paraguay_179624', 'Paraguay_149787', 'USA_994009', 'Ghana_147015', 'Spain_2472849', 'Sri-Lanka_523539', 'USA_181263', 'Ghana_128663', 'India_56450', 'Ghana_194723', 'Somalia_886726', 'USA_1010394', 'Sri-Lanka_653336', 'Somalia_989553', 'Ghana_45911', 'Pakistan_35915', 'Pakistan_401863']
+
+preprocessing           k | partition agreement: mean   worst | water-mask IoU: mean   worst
+clip=none,median=0      2 |                      0.9955  0.9868 |                   0.9868  0.9282
+clip=none,median=0      3 |                      0.9810  0.9092 |                   0.9637  0.8057
+clip=none,median=0      4 |                      0.9631  0.6525 |                   0.8894  0.0264
+clip=none,median=0      5 |                      0.9036  0.4988 |                   0.8232  0.0125
+clip=medium,median=3    2 |                      0.9958  0.9885 |                   0.9892  0.9674
+clip=medium,median=3    3 |                      0.9782  0.8864 |                   0.9574  0.8058
+clip=medium,median=3    4 |                      0.9605  0.8730 |                   0.9073  0.0635
+clip=medium,median=3    5 |                      0.9241  0.5805 |                   0.9007  0.2071
+
+OVERALL (160 comparisons): partition agreement mean 0.9627, worst 0.4988; water-mask IoU mean 0.9272, worst 0.0125
+fit time, one thread: full 95.1 s, subsample 60.1 s (x1.6 faster)
+DECISION by the pre-declared rule: DO NOT ADOPT (M1 keeps the full fit)
+
+(b) Parallel across chips (same 20 chips, M1 k=3 full fit, timing only)
+  n_jobs=1:   12.1 s
+  n_jobs=4:    6.0 s
+  n_jobs=8:    7.5 s
+  results identical across n_jobs: True
+exit=0
