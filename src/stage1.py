@@ -30,10 +30,16 @@ UNIT_VERSION = 1
 COUNT_KEYS = ("tp", "fp", "fn", "tn", "domain")
 
 
-def preprocessing_options(cfg):
-    """The 16 (clip, median) options in config order, as dicts with their canonical name."""
-    return [{"name": prep_name(clip, med), "clip": clip, "median": med}
-            for clip in cfg["preprocess"]["clip_options"] for med in cfg["preprocess"]["median_window_options"]]
+def preprocessing_options(cfg, extra_medians=()):
+    """
+    The 16 (clip, median) options in config order, as dicts with their canonical name, followed by the
+    grid-edge extension options (protocol A7.4): every clip at each median window in `extra_medians`.
+    """
+    clips = cfg["preprocess"]["clip_options"]
+    base = [{"name": prep_name(clip, med), "clip": clip, "median": med}
+            for clip in clips for med in cfg["preprocess"]["median_window_options"]]
+    extra = [{"name": prep_name(clip, med), "clip": clip, "median": med} for med in extra_medians for clip in clips]
+    return base + extra
 
 
 def stage1_params(cfg):

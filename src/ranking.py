@@ -18,6 +18,7 @@ from src.stage1 import ceiling_key, unit_path
 
 FLOOD, ALL = MODES.index("flood_only"), MODES.index("all_water")
 PLAIN_FAMILIES = ("b2_vv", "b2_vh", "m1", "m2")
+PRIMARY, SENSITIVITY = "pooled_all", "mean_flood"   # amended criterion (A7.2) and the declared one (A7.3)
 VARIANTS = ("b1", "b2_vv", "b2_vh", "b2g_vv", "b2g_vh", "m1", "m1g", "m2", "m2g")
 
 
@@ -74,13 +75,23 @@ def criterion(counts, mask, mode=FLOOD):
     return mean, pooled, int(has.sum())
 
 
-def _key(score):
-    """Sort key, larger is better; NaN sorts last."""
+def _key(score, crit=SENSITIVITY):
+    """
+    Sort key, larger is better; NaN sorts last.
+    PRIMARY   : pooled flood-only IoU over all tuning chips (ties then fall to config order).
+    SENSITIVITY: mean per-chip IoU over chips with flood, then pooled IoU (the declared criterion).
+    """
     mean, pooled = score[0], score[1]
-    return (-np.inf if np.isnan(mean) else mean, -np.inf if np.isnan(pooled) else pooled)
+    m = -np.inf if np.isnan(mean) else mean
+    q = -np.inf if np.isnan(pooled) else pooled
+    if crit == PRIMARY:
+        return (q,)
+    if crit == SENSITIVITY:
+        return (m, q)
+    raise ValueError(f"unknown criterion {crit!r}")
 
 
-def rank_options(counts, family, mask, guarded, prep_order, ceilings=()):
+def rank_options(counts, family, mask, guarded, prep_order, ceilings=(), crit=SENSITIVITY):
     """
     Rank the preprocessing options for one variant on one tuning set (best first).
     * B1 ('b1'): each option's best threshold.
@@ -99,14 +110,63 @@ def rank_options(counts, family, mask, guarded, prep_order, ceilings=()):
         best = None
         for cfg, ce in cands:
             score = criterion(counts[(family, prep, cfg, ce)], mask)
-            if best is None or _key(score) > _key(best[0]):
+            if best is None or _key(score, crit) > _key(best[0], crit):
                 best = (score, cfg, ce)
         ranked.append({"prep": prep, "mean": best[0][0], "pooled": best[0][1], "n_flood_chips": best[0][2],
                        "cfg": best[1], "ceiling": best[2], "_order": order})
-    ranked.sort(key=lambda r: (tuple(-x for x in _key((r["mean"], r["pooled"]))), r["_order"]))
+    ranked.sort(key=lambda r: (tuple(-x for x in _key((r["mean"], r["pooled"]), crit)), r["_order"]))
     for r in ranked:
         r.pop("_order")
     return ranked
+
+
+_MEDIAN = re.compile(r"median=(\d+)")
+
+
+def median_of(prep):
+    """The median window of a preprocessing option name such as 'clip=none,median=7'."""
+    return int(_MEDIAN.search(prep).group(1))
+
+
+def extra_prep_names(clips, medians):
+    """Names of the extension options: every clip at each extra median window."""
+    return [f"clip={c},median={m}" for m in medians for c in clips]
+
+
+def available_extra_medians(unit_dir, chips, clips, candidates=(9, 11)):
+    """The extra median windows whose units exist for ALL chips and all clips (consecutive from the first)."""
+    have = []
+    for m in candidates:
+        if all(unit_path(unit_dir, chip, name).exists() for chip in chips for name in extra_prep_names(clips, [m])):
+            have.append(m)
+        else:
+            break
+    return have
+
+
+def rank_with_extensions(counts, family, mask, guarded, base_preps, clips, ceilings, crit,
+                         available, base_max_median=7, step=2, max_extensions=2):
+    """
+    Rank one (variant, tuning set) and apply the median-window grid-edge rule (A2.5, A7.4): if the winner's median
+    window is the current upper edge, add the next median (edge + step) for all clips and rank again, at most
+    `max_extensions` times. Only medians in `available` (units computed) can be added; if the rule triggers for a median
+    that is not available, `pending` reports the median that is needed.
+    Returns (ranked, info) with info = {'extensions': [medians added], 'pending': median needed or None}.
+    """
+    added, pending = [], None
+    while True:
+        preps = list(base_preps) + extra_prep_names(clips, added)
+        ranked = rank_options(counts, family, mask, guarded, preps, ceilings, crit)
+        edge = base_max_median + step * len(added)
+        if median_of(ranked[0]["prep"]) != edge or len(added) >= max_extensions:
+            break
+        nxt = edge + step
+        if nxt in available:
+            added.append(nxt)
+        else:
+            pending = nxt
+            break
+    return ranked, {"extensions": added, "pending": pending}
 
 
 def tuning_sets(events, splits):
@@ -125,7 +185,8 @@ def stage2_union(rankings, prep_order, top=2, cap=6):
     top options are outside the union falls back to its own best-ranked options that are inside it.
     """
     chosen = Counter(p for r in rankings.values() for p in r[:top])
-    mean_rank = {p: float(np.mean([r.index(p) + 1 for r in rankings.values()])) for p in prep_order}
+    mean_rank = {p: float(np.mean([r.index(p) + 1 if p in r else len(r) + 1 for r in rankings.values()]))
+                 for p in prep_order}
     order = sorted(chosen, key=lambda p: (-chosen[p], mean_rank[p], prep_order.index(p)))
     union = order[:cap]
     assigned = {s: [p for p in r if p in union][:top] for s, r in rankings.items()}

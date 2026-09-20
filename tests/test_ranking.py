@@ -121,3 +121,97 @@ def test_load_units_round_trip_and_consistency(fake_dataset):
     bad[key] = counts[key].copy(); bad[key][0, FLOOD, 2] += 1                         # a candidate disagreeing on truth
     with pytest.raises(AssertionError):
         check_consistency(bad)
+
+
+# ---- Amendment 7: pooled criterion, tie-breaks, median-window extensions ---------------------
+
+from src.ranking import (PRIMARY, SENSITIVITY, available_extra_medians, extra_prep_names, median_of,
+                         rank_with_extensions)
+from src.stage1 import preprocessing_options as _prep_options
+
+
+def _mk(rows):
+    return counts_array([(tp, fp, fn, 100 - tp - fp - fn, 100) for tp, fp, fn in rows])
+
+
+def test_pooled_criterion_lets_flood_free_chips_count_and_the_declared_criterion_does_not():
+    # chip A has flood, chip B is flood-free. Ceiling X keeps A intact but B keeps 50 false-alarm pixels;
+    # ceiling Y loses a little on A but abstains on B.
+    counts = {("m1", "p", "nominal", "X"): _mk([(8, 1, 1), (0, 50, 0)]),
+              ("m1", "p", "nominal", "Y"): _mk([(7, 1, 2), (0, 0, 0)])}
+    mask = np.array([True, True])
+    declared = rank_options(counts, "m1", mask, True, ["p"], ["X", "Y"], SENSITIVITY)[0]
+    amended = rank_options(counts, "m1", mask, True, ["p"], ["X", "Y"], PRIMARY)[0]
+    assert declared["ceiling"] == "X" and declared["mean"] == pytest.approx(0.8)      # B is invisible: X looks better
+    assert amended["ceiling"] == "Y" and amended["pooled"] == pytest.approx(7 / 10)   # B's false alarms now count
+    assert criterion(counts[("m1", "p", "nominal", "X")], mask)[1] == pytest.approx(8 / (8 + 51 + 1))
+
+
+def test_primary_ties_fall_to_config_order_and_do_not_use_the_mean():
+    same = _mk([(5, 5, 0), (0, 0, 0)])
+    counts = {("m1", "a", "nominal", "plain"): same, ("m1", "b", "nominal", "plain"): same.copy()}
+    ranked = rank_options(counts, "m1", np.array([True, True]), False, ["a", "b"], crit=PRIMARY)
+    assert [r["prep"] for r in ranked] == ["a", "b"]
+    ranked = rank_options(counts, "m1", np.array([True, True]), False, ["b", "a"], crit=PRIMARY)
+    assert [r["prep"] for r in ranked] == ["b", "a"]                                  # order in the config decides
+
+
+def test_names_and_extra_options():
+    assert median_of("clip=medium,median=11") == 11 and median_of("clip=none,median=0") == 0
+    assert extra_prep_names(["none", "wide"], [9, 11]) == ["clip=none,median=9", "clip=wide,median=9",
+                                                            "clip=none,median=11", "clip=wide,median=11"]
+    opts = _prep_options(load_config(), extra_medians=[9])
+    assert len(opts) == 20 and opts[15]["name"] == "clip=narrow,median=7"                # the base 16 keep their order
+    assert [o["name"] for o in opts[16:]] == ["clip=none,median=9", "clip=wide,median=9",
+                                              "clip=medium,median=9", "clip=narrow,median=9"]
+    assert len(_prep_options(load_config())) == 16
+
+
+def _by_median(scores):
+    """One chip; option 'clip=none,median=M' gets pooled IoU scores[M]/100."""
+    return {("m1", f"clip=none,median={m}", "nominal", "plain"): _mk([(v, 100 - v - 0, 0)]) for m, v in scores.items()}
+
+
+BASE = [f"clip=none,median={m}" for m in (0, 3, 5, 7)]
+
+
+def _rank(scores, available):
+    return rank_with_extensions(_by_median(scores), "m1", np.array([True]), False, BASE, ["none"], [], PRIMARY,
+                                available)
+
+
+def test_extension_rule_stops_at_each_declared_condition():
+    up = {0: 10, 3: 20, 5: 30, 7: 40, 9: 50, 11: 60}
+    ranked, info = _rank(up, available=[])                       # edge winner, no units for median 9: reported as pending
+    assert info == {"extensions": [], "pending": 9} and median_of(ranked[0]["prep"]) == 7 and len(ranked) == 4
+    ranked, info = _rank(up, available=[9])                      # 9 added; it wins at the new edge; 11 is pending
+    assert info == {"extensions": [9], "pending": 11} and median_of(ranked[0]["prep"]) == 9
+    ranked, info = _rank(up, available=[9, 11])                  # two extensions are the cap
+    assert info == {"extensions": [9, 11], "pending": None} and median_of(ranked[0]["prep"]) == 11
+    ranked, info = _rank({**up, 5: 90}, available=[9, 11])       # interior winner: the rule does not trigger
+    assert info == {"extensions": [], "pending": None} and median_of(ranked[0]["prep"]) == 5
+    ranked, info = _rank({**up, 9: 35, 11: 30}, available=[9, 11])   # 9 is added but 7 still wins: stop, nothing pending
+    assert info == {"extensions": [9], "pending": None} and median_of(ranked[0]["prep"]) == 7
+
+
+def test_available_extra_medians_needs_every_chip_and_is_consecutive(tmp_path):
+    def touch(chip, prep):
+        f = unit_path(tmp_path, chip, prep)
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("{}")
+    for chip in ("A", "B"):
+        for name in extra_prep_names(["none"], [9]):
+            touch(chip, name)
+    assert available_extra_medians(tmp_path, ["A", "B"], ["none"]) == [9]
+    touch("A", "clip=none,median=11")                            # 11 exists for one chip only
+    assert available_extra_medians(tmp_path, ["A", "B"], ["none"]) == [9]
+    touch("B", "clip=none,median=11")
+    assert available_extra_medians(tmp_path, ["A", "B"], ["none"]) == [9, 11]
+
+
+def test_union_counts_an_absent_option_as_rank_length_plus_one():
+    order = ["a", "b", "c"]
+    rankings = {"s1": ["a", "b", "c"], "s2": ["a", "b"]}          # s2 has no option c
+    out = stage2_union(rankings, order, top=1, cap=3)
+    assert out["mean_rank"]["c"] == pytest.approx((3 + 3) / 2)    # rank 3 in s1; absent from s2, length 2 + 1 = 3
+    assert out["mean_rank"]["a"] == 1.0
