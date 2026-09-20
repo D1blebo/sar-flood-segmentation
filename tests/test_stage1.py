@@ -2,33 +2,8 @@
 
 import json
 
-import numpy as np
-import pytest
-import rasterio
-from rasterio.transform import from_origin
-
 from src.config import load_config
-from src.stage1 import (compute_stage1_counts, preprocessing_options, stage1_params, stage1_unit,
-                        unit_path)
-
-
-@pytest.fixture
-def fake_dataset(tmp_path, toy_chip):
-    """Write the toy chip to disk in the real Sen1Floods11 layout, and return frozen stage-1 params."""
-    ddir = tmp_path / "data"
-    profile = dict(driver="GTiff", height=64, width=64, crs="EPSG:4326", transform=from_origin(0, 1, 0.01, 0.01))
-    for layer, arr, dtype in (("LabelHand", toy_chip["label"], "int16"), ("JRCWaterHand", toy_chip["jrc"], "uint8")):
-        (ddir / layer).mkdir(parents=True)
-        with rasterio.open(ddir / layer / f"Toy_1_{layer}.tif", "w", count=1, dtype=dtype, **profile) as dst:
-            dst.write(arr.astype(dtype), 1)
-    (ddir / "S1Hand").mkdir(parents=True)
-    with rasterio.open(ddir / "S1Hand" / "Toy_1_S1Hand.tif", "w", count=2, dtype="float32", **profile) as dst:
-        dst.write(toy_chip["vv"], 1)
-        dst.write(toy_chip["vh"], 2)
-    cfg = load_config()
-    params = stage1_params(cfg)
-    params.update(data_dir=str(ddir), unit_dir=str(tmp_path / "units"), slic_cache_dir=str(tmp_path / "slic"))
-    return params, preprocessing_options(cfg)
+from src.stage1 import compute_stage1_counts, preprocessing_options, stage1_unit, unit_path
 
 
 def prep_by_name(preps, name):
