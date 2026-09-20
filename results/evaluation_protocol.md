@@ -592,6 +592,103 @@ below). Applied **per method variant** (M1, M1g, M2, M2g); B1 and B2 finish in s
 `tests/test_config_keys.py` statically checks that every config key the code reads exists in the config (it follows aliases
 such as `sc = cfg["seed_sensitivity"]`, is self-tested, and was shown to fail when a key is renamed). `.claude/` is git-ignored.
 
+### A5.5 Results of the A5.1 and A5.2 checks (2026-09-20; `results/seed_m1_full_output.txt`, `results/seed_m2_output.txt`; measured, label-free, tuning chips only)
+
+**M1, all cells (changed / 160 comparisons, chips with any change / 40, worst IoU).** C1 no clip / median 0, C2 no clip /
+median 3, C3 medium clip / median 0, C4 medium clip / median 3. C1 and C4 are the two original conditions.
+
+| k | `n_init` | C1 | C2 | C3 | C4 |
+|---|---|---|---|---|---|
+| 2 | 3 | 0/160, 0/40, 0.954 | 1/160, 1/40, 0.939 | 0/160, 0/40, 0.963 | 1/160, 1/40, 0.943 |
+| 2 | 10 | 0/160, 0/40, 0.957 | 0/160, 0/40, 0.974 | 0/160, 0/40, 0.958 | 0/160, 0/40, 0.968 |
+| 3 | 3 | 20/160, 10/40, 0.872 | 17/160, 9/40, 0.067 | 29/160, 13/40, 0.522 | 12/160, 5/40, 0.067 |
+| 3 | 10 | 14/160, 6/40, 0.816 | 14/160, 5/40, 0.023 | 15/160, 5/40, 0.768 | 12/160, 4/40, 0.023 |
+| 4 | 3 | 37/160, 17/40, 0.002 | 36/160, 19/40, 0.582 | 52/160, 23/40, 0.001 | 30/160, 19/40, 0.678 |
+| 4 | 10 | 38/160, 15/40, 0.014 | 15/160, 12/40, 0.889 | 28/160, 13/40, 0.000 | 12/160, 9/40, 0.852 |
+| 5 | 3 | 60/160, 26/40, 0.000 | 61/160, 26/40, 0.002 | 62/160, 25/40, 0.008 | 56/160, 26/40, 0.000 |
+| 5 | 10 | 45/160, 20/40, 0.818 | 34/160, 18/40, 0.104 | 36/160, 18/40, 0.007 | 33/160, 17/40, 0.000 |
+
+Mean VV (dB) of the chosen water cluster in the changed comparisons (reference seed / other seed): k=2 n/a (3 changed comparisons
+in total); k=3 about -12.1 to -12.9 (n_init 3) and -9.9 to -12.3 (n_init 10); k=4 about -12.8 to -15.9; k=5 about -13.8 to
+-15.1. Pooled over everything, the reference water cluster has mean VV -15.8 dB in unchanged comparisons and -14.0 dB in
+changed ones, so **the unstable comparisons are ones whose "water" cluster is not very dark**. Only 2 of 770 changed comparisons
+involve a cluster below 1% of valid pixels. Table 3 of the output reproduces 183/640, 154/960 and 32/320 exactly, a determinism check.
+
+**M1 outcomes by the A5.1 reading (pooled over the four conditions):** k = 2: 0.3% at `n_init` 3 vs 0.0% at 10, 0.3 points apart, within 2, so
+**`n_init` 3**. k = 3: 12.2% (78/640) at `n_init` 3 vs 8.6% (55/640) at 10, 3.6 points apart, so **`n_init` 10** (this is the value already in the config;
+`n_init_by_k` is unchanged). Caveat: at `n_init` 10, k = 3 is 8.6% pooled and 9.4% in its worst single condition (C3), i.e. below but
+close to the 10% limit. k = 4 and 5 stay dropped (pooled at `n_init` 10: 14.5% and 23.1%).
+
+**M2 (nominal SLIC 500 / 0.05; 20,480 comparisons).** Pooled changed fraction over all cells: **23.9% at `n_init` 3, 8.8% at `n_init` 10**, so
+`n_init` 10 is in force (it helps M2 far more than M1; `search_space.m2_slic_kmeans.n_init: 10` is now in the config). Pooled at `n_init` 10 per
+(feature set, k), four conditions: `vv` 3.1 / 5.5 / 12.2 / 10.6% for k = 2 / 3 / 4 / 5; `vv_vh` 4.8 / 10.5 / 8.0 / 12.5%; `vv_vh_std` 3.3 / 5.3 / 9.1 / 15.9%;
+`vv_vh_diff` 2.7 / 10.2 / 12.2 / 15.3%.
+
+**The A5.2 rule applied mechanically** (below 10% in every one of the four conditions): KEEP (`vv`, 2), (`vv_vh`, 2), (`vv_vh`, 4), (`vv_vh_diff`, 2),
+(`vv_vh_std`, 2), (`vv_vh_std`, 3); DROP the other 10 combinations, **including the nominal Stage-1 combination (`vv_vh`, k = 3)**
+(17.5% / 6.9% / 4.4% / 13.1% in C1 to C4). That is contingency (a) of A5.2, which the rule does not cover, so **nothing was dropped
+and nothing was changed except `n_init`; the decision is put to the project owner.**
+
+**Two facts that bear on that decision (both measured or computed from the saved rows):**
+- **The rule is a noisy filter near its threshold.** With 160 comparisons per cell, a combination whose true changed rate is 5% is kept
+  97% of the time, 7% is kept 67%, 8% is kept 39%, and 9% is kept 16% (binomial, cells treated as independent, which flatters it because
+  the 40 chips are the real units). So the verdict for a combination near 8% to 10% is largely sampling luck; for example (`vv_vh`, 4) was
+  kept and (`vv_vh`, 3) dropped although they are close.
+- **Tiny clusters matter in M2 but not in M1.** In M2, 344 of 3,348 changed comparisons (10.3%) involve a water cluster below 1% of valid
+  pixels (in M1: 2 of 770, 0.3%). They are commoner at higher k (for example `vv_vh` k=4: 57 cases) and with the medium clip (12.5%) than without
+  (7.9%), the opposite of the "especially no clip" guess. The tiny cluster's mean VV is about -13 dB, not very dark, and the other seed picks a cluster
+  of about 2% of pixels. So the owner's tiny-outlier guess explains about a tenth of M2's instability, not most of it.
+
+**Cross-check with the abstention guard (label-free, M1 rows, all settings):** the ceiling -12 dB would abstain on 34.7% of the changed
+comparisons (in at least one of the two seeds) against 20.9% of the unchanged ones; -15 dB: 68.2% vs 47.8%; -18 dB: 88.2% vs 71.5%. At k = 3, `n_init` 10,
+98% of the changed comparisons have a water cluster brighter than -15 dB. The guard therefore removes disproportionately many unstable comparisons
+but does not cleanly separate them.
+
+---
+
+## Amendment 6 (2026-09-20, before Stage 1 and before any tuning score)
+
+Decisions of the project owner after the seed checks (A5.5), applied to the config.
+
+### A6.1 Stage 1's nominal M2 is (`vv_vh`, k = 2)
+
+Stage 1 ranks the 16 preprocessing options for M2 with one nominal setting: **features `vv_vh`, k = 2, `n_init` 10, SLIC 500
+segments, compactness 0.05**. It replaces the earlier nominal k = 3, which the seed check found unstable (4.4% to 17.5% changed
+across the four conditions); (`vv_vh`, k = 2) was the most stable choice that keeps the same features (4.4%, 3.8%, 6.2%, 5.0%). Stage 2
+for M2 also runs at (`vv_vh`, k = 2).
+
+### A6.2 The per-condition pruning rule is kept as declared
+
+The rule of A5.2 (keep a (feature set, k) only if the changed fraction is below 10% in every one of the four conditions) is applied as
+written; **no pooled criterion is used**. M2's stage-3 grid is therefore exactly the six kept combinations: (`vv`, 2), (`vv_vh`, 2),
+(`vv_vh`, 4), (`vv_vh_diff`, 2), (`vv_vh_std`, 2), (`vv_vh_std`, 3). The other ten are dropped, and k = 5 no longer occurs in M2. k is never
+extended by the grid-edge rule (for M1 and M2 alike). The same combinations apply to M2g.
+
+### A6.3 M1 keeps k = 3 as a candidate
+
+Only k = 4 and k = 5 are dropped from M1 (A4.3). M1's k grid is {2, 3}: stage 1 ranks the 16 preprocessing options at **k = 3, `n_init` 10**,
+and stage 2 tries **k = 2, `n_init` 3** on each tuning set's top-two options. The final M1 choice is the best of those candidates. (Because k = 3
+is ranked over 16 options and k = 2 over two, k = 3 has more selection pressure in tuning; this affects tuning scores only.)
+
+### A6.4 Stage 1, as it will run (declared before running)
+
+- **Units of work:** one unit is one (chip, preprocessing option). Chips are the 440 that have at least one valid pixel (the 6 exclusions of
+  section 3.2 of the data report are skipped); preprocessing options are the 16 (clip x median) of the config. That is 7,040 units. A unit
+  computes, for that chip and preprocessing, the per-chip confusion counts (flood-only and all-water) of: **B1** at every threshold valid
+  under the clip; **B2-VV** and **B2-VH**; **M1** (k = 3, `n_init` 10); **M2** (`vv_vh`, k = 2, 500 / 0.05, `n_init` 10). B2, M1 and M2 are each
+  stored plain and at each ceiling (-18, -15, -12 dB). Seed 42 throughout.
+- **Resumable:** each unit is written atomically to `data/tuning_cache/stage1/<chip>/<preprocessing>.json`; a re-run skips finished units, so an
+  interrupted run loses at most the units in flight. Parallel over units, 4 worker processes.
+- **Ranking (per tuning set, tuning chips only):** the criterion of the protocol (mean per-chip flood-only IoU over the set's chips with flood;
+  ties: pooled IoU, then config order). For B1 the candidates are (preprocessing, threshold); B2-VV, B2-VH, M1 and M2 plain are ranked by their
+  unguarded score per preprocessing option; B2g, M1g and M2g by the best ceiling per option (A3.1). The 12 tuning sets are the 11
+  leave-one-event-out folds and the official validation split.
+- **Outputs:** (1) the compute log, which contains progress and timing only, no scores; (2) after the counts are complete, the rankings per
+  tuning set and variant, in `results/tuning/`, showing tuning-set aggregates only (A3.4); (3) the union of A5.3 for M1, M1g, M2, M2g, with its
+  size and a projected stage-2 cost from the measured per-unit times and the measured parallel speedup. **Stage 1 then stops for the owner's
+  approval before stage 2 starts.**
+- The per-chip counts of held-out chips exist in the cache (each chip is a tuning chip for the other folds); they are never printed chip by chip.
+
 ---
 `configs/config.yaml` sha256 history:
 
@@ -601,4 +698,6 @@ such as `sc = cfg["seed_sensitivity"]`, is self-tested, and was shown to fail wh
 - after Amendment 4, decision rule written, follow-up not yet run: `eb9edf20abb31c69ff200024502db888384c7e0d12fcd354e94fffc007045bb4`
 - after A4.3, rule's consequences applied (superseded within minutes by the next line): `4b0762340323783b83884fe74d6c570af4d0e8b508f20239e4e368baf849179d`
 - after the A4.4 YAML-key fix: `9148fbc3d098e8e3403d521ee3eef768f15354a82e354ad50d0b94582617744e`
-- after Amendment 5 declarations, checks not yet run (current, before any tuning): `1f1572513f168a93eef5d41099bdd26efd4eed50dac76eca0d53aae6ea1dff23`
+- after Amendment 5 declarations, checks not yet run: `1f1572513f168a93eef5d41099bdd26efd4eed50dac76eca0d53aae6ea1dff23`
+- after A5.5, M2 `n_init` 10 added: `ae1dbc6e84fc1b14f4409188e5e5bd5d74a28b8f1fe05607eeca9d8780b68b0b`
+- after Amendment 6, before Stage 1 (current, before any tuning): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`

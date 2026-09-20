@@ -1,0 +1,58 @@
+M1 seed check, 40 official TRAIN chips (same as before), seeds=[42, 0, 1, 2, 3] (reference 42), 'changed' = water-mask IoU < 0.95, no labels used.
+  C1 = clip=none,median=0   (one of the two original conditions)
+  C2 = clip=none,median=3
+  C3 = clip=medium,median=0
+  C4 = clip=medium,median=3   (one of the two original conditions)
+
+5120 comparisons in 2119 s
+
+=== TABLE 1. changed comparisons / comparisons made | chips with any change / 40 | worst IoU ===
+(each cell: 'changed/made  chips/40  worstIoU')
+features     k n_init |             C1             |             C2             |             C3             |             C4            
+-            2      3 |     0/160   0/40   0.954   |     1/160   1/40   0.939   |     0/160   0/40   0.963   |     1/160   1/40   0.943  
+-            2     10 |     0/160   0/40   0.957   |     0/160   0/40   0.974   |     0/160   0/40   0.958   |     0/160   0/40   0.968  
+-            3      3 |    20/160  10/40   0.872   |    17/160   9/40   0.067   |    29/160  13/40   0.522   |    12/160   5/40   0.067  
+-            3     10 |    14/160   6/40   0.816   |    14/160   5/40   0.023   |    15/160   5/40   0.768   |    12/160   4/40   0.023  
+-            4      3 |    37/160  17/40   0.002   |    36/160  19/40   0.582   |    52/160  23/40   0.001   |    30/160  19/40   0.678  
+-            4     10 |    38/160  15/40   0.014   |    15/160  12/40   0.889   |    28/160  13/40   0.000   |    12/160   9/40   0.852  
+-            5      3 |    60/160  26/40   0.000   |    61/160  26/40   0.002   |    62/160  25/40   0.008   |    56/160  26/40   0.000  
+-            5     10 |    45/160  20/40   0.818   |    34/160  18/40   0.104   |    36/160  18/40   0.007   |    33/160  17/40   0.000  
+
+=== TABLE 2. mean VV (dB) of the chosen water cluster in CHANGED comparisons: reference seed / other seed (n changed) ===
+features     k n_init |             C1             |             C2             |             C3             |             C4            
+-            2      3 |             -              |     -14.4/ -14.2 (n=1)     |             -              |     -14.4/ -14.2 (n=1)    
+-            2     10 |             -              |             -              |             -              |             -             
+-            3      3 |     -12.1/ -12.1 (n=20)    |     -12.4/ -12.4 (n=17)    |     -12.9/ -12.8 (n=29)    |     -10.4/ -10.5 (n=12)   
+-            3     10 |     -12.3/ -12.4 (n=14)    |     -10.3/ -10.4 (n=14)    |     -12.1/ -12.0 (n=15)    |      -9.9/ -10.0 (n=12)   
+-            4      3 |     -14.1/ -14.1 (n=37)    |     -12.8/ -12.9 (n=36)    |     -15.9/ -15.9 (n=52)    |     -13.4/ -13.5 (n=30)   
+-            4     10 |     -14.2/ -14.2 (n=38)    |     -12.8/ -12.8 (n=15)    |     -14.8/ -14.8 (n=28)    |     -13.2/ -13.2 (n=12)   
+-            5      3 |     -14.4/ -14.5 (n=60)    |     -15.1/ -15.1 (n=61)    |     -15.0/ -14.9 (n=62)    |     -14.1/ -14.0 (n=56)   
+-            5     10 |     -14.8/ -14.8 (n=45)    |     -14.5/ -14.4 (n=34)    |     -14.3/ -14.3 (n=36)    |     -13.8/ -13.8 (n=33)   
+context, all settings pooled: mean VV of the reference water cluster = -15.8 dB in unchanged comparisons (4350), -14.0 dB in changed ones (770)
+
+=== TABLE 3. Reconciling the earlier counts (the two ORIGINAL conditions only, C-labels above) ===
+  first check (k=4,5; n_init 3)                     :  183 changed of  640 comparisons
+  follow-up, n_init 10 (k=3,4,5)                    :  154 changed of  960 comparisons
+  follow-up, n_init 3 (k=3 only)                    :   32 changed of  320 comparisons
+  matched to the first check: k=4,5 at n_init 10    :  128 changed of  640 comparisons
+  matched: k=3 at n_init 10                         :   26 changed of  320 comparisons
+  (earlier reports: 183 of 640, 154 of 960 and 32 of 320)
+
+=== TABLE 4. Pooled changed fraction ===
+  -           k=2 n_init= 3: four conditions   2/640 =   0.3%; original two   1/320 =   0.3%
+  -           k=2 n_init=10: four conditions   0/640 =   0.0%; original two   0/320 =   0.0%
+  -           k=3 n_init= 3: four conditions  78/640 =  12.2%; original two  32/320 =  10.0%
+  -           k=3 n_init=10: four conditions  55/640 =   8.6%; original two  26/320 =   8.1%
+  -           k=4 n_init= 3: four conditions 155/640 =  24.2%; original two  67/320 =  20.9%
+  -           k=4 n_init=10: four conditions  93/640 =  14.5%; original two  50/320 =  15.6%
+  -           k=5 n_init= 3: four conditions 239/640 =  37.3%; original two 116/320 =  36.2%
+  -           k=5 n_init=10: four conditions 148/640 =  23.1%; original two  78/320 =  24.4%
+
+=== TABLE 5. Tiny water clusters (descriptive; tiny = below 1% of valid pixels) ===
+  2 of 770 changed comparisons involve a tiny water cluster
+
+=== PRE-DECLARED RULES (protocol A5.1), applied mechanically ===
+  k=2: pooled changed fraction n_init 3 = 0.3%, n_init 10 = 0.0% (difference 0.3 points) -> n_init = 3 (within 2 points -> 3). Instability caveat: pooled 0.3%, worst single condition 0.6%.
+  k=3: pooled changed fraction n_init 3 = 12.2%, n_init 10 = 8.6% (difference 3.6 points) -> n_init = 10 (lower changed fraction). Instability caveat: pooled 8.6%, worst single condition 9.4%.
+  k=4 and k=5: stay dropped from M1 (project owner's decision). For information, pooled at n_init 10: k=4 14.5%, k=5 23.1%
+exit=0

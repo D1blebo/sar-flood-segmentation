@@ -11,6 +11,8 @@ paths:
   data_dir: data/sen1floods11
   cache_dir: data/cache
   results_dir: results
+  tuning_cache_dir: data/tuning_cache    # per-(chip, preprocessing) confusion counts, git-ignored
+  tuning_results_dir: results/tuning     # rankings and reports (tuning-set metrics only)
 
 # ---------------------------------------------------------------------------------------------
 # Preprocessing (applied identically to EVERY method, including the threshold baselines)
@@ -50,13 +52,19 @@ search_space:
     fit_subsample: null
     fit_subsample_candidate: 50000
   m2_slic_kmeans:
-    k: [2, 3, 4, 5]
+    # Amendment 6 (A6.2): the per-condition 10% rule (A5.2) was kept as declared. It leaves six (features, k)
+    # combinations; stage 3 tries only those. k=5 no longer occurs.
+    k: [2, 3, 4]
+    allowed_combinations: [[vv, 2], [vv_vh, 2], [vv_vh, 4], [vv_vh_diff, 2], [vv_vh_std, 2], [vv_vh_std, 3]]
     # skimage rescales each chip to [0,1] by its own min/max before SLIC, so compactness acts on that
     # scale, and the clip changes that scale: clip and compactness are therefore chosen jointly.
     # Colour range 1 and the seed spacing (~11 px for 2000 segments, ~36 px for 200) are comparable
     # when compactness is about 1/spacing = 0.03-0.09; the grid brackets that by ~1.5 decades.
     n_segments: [200, 500, 1000, 2000]
     compactness: [0.01, 0.05, 0.2, 1.0]
+    # Amendment 5 (A5.5): k-means restarts for M2. Seed check: 23.9% of comparisons changed at n_init 3,
+    # 8.8% at n_init 10, so 10 (the owner's default) is used.
+    n_init: 10
     # Per-segment features fed to k-means (all in dB, unscaled):
     #   vv          : mean VV
     #   vv_vh       : mean VV, mean VH
@@ -116,16 +124,15 @@ search_plan:
     b1: {thresholds: all, preprocessing: all}          # exhaustive, cheap
     b2: {bands: [vv, vh], preprocessing: all}          # exhaustive, cheap
     m1: {k: 3, n_init: 10, preprocessing: all}
-    m2: {k: 3, n_segments: 500, compactness: 0.05, features: vv_vh, preprocessing: all}
+    m2: {k: 2, n_segments: 500, compactness: 0.05, features: vv_vh, preprocessing: all}   # nominal, A6.1
     keep_best_preprocessing: 2                         # per method, per tuning set
   stage2:
     m1: {k: [2], over: best_two_preprocessing}   # k=3 (n_init 10) already done in stage 1
     m2: {n_segments: [200, 500, 1000, 2000], compactness: [0.01, 0.05, 0.2, 1.0],
-         k: 3, features: vv_vh, over: best_two_preprocessing}
+         k: 2, features: vv_vh, over: best_two_preprocessing}
     choose_clip_and_compactness_jointly: true  # keep BOTH preprocessing options through stage 2
   stage3:
-    m2: {k: [2, 3, 4, 5], features: [vv, vv_vh, vv_vh_std, vv_vh_diff],
-         over: best_config_from_stage2, uses: segmentation_cache}
+    m2: {combinations: allowed_combinations, over: best_config_from_stage2, uses: segmentation_cache}
 
 # Grid edges: if the winner of a tuning set sits on the edge of a NUMERIC grid, extend that grid by one
 # step for that tuning set only, using that tuning set's data only, and log it (dated) in
@@ -140,7 +147,7 @@ grid_extension:
     median_window: {kind: add, value: 2}          # 7 -> 9
     n_segments: {kind: multiply, value: 2.0}      # 2000 -> 4000, 200 -> 100
     compactness: {kind: multiply, value: 5.0}     # 1.0 -> 5.0, 0.01 -> 0.002
-    k: {kind: add, value: 1, applies_to: [m2]}    # 5 -> 6, M2 only; M1 is never extended (A4.3)
+    k: {kind: add, value: 1, applies_to: []}      # k is never extended: M1 (A4.3) and M2 (A6.2) grids are instability-limited
     ceiling_db: {kind: add, value: 3.0}           # -12 -> -9, -18 -> -21
 
 # Laptop: Intel i7-8665U, 4 physical cores / 8 threads, 15 GB RAM (measured with nproc/lscpu/free).

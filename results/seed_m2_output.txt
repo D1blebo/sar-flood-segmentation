@@ -1,0 +1,141 @@
+M2 seed check, 40 official TRAIN chips (same as before), seeds=[42, 0, 1, 2, 3] (reference 42), 'changed' = water-mask IoU < 0.95, no labels used.
+  C1 = clip=none,median=0   (one of the two original conditions)
+  C2 = clip=none,median=3
+  C3 = clip=medium,median=0
+  C4 = clip=medium,median=3   (one of the two original conditions)
+
+20480 comparisons in 318 s
+
+=== TABLE 1. changed comparisons / comparisons made | chips with any change / 40 | worst IoU ===
+(each cell: 'changed/made  chips/40  worstIoU')
+features     k n_init |             C1             |             C2             |             C3             |             C4            
+vv           2      3 |    15/160   9/40   0.751   |    11/160   7/40   0.328   |    22/160  12/40   0.041   |    21/160  11/40   0.067  
+vv           2     10 |     2/160   1/40   0.949   |     4/160   1/40   0.770   |     5/160   3/40   0.858   |     9/160   4/40   0.770  
+vv           3      3 |    28/160  13/40   0.016   |    31/160  15/40   0.264   |    42/160  19/40   0.093   |    25/160  13/40   0.264  
+vv           3     10 |     1/160   1/40   0.885   |     7/160   6/40   0.315   |    23/160  10/40   0.596   |     4/160   2/40   0.919  
+vv           4      3 |    52/160  23/40   0.016   |    45/160  23/40   0.151   |    43/160  20/40   0.028   |    54/160  26/40   0.043  
+vv           4     10 |    18/160   9/40   0.641   |    21/160  10/40   0.318   |    10/160   5/40   0.076   |    29/160  13/40   0.318  
+vv           5      3 |    44/160  19/40   0.115   |    46/160  19/40   0.069   |    39/160  18/40   0.015   |    58/160  23/40   0.107  
+vv           5     10 |    19/160   9/40   0.467   |    22/160  12/40   0.069   |    10/160   4/40   0.343   |    17/160   7/40   0.388  
+vv_vh        2      3 |    15/160   9/40   0.245   |    11/160   7/40   0.483   |    26/160  15/40   0.207   |    16/160  11/40   0.102  
+vv_vh        2     10 |     7/160   2/40   0.902   |     6/160   3/40   0.725   |    10/160   5/40   0.535   |     8/160   3/40   0.684  
+vv_vh        3      3 |    30/160  16/40   0.253   |    32/160  14/40   0.012   |    31/160  16/40   0.094   |    54/160  19/40   0.012  
+vv_vh        3     10 |    28/160  13/40   0.253   |    11/160   4/40   0.014   |     7/160   4/40   0.640   |    21/160   9/40   0.014  
+vv_vh        4      3 |    50/160  20/40   0.030   |    32/160  16/40   0.000   |    42/160  22/40   0.027   |    39/160  17/40   0.000  
+vv_vh        4     10 |    12/160   6/40   0.391   |    12/160   5/40   0.000   |    12/160   7/40   0.423   |    15/160   5/40   0.000  
+vv_vh        5      3 |    37/160  19/40   0.077   |    48/160  20/40   0.030   |    27/160  14/40   0.081   |    48/160  22/40   0.182  
+vv_vh        5     10 |    20/160   9/40   0.253   |    23/160  11/40   0.395   |    16/160   8/40   0.164   |    21/160  10/40   0.121  
+vv_vh_diff   2      3 |    17/160   8/40   0.182   |    23/160  10/40   0.000   |    25/160  12/40   0.007   |    18/160  10/40   0.000  
+vv_vh_diff   2     10 |     8/160   4/40   0.801   |     5/160   2/40   0.930   |     2/160   2/40   0.631   |     2/160   2/40   0.825  
+vv_vh_diff   3      3 |    37/160  16/40   0.082   |    43/160  17/40   0.000   |    37/160  17/40   0.031   |    61/160  23/40   0.000  
+vv_vh_diff   3     10 |    10/160   4/40   0.672   |    19/160   9/40   0.735   |    12/160   6/40   0.159   |    24/160  10/40   0.711  
+vv_vh_diff   4      3 |    49/160  22/40   0.021   |    47/160  18/40   0.027   |    71/160  25/40   0.025   |    38/160  16/40   0.027  
+vv_vh_diff   4     10 |    26/160  11/40   0.416   |    21/160  10/40   0.100   |    18/160  10/40   0.025   |    13/160   5/40   0.100  
+vv_vh_diff   5      3 |    48/160  20/40   0.145   |    59/160  29/40   0.000   |    39/160  17/40   0.000   |    53/160  25/40   0.000  
+vv_vh_diff   5     10 |    26/160  12/40   0.219   |    34/160  15/40   0.000   |    11/160   6/40   0.025   |    27/160  13/40   0.027  
+vv_vh_std    2      3 |    26/160  11/40   0.130   |    11/160   6/40   0.148   |    42/160  19/40   0.000   |    11/160   6/40   0.192  
+vv_vh_std    2     10 |     3/160   2/40   0.939   |     0/160   0/40   0.953   |    14/160   7/40   0.716   |     4/160   1/40   0.848  
+vv_vh_std    3      3 |    28/160  14/40   0.117   |    31/160  16/40   0.042   |    36/160  18/40   0.074   |    65/160  26/40   0.042  
+vv_vh_std    3     10 |     6/160   3/40   0.665   |     7/160   4/40   0.213   |    10/160   4/40   0.640   |    11/160   7/40   0.213  
+vv_vh_std    4      3 |    55/160  24/40   0.195   |    42/160  18/40   0.000   |    53/160  25/40   0.020   |    49/160  17/40   0.000  
+vv_vh_std    4     10 |    16/160   8/40   0.332   |    20/160   9/40   0.470   |     9/160   5/40   0.074   |    13/160   6/40   0.129  
+vv_vh_std    5      3 |    48/160  21/40   0.047   |    46/160  20/40   0.032   |    51/160  22/40   0.012   |    72/160  26/40   0.000  
+vv_vh_std    5     10 |    26/160  12/40   0.253   |    20/160   8/40   0.387   |    25/160  11/40   0.012   |    31/160  15/40   0.020  
+
+=== TABLE 2. mean VV (dB) of the chosen water cluster in CHANGED comparisons: reference seed / other seed (n changed) ===
+features     k n_init |             C1             |             C2             |             C3             |             C4            
+vv           2      3 |     -12.8/ -12.8 (n=15)    |     -12.1/ -12.3 (n=11)    |     -10.7/ -10.5 (n=22)    |     -11.6/ -11.6 (n=21)   
+vv           2     10 |     -10.3/ -10.4 (n=2)     |      -9.1/  -9.2 (n=4)     |      -9.1/  -9.2 (n=5)     |     -11.0/ -11.1 (n=9)    
+vv           3      3 |     -12.5/ -12.5 (n=28)    |     -13.8/ -13.9 (n=31)    |     -12.7/ -13.0 (n=42)    |     -15.9/ -15.9 (n=25)   
+vv           3     10 |      -8.7/  -8.6 (n=1)     |     -13.3/ -12.5 (n=7)     |     -12.1/ -12.0 (n=23)    |     -15.7/ -15.6 (n=4)    
+vv           4      3 |     -15.6/ -15.2 (n=52)    |     -13.2/ -13.2 (n=45)    |     -12.6/ -12.6 (n=43)    |     -13.1/ -13.1 (n=54)   
+vv           4     10 |     -15.9/ -15.9 (n=18)    |     -12.2/ -12.3 (n=21)    |     -13.4/ -14.2 (n=10)    |     -12.8/ -12.9 (n=29)   
+vv           5      3 |     -15.2/ -15.1 (n=44)    |     -14.7/ -15.0 (n=46)    |     -14.5/ -14.5 (n=39)    |     -14.1/ -14.2 (n=58)   
+vv           5     10 |     -14.0/ -14.1 (n=19)    |     -16.6/ -16.3 (n=22)    |     -13.7/ -13.5 (n=10)    |     -13.8/ -13.8 (n=17)   
+vv_vh        2      3 |     -12.2/ -12.2 (n=15)    |     -12.0/ -12.3 (n=11)    |     -11.5/ -12.0 (n=26)    |     -11.6/ -11.8 (n=16)   
+vv_vh        2     10 |     -13.5/ -13.3 (n=7)     |     -13.6/ -13.4 (n=6)     |     -12.0/ -12.4 (n=10)    |     -10.1/ -10.0 (n=8)    
+vv_vh        3      3 |     -12.1/ -11.9 (n=30)    |     -12.0/ -12.2 (n=32)    |     -11.9/ -12.1 (n=31)    |     -13.4/ -13.8 (n=54)   
+vv_vh        3     10 |     -12.0/ -12.3 (n=28)    |     -10.9/ -10.9 (n=11)    |     -13.2/ -12.9 (n=7)     |     -13.5/ -13.6 (n=21)   
+vv_vh        4      3 |     -15.0/ -14.6 (n=50)    |     -13.1/ -12.3 (n=32)    |     -13.4/ -13.1 (n=42)    |     -13.6/ -13.6 (n=39)   
+vv_vh        4     10 |     -12.8/ -12.6 (n=12)    |     -11.4/ -10.9 (n=12)    |     -14.7/ -14.6 (n=12)    |     -13.3/ -12.5 (n=15)   
+vv_vh        5      3 |     -14.2/ -14.5 (n=37)    |     -15.4/ -15.5 (n=48)    |     -13.4/ -13.5 (n=27)    |     -15.4/ -15.4 (n=48)   
+vv_vh        5     10 |     -11.5/ -11.6 (n=20)    |     -14.1/ -14.0 (n=23)    |     -13.1/ -13.1 (n=16)    |     -13.7/ -14.3 (n=21)   
+vv_vh_diff   2      3 |     -11.1/ -11.1 (n=17)    |     -10.8/ -10.9 (n=23)    |     -11.8/ -11.8 (n=25)    |     -10.0/ -10.1 (n=18)   
+vv_vh_diff   2     10 |     -12.0/ -12.0 (n=8)     |      -9.1/  -9.1 (n=5)     |     -10.0/ -10.0 (n=2)     |     -10.8/ -10.7 (n=2)    
+vv_vh_diff   3      3 |     -11.7/ -11.7 (n=37)    |     -13.1/ -13.2 (n=43)    |     -12.7/ -12.7 (n=37)    |     -13.3/ -13.4 (n=61)   
+vv_vh_diff   3     10 |     -12.8/ -12.6 (n=10)    |     -12.7/ -12.7 (n=19)    |     -12.1/ -12.0 (n=12)    |     -12.3/ -12.3 (n=24)   
+vv_vh_diff   4      3 |     -14.4/ -14.2 (n=49)    |     -13.5/ -13.8 (n=47)    |     -13.9/ -14.2 (n=71)    |     -14.3/ -14.6 (n=38)   
+vv_vh_diff   4     10 |     -14.2/ -14.2 (n=26)    |     -12.1/ -12.0 (n=21)    |     -12.2/ -11.9 (n=18)    |     -13.3/ -13.2 (n=13)   
+vv_vh_diff   5      3 |     -15.5/ -15.5 (n=48)    |     -14.9/ -15.0 (n=59)    |     -15.2/ -15.5 (n=39)    |     -16.4/ -15.5 (n=53)   
+vv_vh_diff   5     10 |     -14.9/ -15.1 (n=26)    |     -14.7/ -14.9 (n=34)    |     -12.0/ -11.7 (n=11)    |     -15.0/ -15.2 (n=27)   
+vv_vh_std    2      3 |     -12.0/ -12.1 (n=26)    |     -12.4/ -12.3 (n=11)    |     -12.3/ -12.6 (n=42)    |     -11.0/ -10.8 (n=11)   
+vv_vh_std    2     10 |     -14.7/ -14.9 (n=3)     |             -              |     -13.8/ -14.0 (n=14)    |      -7.9/  -7.7 (n=4)    
+vv_vh_std    3      3 |     -12.7/ -12.6 (n=28)    |     -12.0/ -12.2 (n=31)    |     -13.1/ -12.9 (n=36)    |     -14.1/ -14.2 (n=65)   
+vv_vh_std    3     10 |     -12.4/ -12.6 (n=6)     |      -9.7/  -9.7 (n=7)     |     -12.0/ -11.9 (n=10)    |     -12.3/ -12.3 (n=11)   
+vv_vh_std    4      3 |     -13.8/ -13.5 (n=55)    |     -14.0/ -14.0 (n=42)    |     -13.9/ -13.6 (n=53)    |     -14.1/ -14.0 (n=49)   
+vv_vh_std    4     10 |     -16.2/ -15.9 (n=16)    |     -15.0/ -15.2 (n=20)    |     -11.5/ -11.2 (n=9)     |     -13.9/ -13.9 (n=13)   
+vv_vh_std    5      3 |     -13.7/ -13.8 (n=48)    |     -15.2/ -14.9 (n=46)    |     -14.2/ -14.5 (n=51)    |     -14.5/ -14.4 (n=72)   
+vv_vh_std    5     10 |     -14.0/ -13.3 (n=26)    |     -14.7/ -14.7 (n=20)    |     -12.7/ -13.7 (n=25)    |     -15.0/ -15.0 (n=31)   
+context, all settings pooled: mean VV of the reference water cluster = -14.6 dB in unchanged comparisons (17132), -13.6 dB in changed ones (3348)
+
+=== TABLE 3. Reconciling the earlier counts (the two ORIGINAL conditions only, C-labels above) ===
+  (not applicable to M2: no earlier M2 check)
+
+=== TABLE 4. Pooled changed fraction ===
+  vv          k=2 n_init= 3: four conditions  69/640 =  10.8%; original two  36/320 =  11.2%
+  vv          k=2 n_init=10: four conditions  20/640 =   3.1%; original two  11/320 =   3.4%
+  vv          k=3 n_init= 3: four conditions 126/640 =  19.7%; original two  53/320 =  16.6%
+  vv          k=3 n_init=10: four conditions  35/640 =   5.5%; original two   5/320 =   1.6%
+  vv          k=4 n_init= 3: four conditions 194/640 =  30.3%; original two 106/320 =  33.1%
+  vv          k=4 n_init=10: four conditions  78/640 =  12.2%; original two  47/320 =  14.7%
+  vv          k=5 n_init= 3: four conditions 187/640 =  29.2%; original two 102/320 =  31.9%
+  vv          k=5 n_init=10: four conditions  68/640 =  10.6%; original two  36/320 =  11.2%
+  vv_vh       k=2 n_init= 3: four conditions  68/640 =  10.6%; original two  31/320 =   9.7%
+  vv_vh       k=2 n_init=10: four conditions  31/640 =   4.8%; original two  15/320 =   4.7%
+  vv_vh       k=3 n_init= 3: four conditions 147/640 =  23.0%; original two  84/320 =  26.2%
+  vv_vh       k=3 n_init=10: four conditions  67/640 =  10.5%; original two  49/320 =  15.3%
+  vv_vh       k=4 n_init= 3: four conditions 163/640 =  25.5%; original two  89/320 =  27.8%
+  vv_vh       k=4 n_init=10: four conditions  51/640 =   8.0%; original two  27/320 =   8.4%
+  vv_vh       k=5 n_init= 3: four conditions 160/640 =  25.0%; original two  85/320 =  26.6%
+  vv_vh       k=5 n_init=10: four conditions  80/640 =  12.5%; original two  41/320 =  12.8%
+  vv_vh_diff  k=2 n_init= 3: four conditions  83/640 =  13.0%; original two  35/320 =  10.9%
+  vv_vh_diff  k=2 n_init=10: four conditions  17/640 =   2.7%; original two  10/320 =   3.1%
+  vv_vh_diff  k=3 n_init= 3: four conditions 178/640 =  27.8%; original two  98/320 =  30.6%
+  vv_vh_diff  k=3 n_init=10: four conditions  65/640 =  10.2%; original two  34/320 =  10.6%
+  vv_vh_diff  k=4 n_init= 3: four conditions 205/640 =  32.0%; original two  87/320 =  27.2%
+  vv_vh_diff  k=4 n_init=10: four conditions  78/640 =  12.2%; original two  39/320 =  12.2%
+  vv_vh_diff  k=5 n_init= 3: four conditions 199/640 =  31.1%; original two 101/320 =  31.6%
+  vv_vh_diff  k=5 n_init=10: four conditions  98/640 =  15.3%; original two  53/320 =  16.6%
+  vv_vh_std   k=2 n_init= 3: four conditions  90/640 =  14.1%; original two  37/320 =  11.6%
+  vv_vh_std   k=2 n_init=10: four conditions  21/640 =   3.3%; original two   7/320 =   2.2%
+  vv_vh_std   k=3 n_init= 3: four conditions 160/640 =  25.0%; original two  93/320 =  29.1%
+  vv_vh_std   k=3 n_init=10: four conditions  34/640 =   5.3%; original two  17/320 =   5.3%
+  vv_vh_std   k=4 n_init= 3: four conditions 199/640 =  31.1%; original two 104/320 =  32.5%
+  vv_vh_std   k=4 n_init=10: four conditions  58/640 =   9.1%; original two  29/320 =   9.1%
+  vv_vh_std   k=5 n_init= 3: four conditions 217/640 =  33.9%; original two 120/320 =  37.5%
+  vv_vh_std   k=5 n_init=10: four conditions 102/640 =  15.9%; original two  57/320 =  17.8%
+
+=== TABLE 5. Tiny water clusters (descriptive; tiny = below 1% of valid pixels) ===
+  344 of 3348 changed comparisons involve a tiny water cluster
+
+=== PRE-DECLARED RULES (protocol A5.2), applied mechanically ===
+  n_init: pooled changed fraction n_init 3 = 23.9% (2445/10240), n_init 10 = 8.8% (903/10240) -> n_init 10 in force (10 is the default; no reason found against it)
+  per (feature set, k) at the n_init in force; KEEP only if the changed fraction is below 10% in EVERY condition:
+    KEEP  vv          k=2: 1.2%, 2.5%, 3.1%, 5.6%
+    KEEP  vv_vh       k=2: 4.4%, 3.8%, 6.2%, 5.0%
+    KEEP  vv_vh       k=4: 7.5%, 7.5%, 7.5%, 9.4%
+    KEEP  vv_vh_diff  k=2: 5.0%, 3.1%, 1.2%, 1.2%
+    KEEP  vv_vh_std   k=2: 1.9%, 0.0%, 8.8%, 2.5%
+    KEEP  vv_vh_std   k=3: 3.8%, 4.4%, 6.2%, 6.9%
+    DROP  vv          k=3: 0.6%, 4.4%, 14.4%, 2.5%
+    DROP  vv          k=4: 11.2%, 13.1%, 6.2%, 18.1%
+    DROP  vv          k=5: 11.9%, 13.8%, 6.2%, 10.6%
+    DROP  vv_vh       k=3: 17.5%, 6.9%, 4.4%, 13.1%
+    DROP  vv_vh       k=5: 12.5%, 14.4%, 10.0%, 13.1%
+    DROP  vv_vh_diff  k=3: 6.2%, 11.9%, 7.5%, 15.0%
+    DROP  vv_vh_diff  k=4: 16.2%, 13.1%, 11.2%, 8.1%
+    DROP  vv_vh_diff  k=5: 16.2%, 21.2%, 6.9%, 16.9%
+    DROP  vv_vh_std   k=4: 10.0%, 12.5%, 5.6%, 8.1%
+    DROP  vv_vh_std   k=5: 16.2%, 12.5%, 15.6%, 19.4%
+  NOMINAL (vv_vh, k=3) WOULD BE DROPPED: Stage 1's M2 depends on it -> NOT COVERED, STOP AND ASK
+exit=0
