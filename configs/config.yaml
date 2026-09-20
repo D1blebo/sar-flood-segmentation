@@ -3,7 +3,8 @@
 # Chosen values are written later to results/frozen_config.yaml by the tuning script, never here.
 # Amendment 2 (2026-09-20) added: abstention_guard, m1 fit_subsample, search_plan, grid_extension,
 # compute, two-level bootstrap. Amendment 3 (2026-09-20) added: search_plan.selection and stage2_union,
-# evaluation.heldout_scoring, seed_sensitivity. Original values are unchanged.
+# evaluation.heldout_scoring, seed_sensitivity. Amendment 7 (2026-09-20) replaced the selection criterion (see the
+# protocol) and added sensitivity_selection_criterion. Original values are unchanged otherwise.
 
 seed: 42
 
@@ -100,7 +101,10 @@ cluster_rule: lowest_mean_vv
 # Per-chip confusion counts are cached, so every tuning set just sums a different subset.
 # ---------------------------------------------------------------------------------------------
 search_plan:
-  ranking: mean_per_chip_flood_only_iou      # over tuning chips with >= 1 flood-only truth pixel
+  # Amendment 7: PRIMARY criterion = pooled flood-only IoU over ALL tuning chips (flood-free chips count via their
+  # false positives). The earlier criterion (mean per-chip IoU over chips with flood) is kept as the SENSITIVITY criterion.
+  ranking: pooled_flood_only_iou_all_tuning_chips
+  sensitivity_ranking: mean_per_chip_flood_only_iou   # declared before tuning; the whole search is also run under it
   # Amendment 3 (replaces the earlier 'ranked by its best ceiling'):
   #  * plain methods (B1, B2-VV, B2-VH, M1, M2) are selected on their UNGUARDED scores only;
   #  * guarded variants (B2g, M1g, M2g) are separate methods with their own selection at every stage,
@@ -163,7 +167,8 @@ evaluation:
   secondary_protocol: official_split         # tune on valid only, score test once, Bolivia separately
   primary_metric: flood_only                 # LabelHand==1 & JRC==0, JRC applied to prediction and truth
   secondary_metric: all_water
-  selection_criterion: mean_per_chip_iou     # over tuning chips with >=1 flood truth pixel
+  selection_criterion: pooled_flood_only_iou_all_tuning_chips   # Amendment 7 (was mean_per_chip_iou)
+  sensitivity_selection_criterion: mean_per_chip_iou             # the declared criterion, reported alongside
   flood_fraction_bins: [0.05, 0.30]          # strata: none, <5%, 5-30%, >30%
   bootstrap:
     n_resamples: 1000

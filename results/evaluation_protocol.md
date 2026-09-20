@@ -734,6 +734,50 @@ re-ranked from the existing counts without recomputing anything), or freeze the 
 since it may change. **Stage 2 has not started.**
 
 ---
+
+## Amendment 7 (2026-09-20, after Stage 1 and BEFORE any re-ranking under it): the selection criterion is amended
+
+### A7.1 Why, stated plainly
+
+The criterion declared before tuning (section 6: mean per-chip flood-only IoU over tuning chips that have flood) **cannot reward the abstention guard**, because flood-free
+chips do not enter it. **Stage 1 then showed exactly that** (A6.5): the guarded variants scored lower than their plain versions in 12 of 12 tuning sets for all four pairs,
+and every guarded winner sat at the most permissive ceiling. **That weakness was documented before tuning began** (section 6, "Selection rule": "flood-free tuning chips
+do not enter this criterion, so over-prediction there is only visible in the reported false-positive rate"). The amendment is nevertheless **post hoc with respect to that observation**: the project
+owner and I had seen the Stage 1 rankings under the declared criterion when it was chosen. No re-ranking under the new criterion existed when this section was written.
+
+### A7.2 The amended criterion (primary), exactly
+
+For a candidate configuration and a tuning set S (the set's tuning chips, **all** of them, with or without flood):
+
+  J(S) = sum over chips c in S of TP_c / sum over chips c in S of (TP_c + FP_c + FN_c),
+
+with TP, FP, FN the **flood-only** counts (evaluation domain of section 1, JRC-masked, NaN and unlabelled pixels ignored). It is **pooled flood-only IoU over all tuning chips**.
+A flood-free chip has TP = FN = 0, so it contributes only its false positives to the denominator; a chip with an empty domain contributes zero counts. A guard that abstains on a flood-free chip
+therefore removes that chip's false positives from the denominator and can raise J. It applies to **every variant, plain and guarded** (B1, B2 VV/VH, M1, M2 and their guarded versions), and to the
+preprocessing-option ranking of every stage. **Tie-breaks:** the declared ones are kept; the earlier "higher pooled IoU" tie-break is now the criterion itself, so an exact tie goes to the earlier candidate
+in config order (thresholds ascending, ceilings in list order, options in config order). **How this differs from what was asked: it does not.** One property to keep in mind: pooling weights chips
+by pixels, so chips with large flood areas or large false-alarm volumes dominate and the many small-flood chips count little. That is the reason both pooled and per-chip results continue to be reported.
+
+### A7.3 The declared criterion becomes a sensitivity analysis
+
+The declared criterion (mean per-chip flood-only IoU over tuning chips with flood, tie-breaks pooled IoU then config order) is kept as the **sensitivity criterion**. The **whole search is also run under it**
+(the same count cache, so no extra clustering; separate rankings, unions, stage-2/3 selections, frozen configurations and held-out scores) and its results are **reported alongside the primary ones**. Selection is one
+thing and reporting another: **both pooled and mean-per-chip held-out scores are reported for both criteria's configurations.** The reason given in A2.2 for making the mean per-chip IoU the headline
+("it is the selection criterion") no longer holds; which score is the headline is left to the project owner (my suggestion: pooled, to match selection).
+
+### A7.4 Re-applying the grid-edge rule (A2.5) under the amended criterion
+
+The Stage 1 counts are re-used, so re-ranking costs nothing. The rule is then applied per criterion, per tuning set and per variant, with only the extensions that still trigger executed:
+
+- **Median window** (edge 7): if a (tuning set, variant) winner has median 7, that (set, variant) gets median 9 for all four clips; if the new winner is 9, it gets 11; at most 2 extensions (A2.5). The needed units are computed
+  once for all chips (about 21 minutes per level on 4 workers) and shared by both criteria; a (set, variant) whose winner is not at the edge does not get the extended options. Options absent from a set's ranking count as rank (length + 1) in the
+  union's mean-rank tie-break (A5.3).
+- **B1 threshold** (edges -30 and -8) is handled the same way if it triggers (new thresholds need a recompute of B1, about 12 minutes); at Stage 1 it was interior.
+- **Guard ceiling** (edges -18 and -12): **not executed automatically.** If a guarded winner is still at an edge under the primary criterion, I stop and report to the project owner (his instruction); an exact tie among ceilings resolves
+  to the lowest ceiling by config order, so ties are flagged rather than counted as evidence for the edge. For the sensitivity criterion the ceiling extension is **not run**: reason declared now, the guard cannot win under that criterion, and the run would cost about 81 minutes to approach the plain method.
+- Every trigger is logged in `results/grid_extension_log.md` as executed or not executed, with the reason.
+
+---
 `configs/config.yaml` sha256 history:
 
 - when this protocol was first written: `3e8b2fb240b85a7903b30f0a2a788d86b17f8ba9216eb5ea9d354e1321364991`
@@ -744,4 +788,5 @@ since it may change. **Stage 2 has not started.**
 - after the A4.4 YAML-key fix: `9148fbc3d098e8e3403d521ee3eef768f15354a82e354ad50d0b94582617744e`
 - after Amendment 5 declarations, checks not yet run: `1f1572513f168a93eef5d41099bdd26efd4eed50dac76eca0d53aae6ea1dff23`
 - after A5.5, M2 `n_init` 10 added: `ae1dbc6e84fc1b14f4409188e5e5bd5d74a28b8f1fe05607eeca9d8780b68b0b`
-- after Amendment 6 (current; Stage 1 ran with exactly this config, code commit `f569460`): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`
+- after Amendment 6 (Stage 1 ran with exactly this config, code commit `f569460`): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`
+- after Amendment 7, before any re-ranking (current): `5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e`
