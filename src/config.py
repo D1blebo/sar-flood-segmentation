@@ -35,3 +35,8 @@ def b1_thresholds_for_clip(cfg, clip):
     if clip is None:
         return thresholds
     return [t for t in thresholds if t > clip["vv"][0]]
+
+
+def prep_name(clip_name, median_window):
+    """Canonical name of a preprocessing option, also used as part of the SLIC cache key."""
+    return f"clip={clip_name},median={median_window}"

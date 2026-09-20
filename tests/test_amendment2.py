@@ -182,3 +182,27 @@ def test_config_has_no_accidental_boolean_or_numeric_keys():
             for item in node:
                 walk(item, path)
     walk(cfg)
+
+
+# ---- Amendment 5: seed-comparison helper ----------------------------------------------------
+
+def test_compare_seeds_and_prep_name_hand_computed():
+    from src.config import prep_name
+    from src.seed_check import compare_seeds
+
+    class Stub(ClusteringMethod):
+        def __init__(self, cmap):
+            self.cmap = np.array([cmap], np.int32)
+
+        def cluster_map(self, vv, vh, cache_key=None):
+            return self.cmap
+
+    vv = np.array([[-25, -25, -10, -10, -5, -5]], np.float32)
+    maps = {42: [0, 0, 1, 1, 2, 2], 0: [0, 0, 1, 1, 2, 2], 1: [0, 1, 1, 1, 2, 2]}
+    rows = compare_seeds(lambda seed: Stub(maps[seed]), vv, vv - 7, [42, 0, 1])
+    assert [r["seed"] for r in rows] == [0, 1]
+    assert rows[0]["iou"] == 1.0                                    # same partition
+    # seed 1: water is the cluster holding only pixel 0 (mean -25); reference water = pixels 0 and 1
+    assert rows[1]["iou"] == 0.5 and rows[1]["reference_water_px"] == 2 and rows[1]["seed_water_px"] == 1
+    assert rows[1]["valid_px"] == 6 and rows[1]["reference_mean_vv"] == -25.0
+    assert prep_name("medium", 3) == "clip=medium,median=3"

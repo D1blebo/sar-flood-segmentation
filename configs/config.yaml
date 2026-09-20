@@ -104,8 +104,14 @@ search_plan:
   # Stage 2 works on the UNION over all tuning sets (and over plain and guarded variants) of each
   # method's stage-1 top-two preprocessing options; each option is computed once for all chips and
   # cached, and each tuning set still ranks only within its OWN top two.
-  stage2_union: {compute_once_share_cache: true, each_tuning_set_ranks_only_its_own_top_two: true,
-                 report_union_size_and_projected_cost_before_starting: true}
+  # Amendment 5 (A5.3): the union is capped. Applied per method variant (M1, M1g, M2, M2g).
+  stage2_union:
+    top_per_tuning_set: 2
+    max_options_in_union: 6
+    rank_union_by: [tuning_sets_with_option_in_top2_desc, mean_rank_over_all_tuning_sets_asc]
+    tuning_set_fallback: own_next_best_option_that_is_in_the_union
+    compute_once_share_cache: true
+    report_union_size_and_projected_cost_before_starting: true
   stage1:                                    # preprocessing: 4 clips x 4 median windows = 16 options
     b1: {thresholds: all, preprocessing: all}          # exhaustive, cheap
     b2: {bands: [vv, vh], preprocessing: all}          # exhaustive, cheap
@@ -189,3 +195,24 @@ seed_sensitivity_followup:
   changed_fraction_limit: 0.10                        # project owner's threshold
   tiny_cluster_fraction: 0.01                         # DESCRIPTIVE only: water cluster < 1% of valid pixels
   timing_chips: 10
+
+# Amendment 5: full seed-sensitivity checks (label-free, official TRAIN chips, seeds/n_chips/threshold from
+# seed_sensitivity above). Four preprocessing conditions = {no clip, medium clip} x {median 0, median 3}.
+# `original_conditions` are the two used by the first check and the follow-up. M2 is checked at the nominal
+# SLIC setting on cached segmentations. The decision rules are in results/evaluation_protocol.md (A5.1, A5.2).
+seed_sensitivity_full:
+  conditions:
+    - {clip: none, median: 0}
+    - {clip: none, median: 3}
+    - {clip: medium, median: 0}
+    - {clip: medium, median: 3}
+  original_conditions:
+    - {clip: none, median: 0}
+    - {clip: medium, median: 3}
+  n_init_list: [3, 10]
+  m1: {k: [2, 3, 4, 5]}
+  m2: {k: [2, 3, 4, 5], features: [vv, vv_vh, vv_vh_std, vv_vh_diff], n_segments: 500, compactness: 0.05}
+  changed_fraction_limit: 0.10
+  n_init_tie_within_pp: 2
+  tiny_cluster_fraction: 0.01
+  rows_dir: data/seed_checks

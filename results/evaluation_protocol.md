@@ -514,6 +514,85 @@ change), and a test now fails if any config key is a boolean or a number (except
 map). Found by printing the parsed config after the A4.3 edit; nothing had read those keys yet.
 
 ---
+
+## Amendment 5 (2026-09-20, before any tuning and before any test scoring; written BEFORE the checks below ran)
+
+### A5.0 What the earlier changed-comparison counts covered
+
+The counts quoted in earlier reports come from **different runs and different sets of k**, which is why they do not
+add up against each other. All use the same 40 train chips, 5 seeds and the two original conditions
+(C1 = no clip / median 0, C4 = medium clip / median 3), so each k has 40 chips x 4 non-reference seeds x 2
+conditions = **320 comparisons**:
+
+- **183 of 640**: the FIRST check (A3.3), `n_init` 3, k = 4 and k = 5 only (k=4: 37 + 30 = 67; k=5: 60 + 56 = 116).
+- **154 of 960**: the FOLLOW-UP (A4.3), `n_init` 10, k = 3, 4 and 5 (k=3: 26; k=4: 50; k=5: 78).
+- **32 of 320**: the FOLLOW-UP, `n_init` 3, k = 3 only.
+
+The like-for-like comparison for k = 4 and 5 is therefore 183 of 640 (28.6%) at `n_init` 3 against 128 of 640
+(20.0%) at `n_init` 10. The full run below re-computes every cell, so all counts can be read from one table with
+denominators (its Table 3 reproduces these numbers as a determinism check).
+
+### A5.1 M1: full table, and the reading of the k = 2 and k = 3 rule (an interpretation, made before any Stage 1 score exists)
+
+- **Full table (label-free):** k in {2, 3, 4, 5} x `n_init` in {3, 10} x **four** preprocessing conditions
+  (C1 no clip / median 0, C2 no clip / median 3, C3 medium clip / median 0, C4 medium clip / median 3), same 40
+  train chips and 5 seeds. Per cell: changed / comparisons, chips with any change / 40, worst IoU, and the mean VV (dB)
+  of the chosen water cluster in the changed comparisons. This adds k = 2 (never measured) and the two conditions that
+  were not run before. Only C1 and C4 existed when the k = 3 and k = 4/5 verdicts of A4.3 were reached; C2, C3 and
+  k = 2 are new evidence and are **not** used to re-open A4.3's decisions on k = 4 and 5 (they stay dropped).
+- **Reading of the owner's k = 3 rule (his instruction, logged here as an interpretation):** k = 3 **stays a candidate
+  for Stage 1**, with whichever `n_init` (3 or 10) has the **lower pooled changed fraction**; **use 3 if the two are
+  within 2 percentage points** (inclusive). The same reading is extended to **k = 2**, declared before any k = 2 data
+  exist. The pooled fraction is taken over **all four conditions** (comparisons at that k and `n_init`). Disclosure:
+  on the two original conditions alone, k = 3 was 32 of 320 = 10.0% at `n_init` 3 and 26 of 320 = 8.1% at `n_init` 10, a
+  1.9-point difference, which I knew when choosing the four-condition basis; the four-condition figures for
+  C2 and C3 were not known.
+- **Whichever `n_init` is chosen, the remaining instability is reported as a caveat** (pooled fraction and worst single
+  condition), and neither k = 2 nor k = 3 is dropped by this rule.
+
+### A5.2 M2 seed sensitivity (rule fixed before running)
+
+- **Design:** same 40 train chips, same 5 seeds (reference 42), same "changed" definition (IoU with the reference seed
+  below 0.95), no labels. M2 is run at the **nominal SLIC setting (500 segments, compactness 0.05)**, on the four
+  conditions above, for **k in {2, 3, 4, 5} x all four feature sets** (`vv`, `vv_vh`, `vv_vh_std`, `vv_vh_diff`), at `n_init`
+  3 and 10. SLIC itself is deterministic, so only the k-means seed varies; segmentations are read from, and written to,
+  the on-disk cache (the same cache Stage 1 will use, keyed by chip and preprocessing).
+- **`n_init`:** **10** for M2, unless there is a reason not to. The reason declared now: pooled over all comparisons, the
+  changed fraction at `n_init` 10 is **more than 2 percentage points worse** than at `n_init` 3 (then `n_init` 3).
+- **The 10% rule, applied to each (feature set, k) at the `n_init` in force:** keep it if the changed fraction is below
+  10% in **every** one of the four conditions; otherwise **drop that (feature set, k) combination** from M2's grid.
+- **Not covered by the rule, so I stop and ask instead of acting:** (a) if the nominal Stage-1 combination
+  (`vv_vh`, k = 3) would be dropped, because Stage 1's M2 depends on it; (b) if no combination would remain.
+- **Limitation, stated in advance:** only the nominal SLIC setting is checked; other `n_segments`/`compactness` values,
+  which change the segments the k-means sees, may behave differently.
+
+### A5.3 Stage 2 union: capped at 6 options
+
+This replaces the uncapped union of A3.2 (its "each tuning set ranks only within its own top two" gets the fallback
+below). Applied **per method variant** (M1, M1g, M2, M2g); B1 and B2 finish in stage 1.
+
+1. From each of the 12 tuning sets, take that set's **top 2** preprocessing options for the variant (stage-1 ranking).
+2. Rank the options by **how many tuning sets put them in their top 2** (descending); break ties by **mean rank over all
+   12 tuning sets' full stage-1 rankings** (1 = best, ascending). Keep the **top 6**: this is the union.
+3. **Fallback:** a tuning set whose top-2 options are not in the union uses its **own best-ranked options that are in the
+   union** (up to two), so it still ranks only using its own data.
+4. Each option in the union is computed once for all chips and cached; each tuning set reads only its own chips.
+- **Known limitation (leakage path):** the union depends on every tuning set's stage-1 ranking, and each ranking is computed
+  from data that include *other* folds' held-out events. So a held-out event's chips can, through the other folds' rankings,
+  influence **which options exist** for its own fold. Its own selection never uses its held-out chips, and any two tuning sets
+  share at least about 70% of their chips, so the effect is expected to be small, but it is not zero.
+- **Cost bound:** one M2 stage-2 sweep per option is about 65 min serial (16 configurations x 446 chips x 0.55 s), 33 min at the
+  measured 2x parallel speedup; one M1 sweep (k = 2 only) about 5 min serial. With at most 6 options per variant, stage 2
+  is bounded by about **3.6 h at 2x** (plain and guarded variants sharing their options) up to about **7 h at 2x** (12
+  distinct options per method); at an unmeasured 4x, about 1.8 h to 3.5 h. The actual estimate, from the real union, is
+  reported before stage 2 starts.
+
+### A5.4 Housekeeping
+
+`tests/test_config_keys.py` statically checks that every config key the code reads exists in the config (it follows aliases
+such as `sc = cfg["seed_sensitivity"]`, is self-tested, and was shown to fail when a key is renamed). `.claude/` is git-ignored.
+
+---
 `configs/config.yaml` sha256 history:
 
 - when this protocol was first written: `3e8b2fb240b85a7903b30f0a2a788d86b17f8ba9216eb5ea9d354e1321364991`
@@ -521,4 +600,5 @@ map). Found by printing the parsed config after the A4.3 edit; nothing had read 
 - after Amendment 3: `c026bb49ecae6c61fa91d9b38955c8c6d57a82b6f45718de7fa1b6b64bc15b90`
 - after Amendment 4, decision rule written, follow-up not yet run: `eb9edf20abb31c69ff200024502db888384c7e0d12fcd354e94fffc007045bb4`
 - after A4.3, rule's consequences applied (superseded within minutes by the next line): `4b0762340323783b83884fe74d6c570af4d0e8b508f20239e4e368baf849179d`
-- after the A4.4 YAML-key fix (current, before any tuning): `9148fbc3d098e8e3403d521ee3eef768f15354a82e354ad50d0b94582617744e`
+- after the A4.4 YAML-key fix: `9148fbc3d098e8e3403d521ee3eef768f15354a82e354ad50d0b94582617744e`
+- after Amendment 5 declarations, checks not yet run (current, before any tuning): `1f1572513f168a93eef5d41099bdd26efd4eed50dac76eca0d53aae6ea1dff23`
