@@ -1,0 +1,178 @@
+STAGE 1 RANKING REPORT (tuning-set aggregates only; no held-out chip is scored here)
+config sha256 39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a; git HEAD f56946069409; tracked files modified: none
+units loaded: 440 chips x 16 preprocessing options; truth/domain consistency check passed
+criterion = mean per-chip flood-only IoU over the tuning set's chips with flood; guarded variants are ranked by their best (configuration, ceiling); plain variants by unguarded scores only (A3.1)
+
+tuning sets (chips in the tuning set / of which have flood-only truth):
+  loeo:Bolivia           425 / 378
+  loeo:Ghana             392 / 366
+  loeo:India             372 / 327
+  loeo:Mekong            410 / 364
+  loeo:Nigeria           422 / 375
+  loeo:Pakistan          412 / 372
+  loeo:Paraguay          374 / 337
+  loeo:Somalia           414 / 371
+  loeo:Spain             410 / 363
+  loeo:Sri-Lanka         398 / 353
+  loeo:USA               371 / 324
+  official_valid          86 /  77
+
+=== b1: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=none,median=5 thr -14 (0.243)               2. clip=wide,median=5 thr -14 (0.243)
+  loeo:Ghana             1. clip=none,median=5 thr -14 (0.244)               2. clip=wide,median=5 thr -14 (0.244)
+  loeo:India             1. clip=none,median=5 thr -15 (0.249)               2. clip=wide,median=5 thr -15 (0.249)
+  loeo:Mekong            1. clip=none,median=5 thr -14 (0.227)               2. clip=wide,median=5 thr -14 (0.227)
+  loeo:Nigeria           1. clip=none,median=5 thr -14 (0.243)               2. clip=wide,median=5 thr -14 (0.243)
+  loeo:Pakistan          1. clip=none,median=5 thr -14 (0.251)               2. clip=wide,median=5 thr -14 (0.251)
+  loeo:Paraguay          1. clip=none,median=5 thr -14 (0.247)               2. clip=wide,median=5 thr -14 (0.247)
+  loeo:Somalia           1. clip=none,median=5 thr -14 (0.256)               2. clip=wide,median=5 thr -14 (0.256)
+  loeo:Spain             1. clip=none,median=5 thr -14 (0.246)               2. clip=wide,median=5 thr -14 (0.246)
+  loeo:Sri-Lanka         1. clip=none,median=5 thr -14 (0.255)               2. clip=wide,median=5 thr -14 (0.255)
+  loeo:USA               1. clip=none,median=5 thr -14 (0.276)               2. clip=wide,median=5 thr -14 (0.276)
+  official_valid         1. clip=none,median=5 thr -14 (0.258)               2. clip=wide,median=5 thr -14 (0.258)
+
+=== b2_vv: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 (0.215)                     2. clip=medium,median=7 (0.215)
+  loeo:Ghana             1. clip=narrow,median=7 (0.220)                     2. clip=medium,median=7 (0.220)
+  loeo:India             1. clip=narrow,median=7 (0.215)                     2. clip=medium,median=7 (0.215)
+  loeo:Mekong            1. clip=narrow,median=7 (0.203)                     2. clip=medium,median=7 (0.203)
+  loeo:Nigeria           1. clip=narrow,median=7 (0.217)                     2. clip=medium,median=7 (0.217)
+  loeo:Pakistan          1. clip=narrow,median=7 (0.225)                     2. clip=medium,median=7 (0.225)
+  loeo:Paraguay          1. clip=narrow,median=7 (0.223)                     2. clip=medium,median=7 (0.223)
+  loeo:Somalia           1. clip=narrow,median=7 (0.228)                     2. clip=medium,median=7 (0.227)
+  loeo:Spain             1. clip=narrow,median=7 (0.217)                     2. clip=wide,median=7 (0.217)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 (0.230)                     2. clip=medium,median=7 (0.230)
+  loeo:USA               1. clip=narrow,median=7 (0.248)                     2. clip=medium,median=7 (0.248)
+  official_valid         1. clip=narrow,median=7 (0.231)                     2. clip=medium,median=7 (0.231)
+
+=== b2_vh: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 (0.230)                     2. clip=medium,median=7 (0.229)
+  loeo:Ghana             1. clip=narrow,median=7 (0.235)                     2. clip=medium,median=7 (0.234)
+  loeo:India             1. clip=narrow,median=7 (0.233)                     2. clip=medium,median=7 (0.232)
+  loeo:Mekong            1. clip=narrow,median=7 (0.220)                     2. clip=wide,median=7 (0.219)
+  loeo:Nigeria           1. clip=narrow,median=7 (0.233)                     2. clip=medium,median=7 (0.232)
+  loeo:Pakistan          1. clip=narrow,median=7 (0.242)                     2. clip=medium,median=7 (0.241)
+  loeo:Paraguay          1. clip=narrow,median=7 (0.230)                     2. clip=medium,median=7 (0.229)
+  loeo:Somalia           1. clip=narrow,median=7 (0.243)                     2. clip=medium,median=7 (0.242)
+  loeo:Spain             1. clip=narrow,median=7 (0.237)                     2. clip=wide,median=7 (0.235)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 (0.245)                     2. clip=medium,median=7 (0.243)
+  loeo:USA               1. clip=narrow,median=7 (0.262)                     2. clip=medium,median=7 (0.261)
+  official_valid         1. clip=narrow,median=7 (0.243)                     2. clip=wide,median=7 (0.241)
+
+=== b2g_vv: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 ceil -12 (0.197)            2. clip=medium,median=7 ceil -12 (0.197)
+  loeo:Ghana             1. clip=narrow,median=7 ceil -12 (0.201)            2. clip=medium,median=7 ceil -12 (0.201)
+  loeo:India             1. clip=narrow,median=7 ceil -12 (0.202)            2. clip=medium,median=7 ceil -12 (0.202)
+  loeo:Mekong            1. clip=narrow,median=7 ceil -12 (0.184)            2. clip=medium,median=7 ceil -12 (0.184)
+  loeo:Nigeria           1. clip=narrow,median=7 ceil -12 (0.198)            2. clip=medium,median=7 ceil -12 (0.198)
+  loeo:Pakistan          1. clip=narrow,median=7 ceil -12 (0.206)            2. clip=medium,median=7 ceil -12 (0.206)
+  loeo:Paraguay          1. clip=narrow,median=7 ceil -12 (0.204)            2. clip=medium,median=7 ceil -12 (0.204)
+  loeo:Somalia           1. clip=narrow,median=7 ceil -12 (0.208)            2. clip=medium,median=7 ceil -12 (0.208)
+  loeo:Spain             1. clip=narrow,median=7 ceil -12 (0.197)            2. clip=wide,median=7 ceil -12 (0.197)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 ceil -12 (0.214)            2. clip=medium,median=7 ceil -12 (0.214)
+  loeo:USA               1. clip=narrow,median=7 ceil -12 (0.226)            2. clip=medium,median=7 ceil -12 (0.226)
+  official_valid         1. clip=narrow,median=7 ceil -12 (0.216)            2. clip=medium,median=7 ceil -12 (0.216)
+
+=== b2g_vh: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 ceil -12 (0.191)            2. clip=medium,median=7 ceil -12 (0.190)
+  loeo:Ghana             1. clip=narrow,median=7 ceil -12 (0.194)            2. clip=medium,median=7 ceil -12 (0.193)
+  loeo:India             1. clip=narrow,median=7 ceil -12 (0.202)            2. clip=medium,median=7 ceil -12 (0.200)
+  loeo:Mekong            1. clip=narrow,median=7 ceil -12 (0.179)            2. clip=wide,median=7 ceil -12 (0.178)
+  loeo:Nigeria           1. clip=narrow,median=7 ceil -12 (0.193)            2. clip=medium,median=7 ceil -12 (0.192)
+  loeo:Pakistan          1. clip=narrow,median=7 ceil -12 (0.201)            2. clip=medium,median=7 ceil -12 (0.200)
+  loeo:Paraguay          1. clip=narrow,median=7 ceil -12 (0.199)            2. clip=medium,median=7 ceil -12 (0.198)
+  loeo:Somalia           1. clip=narrow,median=7 ceil -12 (0.202)            2. clip=medium,median=7 ceil -12 (0.200)
+  loeo:Spain             1. clip=narrow,median=7 ceil -12 (0.194)            2. clip=none,median=7 ceil -12 (0.193)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 ceil -12 (0.209)            2. clip=medium,median=7 ceil -12 (0.208)
+  loeo:USA               1. clip=narrow,median=7 ceil -12 (0.215)            2. clip=medium,median=7 ceil -12 (0.214)
+  official_valid         1. clip=narrow,median=7 ceil -12 (0.205)            2. clip=wide,median=7 ceil -12 (0.203)
+
+=== m1: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 (0.245)                     2. clip=narrow,median=5 (0.243)
+  loeo:Ghana             1. clip=narrow,median=5 (0.247)                     2. clip=narrow,median=7 (0.247)
+  loeo:India             1. clip=narrow,median=7 (0.242)                     2. clip=narrow,median=5 (0.239)
+  loeo:Mekong            1. clip=narrow,median=7 (0.237)                     2. clip=medium,median=7 (0.235)
+  loeo:Nigeria           1. clip=narrow,median=7 (0.250)                     2. clip=narrow,median=5 (0.247)
+  loeo:Pakistan          1. clip=narrow,median=7 (0.254)                     2. clip=narrow,median=5 (0.252)
+  loeo:Paraguay          1. clip=narrow,median=7 (0.252)                     2. clip=medium,median=7 (0.248)
+  loeo:Somalia           1. clip=narrow,median=7 (0.258)                     2. clip=narrow,median=5 (0.256)
+  loeo:Spain             1. clip=narrow,median=7 (0.248)                     2. clip=narrow,median=5 (0.246)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 (0.257)                     2. clip=narrow,median=5 (0.255)
+  loeo:USA               1. clip=narrow,median=7 (0.269)                     2. clip=narrow,median=5 (0.267)
+  official_valid         1. clip=narrow,median=5 (0.240)                     2. clip=narrow,median=3 (0.237)
+
+=== m1g: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=5 ceil -12 (0.225)            2. clip=narrow,median=7 ceil -12 (0.224)
+  loeo:Ghana             1. clip=narrow,median=5 ceil -12 (0.230)            2. clip=narrow,median=7 ceil -12 (0.227)
+  loeo:India             1. clip=narrow,median=7 ceil -12 (0.231)            2. clip=narrow,median=5 ceil -12 (0.229)
+  loeo:Mekong            1. clip=narrow,median=7 ceil -12 (0.217)            2. clip=narrow,median=5 ceil -12 (0.217)
+  loeo:Nigeria           1. clip=narrow,median=5 ceil -12 (0.230)            2. clip=narrow,median=7 ceil -12 (0.230)
+  loeo:Pakistan          1. clip=narrow,median=5 ceil -12 (0.234)            2. clip=narrow,median=7 ceil -12 (0.234)
+  loeo:Paraguay          1. clip=narrow,median=7 ceil -12 (0.231)            2. clip=narrow,median=5 ceil -12 (0.231)
+  loeo:Somalia           1. clip=narrow,median=5 ceil -12 (0.237)            2. clip=narrow,median=7 ceil -12 (0.237)
+  loeo:Spain             1. clip=narrow,median=5 ceil -12 (0.227)            2. clip=narrow,median=7 ceil -12 (0.227)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 ceil -12 (0.238)            2. clip=narrow,median=5 ceil -12 (0.238)
+  loeo:USA               1. clip=narrow,median=5 ceil -12 (0.246)            2. clip=narrow,median=7 ceil -12 (0.246)
+  official_valid         1. clip=narrow,median=3 ceil -12 (0.225)            2. clip=narrow,median=5 ceil -12 (0.220)
+
+=== m2: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=none,median=7 (0.208)                       2. clip=wide,median=7 (0.208)
+  loeo:Ghana             1. clip=none,median=7 (0.212)                       2. clip=wide,median=7 (0.212)
+  loeo:India             1. clip=none,median=7 (0.211)                       2. clip=wide,median=7 (0.211)
+  loeo:Mekong            1. clip=none,median=7 (0.199)                       2. clip=wide,median=7 (0.199)
+  loeo:Nigeria           1. clip=none,median=7 (0.210)                       2. clip=wide,median=7 (0.210)
+  loeo:Pakistan          1. clip=none,median=7 (0.218)                       2. clip=wide,median=7 (0.218)
+  loeo:Paraguay          1. clip=none,median=7 (0.217)                       2. clip=wide,median=7 (0.217)
+  loeo:Somalia           1. clip=none,median=7 (0.220)                       2. clip=wide,median=7 (0.220)
+  loeo:Spain             1. clip=none,median=7 (0.213)                       2. clip=wide,median=7 (0.213)
+  loeo:Sri-Lanka         1. clip=none,median=7 (0.223)                       2. clip=wide,median=7 (0.222)
+  loeo:USA               1. clip=none,median=7 (0.239)                       2. clip=wide,median=7 (0.239)
+  official_valid         1. clip=none,median=7 (0.219)                       2. clip=wide,median=7 (0.218)
+
+=== m2g: best two preprocessing options per tuning set (criterion on that tuning set) ===
+  loeo:Bolivia           1. clip=none,median=5 ceil -12 (0.178)              2. clip=none,median=7 ceil -12 (0.178)
+  loeo:Ghana             1. clip=none,median=7 ceil -12 (0.181)              2. clip=none,median=5 ceil -12 (0.180)
+  loeo:India             1. clip=none,median=5 ceil -12 (0.186)              2. clip=none,median=7 ceil -12 (0.185)
+  loeo:Mekong            1. clip=none,median=5 ceil -12 (0.167)              2. clip=none,median=7 ceil -12 (0.167)
+  loeo:Nigeria           1. clip=none,median=5 ceil -12 (0.180)              2. clip=none,median=7 ceil -12 (0.179)
+  loeo:Pakistan          1. clip=none,median=5 ceil -12 (0.186)              2. clip=none,median=7 ceil -12 (0.186)
+  loeo:Paraguay          1. clip=none,median=7 ceil -12 (0.192)              2. clip=wide,median=7 ceil -12 (0.192)
+  loeo:Somalia           1. clip=none,median=5 ceil -12 (0.188)              2. clip=none,median=7 ceil -12 (0.188)
+  loeo:Spain             1. clip=none,median=5 ceil -12 (0.181)              2. clip=none,median=7 ceil -12 (0.180)
+  loeo:Sri-Lanka         1. clip=none,median=7 ceil -12 (0.194)              2. clip=wide,median=7 ceil -12 (0.194)
+  loeo:USA               1. clip=none,median=5 ceil -12 (0.202)              2. clip=none,median=7 ceil -12 (0.202)
+  official_valid         1. clip=none,median=7 ceil -12 (0.190)              2. clip=wide,median=7 ceil -12 (0.189)
+
+=== STAGE-2 UNION (A5.3): top 2 per tuning set, at most 6 options, ranked by number of tuning sets choosing them ===
+
+m1: 4 distinct options appear in some tuning set's top two; union keeps 4
+   clip=narrow,median=7     chosen by 11 of 12 sets, mean rank  1.25   KEPT
+   clip=narrow,median=5     chosen by 10 of 12 sets, mean rank  2.00   KEPT
+   clip=medium,median=7     chosen by  2 of 12 sets, mean rank  3.08   KEPT
+   clip=narrow,median=3     chosen by  1 of 12 sets, mean rank  8.08   KEPT
+   tuning sets that use the fallback (own top two not both in the union): 0 of 12
+
+m1g: 3 distinct options appear in some tuning set's top two; union keeps 3
+   clip=narrow,median=5     chosen by 12 of 12 sets, mean rank  1.42   KEPT
+   clip=narrow,median=7     chosen by 11 of 12 sets, mean rank  1.83   KEPT
+   clip=narrow,median=3     chosen by  1 of 12 sets, mean rank  4.50   KEPT
+   tuning sets that use the fallback (own top two not both in the union): 0 of 12
+
+m2: 2 distinct options appear in some tuning set's top two; union keeps 2
+   clip=none,median=7       chosen by 12 of 12 sets, mean rank  1.00   KEPT
+   clip=wide,median=7       chosen by 12 of 12 sets, mean rank  2.00   KEPT
+   tuning sets that use the fallback (own top two not both in the union): 0 of 12
+
+m2g: 3 distinct options appear in some tuning set's top two; union keeps 3
+   clip=none,median=7       chosen by 12 of 12 sets, mean rank  1.67   KEPT
+   clip=none,median=5       chosen by  9 of 12 sets, mean rank  1.75   KEPT
+   clip=wide,median=7       chosen by  3 of 12 sets, mean rank  2.75   KEPT
+   tuning sets that use the fallback (own top two not both in the union): 0 of 12
+
+=== MEASURED STAGE-1 TIMING AND PROJECTED STAGE-2 COST ===
+mean seconds per unit (serial): preprocess 0.30, b1 0.10, b2 0.06, m1 1.77, m2 0.64; total 2.87
+worker utilisation in the stage-1 run (sum of per-unit times / wall): 4.0; this shows the 4 workers were kept busy, it is not a comparison with an uncontended serial run
+stage 2 needs 3 distinct M2 options and 4 distinct M1 options (plain and guarded share an option when they coincide)
+projected stage-2 time: sum of measured per-unit times 3.8 h (each measured while 4 workers ran at once), so about 0.9 h of wall time on 4 workers (M1 stage 2 is ASSUMED to cost 30% of a stage-1 M1 unit; M2: 15 new (n_segments, compactness) configurations per option)
+
+STOP: stage 2 does not start until the project owner approves this union and cost.

@@ -689,6 +689,50 @@ is ranked over 16 options and k = 2 over two, k = 3 has more selection pressure 
   approval before stage 2 starts.**
 - The per-chip counts of held-out chips exist in the cache (each chip is a tuning chip for the other folds); they are never printed chip by chip.
 
+### A6.5 Stage 1 results (2026-09-20; `results/tuning/stage1_compute.log`, `stage1_report.txt`, `stage1_rankings.json`; config sha256 unchanged, code at commit `f569460`)
+
+**Run:** 7,040 units (440 chips x 16 preprocessing options), 0 errors, 84.7 min wall on 4 workers. Sum of per-unit times 338.5 min, measured
+while 4 workers ran at once, so the log's "4.00x" is worker utilisation, not a comparison with an uncontended serial run. Mean per unit (contended):
+preprocess 0.30 s, B1 0.10, B2 0.06, M1 1.77, M2 0.64; total 2.87 s. Truth and domain counts were checked to be identical across every candidate.
+All numbers below are aggregates over a tuning set's own chips (11 leave-one-event-out folds, 371 to 425 tuning chips each, plus the official validation
+split, 86 chips); no held-out chip is scored.
+
+**Top-1 criterion (mean per-chip flood-only IoU on the tuning set) across the 12 tuning sets, and how the winners sit on the grids:**
+
+| Variant | Top-1 criterion range | Winner has median 7 (grid edge) | Winner has ceiling -12 (grid edge) |
+|---|---|---|---|
+| B1 | 0.227 to 0.276 (thresholds -14 or -15; interior) | 0 / 12 (median 5) | n/a |
+| B2 VV / VH | 0.203 to 0.248 / 0.220 to 0.262 | 12 / 12 both | n/a |
+| B2g VV / VH | 0.184 to 0.226 / 0.179 to 0.215 | 12 / 12 both | **12 / 12 both** |
+| M1 | 0.237 to 0.269 | 10 / 12 | n/a |
+| M1g | 0.217 to 0.246 | 4 / 12 | **12 / 12** |
+| M2 (nominal `vv_vh`, k = 2) | 0.199 to 0.239 | 12 / 12 | n/a |
+| M2g | 0.167 to 0.202 | 4 / 12 | **12 / 12** |
+
+**Union (A5.3), from the 12 tuning sets:** the cap of 6 was not binding and no tuning set needed the fallback. M1: 4 options (`narrow,7` chosen by 11 of 12
+sets, `narrow,5` by 10, `medium,7` by 2, `narrow,3` by 1); M1g: 3; M2: 2 (`none,7` and `wide,7`, chosen by all 12); M2g: 3 (`none,7`, `none,5`, `wide,7`).
+Distinct options needed: **3 for M2, 4 for M1**. **Projected stage 2, without any grid extension:** M2 3 x 15 configurations x 440 chips x 0.64 s, M1 4 x 440 x
+1.77 s x 0.30 (assumed), i.e. 3.8 h of contended unit time, **about 0.9 h of wall time on 4 workers**.
+
+**Two things the pre-declared rules now require attention for (nothing has been executed):**
+
+1. **Grid-edge rule (A2.5) fires.** The median window is at its upper edge (7) for the winner in 12 of 12 tuning sets for B2, B2g and M2, and in 10 of 12 for M1; the
+   guard ceiling is at its permissive edge (-12) for 12 of 12 sets in every guarded variant. The rule extends each numeric grid by one step per tuning set (median 7 to 9;
+   ceiling -12 to -9), at most twice. The clip is categorical and is not extended; the B1 threshold is interior. Cost of executing it: median 9 is 4 new options x 440 chips
+   = 1,760 units, about 21 min on 4 workers (another 21 min if 9 is again the edge). Ceiling -9 cannot be read from the stored counts because the cache does not keep the
+   predicted region's mean VV, so it needs a re-run of B2, M1 and M2 over all 7,040 units, about 81 min; storing that mean VV in the re-run would make every later
+   ceiling free.
+2. **Under the selection criterion, the guard cannot win.** The criterion averages only chips with flood (protocol section 6 stated this weakness in advance: flood-free chips do
+   not enter it). A guard can only remove predictions, so on chips with flood it can at best equal the plain method. Consistently, **the guarded top-1 criterion is lower than the plain one in
+   all 12 of 12 tuning sets for every pair** (gaps: B2-VV 0.013 to 0.022, B2-VH 0.031 to 0.047, M1 0.011 to 0.023, M2 0.025 to 0.037) and every winner sits at the most permissive ceiling. Extending
+   the ceiling grid would push the guarded variants toward the plain ones. The guard's intended benefit, fewer false alarms on flood-free chips (47 of 440 chips), is invisible to
+   this criterion.
+
+**Decisions put to the project owner:** (a) whether to run the median extension now (recommended: yes; it is the declared rule); (b) for the guard, either run the ceiling extension
+as declared (about 81 min, expected to approach plain), or amend the selection criterion so that flood-free chips count (which would apply to all variants for fairness and can be
+re-ranked from the existing counts without recomputing anything), or freeze the guarded variants at the -12 edge and report that; (c) approve the stage-2 union after any extension,
+since it may change. **Stage 2 has not started.**
+
 ---
 `configs/config.yaml` sha256 history:
 
