@@ -20,6 +20,15 @@ from src.preprocess import preprocess
 
 def evaluate_chip(method, chip, clip=None, median_window=0, cache_key=None, with_oracle=False,
                   ceilings_db=()):
+    """Preprocess `chip`, then evaluate one method (see evaluate_prepared for the returned structure)."""
+    vv, vh = preprocess(chip["vv"], chip["vh"], clip, median_window)
+    image_valid = image_valid_mask(chip["vv"], chip["vh"])  # same NaN mask as after preprocessing
+    return evaluate_prepared(method, vv, vh, image_valid, chip["label"], chip["jrc"], cache_key,
+                             with_oracle, ceilings_db)
+
+
+def evaluate_prepared(method, vv, vh, image_valid, label, jrc, cache_key=None, with_oracle=False,
+                      ceilings_db=()):
     """
     Returns {'flood_only': counts, 'all_water': counts} for the plain method, and in addition:
       * with_oracle=True (clustering methods only): '<mode>_oracle' counts. DIAGNOSTIC ONLY, uses
@@ -29,9 +38,6 @@ def evaluate_chip(method, chip, clip=None, median_window=0, cache_key=None, with
         cost one clustering).
     `cache_key` should identify the chip and the preprocessing, e.g. 'Ghana_5079|clip=none|med=0'.
     """
-    vv, vh = preprocess(chip["vv"], chip["vh"], clip, median_window)
-    image_valid = image_valid_mask(chip["vv"], chip["vh"])  # same NaN mask as after preprocessing
-
     cmap = None
     if isinstance(method, ClusteringMethod):
         cmap = method.cluster_map(vv, vh, cache_key)
@@ -42,7 +48,7 @@ def evaluate_chip(method, chip, clip=None, median_window=0, cache_key=None, with
 
     out = {}
     for mode in MODES:
-        domain, truth = evaluation_domain_and_truth(image_valid, chip["label"], chip["jrc"], mode)
+        domain, truth = evaluation_domain_and_truth(image_valid, label, jrc, mode)
         out[mode] = confusion_counts(pred, truth, domain)
         if with_oracle and cmap is not None:
             best, _ = oracle_cluster(cmap, truth, domain)

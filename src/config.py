@@ -31,10 +31,14 @@ def b1_thresholds_for_clip(cfg, clip):
     B1 thresholds worth trying under a clip. Clipping puts a floor `lo` under VV, so VV < t is
     empty for every t <= lo; those thresholds predict nothing and are skipped (Amendment 2).
     """
-    thresholds = b1_threshold_grid(cfg)
+    return b1_thresholds_above_floor(b1_threshold_grid(cfg), clip)
+
+
+def b1_thresholds_above_floor(grid, clip):
+    """The thresholds in `grid` that can predict anything once VV is clipped to clip['vv'] (None = no clip)."""
     if clip is None:
-        return thresholds
-    return [t for t in thresholds if t > clip["vv"][0]]
+        return list(grid)
+    return [t for t in grid if t > clip["vv"][0]]
 
 
 def prep_name(clip_name, median_window):

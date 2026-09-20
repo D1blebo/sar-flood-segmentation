@@ -28,3 +28,17 @@ def map_chips(fn, chip_ids, n_jobs=4, **kwargs):
     with ProcessPoolExecutor(n_jobs, mp_context=mp.get_context("spawn"),
                              initializer=_init_worker) as pool:
         return list(pool.map(partial(fn, **kwargs), chip_ids, chunksize=2))
+
+
+def stream_map(fn, items, n_jobs=4, chunksize=2, **kwargs):
+    """
+    Like map_chips but yields each result as soon as it (and all earlier ones) are ready, so a long
+    run can log progress. Same worker rules: spawn, one thread per worker, picklable fn and kwargs.
+    """
+    items = list(items)
+    if n_jobs <= 1:
+        for item in items:
+            yield fn(item, **kwargs)
+        return
+    with ProcessPoolExecutor(n_jobs, mp_context=mp.get_context("spawn"), initializer=_init_worker) as pool:
+        yield from pool.map(partial(fn, **kwargs), items, chunksize=chunksize)
