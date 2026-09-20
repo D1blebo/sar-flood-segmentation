@@ -744,4 +744,4 @@ since it may change. **Stage 2 has not started.**
 - after the A4.4 YAML-key fix: `9148fbc3d098e8e3403d521ee3eef768f15354a82e354ad50d0b94582617744e`
 - after Amendment 5 declarations, checks not yet run: `1f1572513f168a93eef5d41099bdd26efd4eed50dac76eca0d53aae6ea1dff23`
 - after A5.5, M2 `n_init` 10 added: `ae1dbc6e84fc1b14f4409188e5e5bd5d74a28b8f1fe05607eeca9d8780b68b0b`
-- after Amendment 6, before Stage 1 (current, before any tuning): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`
+- after Amendment 6 (current; Stage 1 ran with exactly this config, code commit `f569460`): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`
