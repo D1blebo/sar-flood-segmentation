@@ -1,0 +1,127 @@
+# Frozen configurations, primary criterion, tuning set loeo:Nigeria (422 tuning chips).
+# Tuning-set metrics only: no held-out chip was scored. config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection e84fdbea7a8f.
+criterion: primary
+tuning_set: loeo:Nigeria
+n_tuning_chips: 422
+selections:
+  b1:
+    tuning_set_pooled_flood_only_iou: 0.3624026963355117
+    tuning_set_mean_per_chip_flood_only_iou: 0.22430029159838774
+    method: B1 fixed threshold on VV
+    preprocessing:
+      clip: none
+      clip_range_db: null
+      median_window: 7
+    threshold_db: -16.0
+  b2_vv:
+    tuning_set_pooled_flood_only_iou: 0.13592031474449554
+    tuning_set_mean_per_chip_flood_only_iou: 0.2182771257139606
+    method: B2 Otsu on VV
+    preprocessing:
+      clip: narrow
+      clip_range_db: &id001
+        vv:
+        - -25.0
+        - 0.0
+        vh:
+        - -30.0
+        - -8.0
+      median_window: 9
+  b2_vh:
+    tuning_set_pooled_flood_only_iou: 0.16716044267560834
+    tuning_set_mean_per_chip_flood_only_iou: 0.23381369394961254
+    method: B2 Otsu on VH
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 11
+  b2g_vv:
+    tuning_set_pooled_flood_only_iou: 0.3759366519265796
+    tuning_set_mean_per_chip_flood_only_iou: 0.17231299149667204
+    method: B2 Otsu on VV
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 7
+    abstention_guard:
+      ceiling_db: -15.0
+  b2g_vh:
+    tuning_set_pooled_flood_only_iou: 0.3743304833662435
+    tuning_set_mean_per_chip_flood_only_iou: 0.1547554821972024
+    method: B2 Otsu on VH
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 9
+    abstention_guard:
+      ceiling_db: -15.0
+  m1:
+    tuning_set_pooled_flood_only_iou: 0.1944305828966167
+    tuning_set_mean_per_chip_flood_only_iou: 0.24582395328764436
+    method: M1 pixel k-means
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 9
+    k: 3
+    n_init: 10
+    seed: 42
+    max_iter: 300
+  m1g:
+    tuning_set_pooled_flood_only_iou: 0.38159874704799374
+    tuning_set_mean_per_chip_flood_only_iou: 0.16713593694568366
+    method: M1 pixel k-means
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 9
+    k: 2
+    n_init: 3
+    seed: 42
+    max_iter: 300
+    abstention_guard:
+      ceiling_db: -15.0
+  m2:
+    tuning_set_pooled_flood_only_iou: 0.2155931926490376
+    tuning_set_mean_per_chip_flood_only_iou: 0.22644447861268324
+    method: M2 SLIC + k-means
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 11
+    n_segments: 1000
+    compactness: 0.2
+    features: vv_vh
+    k: 4
+    n_init: 10
+    seed: 42
+    max_iter: 300
+    slic_max_num_iter: 10
+    stage2_choice_tuning_set_pooled_iou: 0.15605859413197126
+    stage3_ceiling_extensions_db: []
+  m2g:
+    tuning_set_pooled_flood_only_iou: 0.37257856269056033
+    tuning_set_mean_per_chip_flood_only_iou: 0.1744407706840297
+    method: M2 SLIC + k-means
+    preprocessing:
+      clip: wide
+      clip_range_db:
+        vv:
+        - -40.0
+        - 10.0
+        vh:
+        - -45.0
+        - 0.0
+      median_window: 3
+    n_segments: 2000
+    compactness: 0.2
+    features: vv_vh_std
+    k: 2
+    n_init: 10
+    seed: 42
+    max_iter: 300
+    slic_max_num_iter: 10
+    abstention_guard:
+      ceiling_db: -15.0
+    stage2_choice_tuning_set_pooled_iou: 0.3722581656864012
+    stage3_ceiling_extensions_db: []

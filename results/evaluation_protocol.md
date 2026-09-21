@@ -905,6 +905,15 @@ For each (criterion, tuning set) the nine selections are written, with every hyp
 - **Unresolved:** primary M2 has 4 of 12 tuning sets whose winner is at the lowest compactness (0.0004) with the cap of 2 steps reached. The optimum there is not located (logged in `results/grid_extension_log.md`).
 - Stage 2 winners (counts over the 12 tuning sets): primary M2 `n4000_c0.2` 4, `n1000_c0.0004` 4, `n1000_c0.2` 2, `n2000_c0.2` 1, `n1000_c0.01` 1; primary M2g `n500_c0.05` 7, `n1000_c0.2` 3, `n2000_c0.2` 2; sensitivity M2 `n2000_c0.2` 6, `n1000_c0.2` 5, `n4000_c0.2` 1; sensitivity M2g `n4000_c0.2` 10, others 1 each.
 
+### A9.5 Stage 3 and the frozen configurations (2026-09-21; `results/tuning/stage3_compute.log`, `frozen_summary.txt`, `frozen_all.json`, `results/frozen/<criterion>/<tuning set>.yaml`; config sha256 unchanged, code commit `e84fdbe`; measured on tuning chips only)
+
+- Stage 3 computed 7,920 units (18 distinct Stage 2 choices x 440 chips, six (features, k) combinations each): 28.0 min, 0 errors.
+- Determinism check passed before freezing: the (`vv_vh`, k = 2) Stage 3 counts equal the Stage 2 counts exactly for all 18 distinct Stage 2 choices.
+- Frozen: 9 selections x 12 tuning sets x 2 criteria. **No held-out chip has been scored.** The chosen values are tuning-set criterion values only.
+- Stage 3 moved many M2 choices away from the nominal (`vv_vh`, k = 2): under the primary criterion M2 has 7 distinct configurations over 12 sets (k = 4 in 7 sets, `vv_vh_std` k = 3 in 5); under the sensitivity criterion M2 picks `vv_vh_std` (k = 2 in 4 sets, k = 3 in 8) and M2g picks `vv_vh` k = 4 in 5 sets and `vv_vh_std` k = 3 in 5. The frozen M2 is therefore heterogeneous across folds; the held-out evaluation applies each fold's own configuration to its own held-out event.
+- Unresolved (logged): primary M2 has 4 sets at the lowest compactness (0.0004) after the cap; in the frozen primary M2, 4 sets carry compactness 0.0004 and 1 carries 0.01 (see summary). The median optimum is unresolved at the cap of 11 (windows of 90 to 110 m may blur narrow drains): primary B2 VH uses median 11 in 11/12 sets and sensitivity M2 uses median 11 in 11/12 sets (the other uses 9).
+- Ranges of tuning-set criterion values across the 12 sets (pooled flood-only IoU, primary): B1 0.330 to 0.413; B2 VV 0.124 to 0.158; B2 VH 0.155 to 0.197; M1 0.176 to 0.221; M2 0.185 to 0.247; guarded B2g 0.338 to 0.442, M1g 0.343 to 0.434, M2g 0.335 to 0.440. On the tuning chips, then, the unguarded clustering and Otsu methods score below the fixed threshold, and the guard is what lifts them to the threshold's level; whether this holds on held-out events is untested.
+
 ---
 `configs/config.yaml` sha256 history:
 
