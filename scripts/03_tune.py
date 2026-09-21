@@ -25,6 +25,7 @@ from src.parallel import stream_map
 from src.ranking import (add_derived_ceilings, load_mv, verify_derived_ceilings, FLOOD, PRIMARY, SENSITIVITY, VARIANTS, available_extra_medians, check_consistency, criterion,
                          extra_prep_names, load_units, measured_speedup, median_of, project_stage2_cost,
                          rank_options, rank_with_extensions, stage2_union, tuning_sets, _key)
+from src.stage2 import stage2_params, stage2_path, stage2_unit
 from src.stage1 import (ceiling_key, eligible_chips, load_or_build_chip_index, mv_path, mv_unit, preprocessing_options,
                         stage1_params, stage1_unit, unit_path)
 
@@ -89,6 +90,76 @@ def value(r, crit):
     return r["pooled"] if crit == PRIMARY else r["mean"]
 
 
+def stage2_options(rankings_json):
+    """Per criterion, the preprocessing options each stage-2 kind needs: M1 = union(M1, M1g), M2 = union(M2, M2g) (A5.3)."""
+    out = {}
+    for crit in (PRIMARY, SENSITIVITY):
+        u = rankings_json["criteria"][crit]["unions"]
+        merge = lambda a, b: list(dict.fromkeys(u[a]["union"] + u[b]["union"]))
+        out[crit] = {"m1": merge("m1", "m1g"), "m2": merge("m2", "m2g")}
+    return out
+
+
+def stage2_plan():
+    """Derive the stage-2 options from the final stage-1 union, write the plan, and project the time (6-hour rule, A8.4)."""
+    cfg = load_config()
+    d = json.loads((REPO_ROOT / cfg["paths"]["tuning_results_dir"] / "stage1_rankings.json").read_text())
+    opts = stage2_options(d)
+    params = stage2_params(cfg)
+    n_chips = len(eligible_chips(load_or_build_chip_index(cfg)))
+    # measured stage-1 unit times (contended, 4 workers): preprocess 0.53 s, M1 1.65 s, M2 0.60 s; M1 stage 2 assumed 30% of stage-1 M1
+    pre, m1_s, m2_s = 0.53, 1.65, 0.60
+    per_opt = {"m1": pre + 0.30 * m1_s, "m2": pre + len(params["s2_m2"]["grid"]) * m2_s}
+    hours = lambda kind, n: n * n_chips * per_opt[kind] / 3600.0 / cfg["compute"]["n_jobs"]
+    prim = {k: opts[PRIMARY][k] for k in ("m1", "m2")}
+    extra = {k: [o for o in opts[SENSITIVITY][k] if o not in prim[k]] for k in ("m1", "m2")}
+    h_prim = hours("m1", len(prim["m1"])) + hours("m2", len(prim["m2"]))
+    h_extra = hours("m1", len(extra["m1"])) + hours("m2", len(extra["m2"]))
+    limit = cfg["search_plan"]["stage2_run"]["start_automatically_unless_projected_hours_exceed"]
+    print("STAGE 2 PLAN (options come from the final stage-1 union, A5.3)")
+    for crit, label in ((PRIMARY, "primary"), (SENSITIVITY, "sensitivity")):
+        print(f"  {label:12s} M1 options ({len(opts[crit]['m1'])}): {opts[crit]['m1']}")
+        print(f"  {'':12s} M2 options ({len(opts[crit]['m2'])}): {opts[crit]['m2']}")
+    print(f"projected wall time on {cfg['compute']['n_jobs']} workers (from measured contended unit times): primary {h_prim:.1f} h; "
+          f"sensitivity, only the options not already computed ({len(extra['m1'])} M1, {len(extra['m2'])} M2): {h_extra:.1f} h; total {h_prim + h_extra:.1f} h")
+    verdict = "START AUTOMATICALLY" if h_prim + h_extra <= limit else "ASK FIRST"
+    print(f"rule (A8.4): start automatically unless the projection exceeds {limit} h -> {verdict}")
+    (REPO_ROOT / cfg["paths"]["tuning_results_dir"] / "stage2_plan.json").write_text(json.dumps(
+        {"options": opts, "projected_hours": {"primary": h_prim, "sensitivity_extra": h_extra}}, indent=1))
+
+
+def stage2_compute():
+    """Run stage 2: the primary criterion's options first, then the sensitivity criterion's remaining options."""
+    cfg = load_config()
+    params, preps = stage2_params(cfg), preprocessing_options(cfg, [9, 11])
+    plan = json.loads((REPO_ROOT / cfg["paths"]["tuning_results_dir"] / "stage2_plan.json").read_text())["options"]
+    sha = hashlib.sha256((REPO_ROOT / "configs" / "config.yaml").read_bytes()).hexdigest()
+    chips = eligible_chips(load_or_build_chip_index(cfg))
+    print(f"STAGE 2 compute  {time.strftime('%Y-%m-%d %H:%M:%S')}\nconfig sha256 {sha}\ngit HEAD {git('rev-parse', 'HEAD')[:12]}; "
+          f"tracked files modified since HEAD: {git('diff', '--name-only', 'HEAD') or 'none'}; {len(chips)} chips; "
+          f"{cfg['compute']['n_jobs']} workers", flush=True)
+    errors_total = 0
+    for crit, label in ((PRIMARY, "primary"), (SENSITIVITY, "sensitivity")):
+        units = [f"{kind}|{c}|{o}" for kind in ("m1", "m2") for o in plan[crit][kind] for c in chips]
+        todo = [u for u in units if not stage2_path(params["stage2_dir"], *u.split("|", 2)).exists()]
+        print(f"\nPHASE {label}: {len(units)} units, {len(units) - len(todo)} already done, {len(todo)} to run", flush=True)
+        t0, done, errors = time.perf_counter(), 0, []
+        for unit, status, secs in stream_map(stage2_unit, todo, cfg["compute"]["n_jobs"], chunksize=1, params=params, preps=preps):
+            done += 1
+            if status.startswith("error"):
+                errors.append(unit)
+                print(f"  ERROR {unit}: {status}", flush=True)
+            if done % 100 == 0 or done == len(todo):
+                wall = time.perf_counter() - t0
+                print(f"  {done}/{len(todo)} units, {wall / 60:.1f} min elapsed, {done / wall:.2f} units/s, "
+                      f"eta {(len(todo) - done) * wall / done / 60:.1f} min", flush=True)
+        errors_total += len(errors)
+        print(f"PHASE {label} finished: {done - len(errors)} done, {len(errors)} errors, wall {(time.perf_counter() - t0) / 60:.1f} min", flush=True)
+    if errors_total:
+        print("re-run this command to retry the failed units", flush=True)
+        sys.exit(1)
+
+
 def verify_mv():
     """Exactness check (A8.3): counts derived from the stored mean VV must equal the stored counts at -18, -15, -12."""
     cfg = load_config()
@@ -140,6 +211,22 @@ def rank(dry=None):
     check_consistency(counts)
     sets = tuning_sets(events, splits)
     ceilings = [ceiling_key(c) for c in params["ceilings"]]
+    cstep = ge["step"]["ceiling_db"]["value"]
+    base_c = params["ceilings"]
+    extra_ceils = sorted({base_c[0] - cstep * i for i in (1, 2)} | {base_c[-1] + cstep * i for i in (1, 2)})
+    ceiling_ext, mv_note = None, "mean-VV files not available: ceiling extension not evaluated"
+    if not dry:
+        try:
+            mv = load_mv(params["unit_dir"], chips, names)
+            checked, bad = verify_derived_ceilings(counts, mv, params["ceilings"])
+            if bad:
+                sys.exit(f"derived ceiling counts differ from the stored ones ({bad} of {checked}): refusing to use them")
+            add_derived_ceilings(counts, mv, extra_ceils)
+            ceiling_ext = {"available": extra_ceils, "step": cstep, "max": max_ext}
+            mv_note = (f"mean-VV files loaded; derived ceiling counts equal the stored ones for {checked} (option, family, ceiling) "
+                       f"arrays (exact); ceilings {extra_ceils} available for the primary criterion")
+        except FileNotFoundError:
+            pass
     ref = next(iter(counts.values()))                       # truth counts do not depend on the candidate
     has_flood = (ref[:, FLOOD, 0] + ref[:, FLOOD, 2]) > 0
 
@@ -148,6 +235,7 @@ def rank(dry=None):
           f"{git('diff', '--name-only', 'HEAD') or 'none'}")
     print(f"units loaded: {len(chips)} chips x {len(names)} preprocessing options (base {len(base)} + extension medians {extras or 'none'}); "
           "truth/domain consistency check passed")
+    print(mv_note)
     print("tuning sets (chips in the tuning set / of which have flood-only truth):")
     print("  " + "; ".join(f"{n} {int(m.sum())}/{int((m & has_flood).sum())}" for n, m in sets.items()))
 
@@ -170,7 +258,8 @@ def rank(dry=None):
             for variant in VARIANTS:
                 family, guarded = VARIANT_FAMILY[variant]
                 R[name][variant], info[name][variant] = rank_with_extensions(
-                    counts, family, mask, guarded, base, clips, ceilings, crit, extras, base_max, step, max_ext)
+                    counts, family, mask, guarded, base, clips, ceilings, crit, extras, base_max, step, max_ext,
+                    ceiling_ext=ceiling_ext if crit == PRIMARY else None)
         results[crit] = {"rankings": R, "extension_info": info}
 
     # -------- median-window extension status
@@ -187,6 +276,17 @@ def rank(dry=None):
             pending_any |= set(pend)
             at_edge_now = sum(median_of(results[crit]["rankings"][n][variant][0]["prep"]) == base_max and not results[crit]["extension_info"][n][variant]["extensions"] and not results[crit]["extension_info"][n][variant]["pending"] for n in sets)
             print(f"  {variant:8s} {at_edge_now:44d} {e9:14d} {e11:7d} {str(pend) if pend else '-':>12s}")
+    print("\n=== GUARD-CEILING EXTENSION STATUS (primary criterion only; the sensitivity criterion is not run by declaration A7.4) ===")
+    ceil_pending = False
+    for variant in ("b2g_vv", "b2g_vh", "m1g", "m2g"):
+        infos = [results[PRIMARY]["extension_info"][n][variant] for n in sets]
+        tally = {}
+        for i in infos:
+            for c in i.get("ceiling_extensions", []):
+                tally[c] = tally.get(c, 0) + 1
+        pend = sorted({i["pending_ceiling"] for i in infos if i.get("pending_ceiling") is not None})
+        ceil_pending |= bool(pend)
+        print(f"  {variant:7s} sets that extended to each new ceiling: {tally or 'none'}; needs values not available: {pend or '-'}")
     if pending_any:
         print(f"\nPENDING: the rule triggers for median window(s) {sorted(pending_any)} whose units are not computed. Run: "
               f"python scripts/03_tune.py compute --medians {' '.join(str(m) for m in sorted(pending_any)[:1])}")
@@ -218,17 +318,18 @@ def rank(dry=None):
         print(f"\n{CRITERION_LABEL[crit]}")
         for variant in ("b2g_vv", "b2g_vh", "m1g", "m2g"):
             family, _ = VARIANT_FAMILY[variant]
-            wins = {k: 0 for k in ceilings}
-            ties = 0
+            wins, ties, capped = {}, 0, 0
             for name, mask in sets.items():
                 w = results[crit]["rankings"][name][variant][0]
-                wins[w["ceiling"]] += 1
-                sc = {ce: criterion(counts[(family, w["prep"], "nominal", ce)], mask) for ce in ceilings}
+                wins[w["ceiling"]] = wins.get(w["ceiling"], 0) + 1
+                cur = ceilings + [ceiling_key(c) for c in results[crit]["extension_info"][name][variant].get("ceiling_extensions", [])]
+                sc = {ce: criterion(counts[(family, w["prep"], "nominal", ce)], mask) for ce in cur}
                 best = _key(sc[w["ceiling"]], crit)
-                ties += sum(_key(sc[ce], crit) == best for ce in ceilings) > 1
-            edge = wins[ceilings[0]] + wins[ceilings[-1]]
-            print(f"  {variant:7s} winning ceiling by tuning set: " + ", ".join(f"{k} dB {v}/12" for k, v in wins.items())
-                  + f"  -> at an edge in {edge}/12; exact ties among ceilings in {ties}/12")
+                ties += sum(_key(sc[ce], crit) == best for ce in cur) > 1
+                vals = [float(k) for k in cur]
+                capped += float(w["ceiling"]) in (min(vals), max(vals)) and crit == PRIMARY
+            print(f"  {variant:7s} winning ceiling by tuning set: " + ", ".join(f"{k} dB {v}/12" for k, v in sorted(wins.items(), key=lambda kv: float(kv[0])))
+                  + f"; winner at an edge of its final list in {capped}/12 (primary only); exact ties among ceilings in {ties}/12")
         b1thr = [float(results[crit]["rankings"][n]["b1"][0]["cfg"]) for n in sets]
         print(f"  b1      winning thresholds {sorted(set(b1thr))} dB (grid edges -30 and -8)")
 
@@ -271,6 +372,10 @@ if __name__ == "__main__":
         compute([9, 11], kind="mv")
     elif cmd == "verify-mv":
         verify_mv()
+    elif cmd == "stage2-plan":
+        stage2_plan()
+    elif cmd == "stage2-compute":
+        stage2_compute()
     elif cmd == "rank":
         rank(dry=int(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[2] == "--dry" else None)
     else:

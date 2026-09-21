@@ -145,28 +145,47 @@ def available_extra_medians(unit_dir, chips, clips, candidates=(9, 11)):
 
 
 def rank_with_extensions(counts, family, mask, guarded, base_preps, clips, ceilings, crit,
-                         available, base_max_median=7, step=2, max_extensions=2):
+                         available, base_max_median=7, step=2, max_extensions=2, ceiling_ext=None):
     """
-    Rank one (variant, tuning set) and apply the median-window grid-edge rule (A2.5, A7.4): if the winner's median
-    window is the current upper edge, add the next median (edge + step) for all clips and rank again, at most
-    `max_extensions` times. Only medians in `available` (units computed) can be added; if the rule triggers for a median
-    that is not available, `pending` reports the median that is needed.
-    Returns (ranked, info) with info = {'extensions': [medians added], 'pending': median needed or None}.
+    Rank one (variant, tuning set) and apply the grid-edge rule (A2.5, A7.4, A8.3), repeating until nothing triggers:
+    * median window: if the winner's median is the current upper edge, add the next median (edge + step) for all clips,
+      at most `max_extensions` times; only medians in `available` (units computed) can be added, otherwise `pending`
+      reports the median that is needed.
+    * guard ceiling (guarded variants, only if `ceiling_ext` is given = {'available': [floats], 'step': dB, 'max': n}):
+      if the winner's ceiling is the lowest or highest in the current list, add one step beyond it, at most `max` steps in
+      total; ceilings not in `available` are reported in `pending_ceiling`.
+    Returns (ranked, info): info = {'extensions': [medians], 'pending': median or None}, plus 'ceiling_extensions' and
+    'pending_ceiling' when ceiling_ext is given.
     """
-    added, pending = [], None
+    added_m, added_c, pending_m, pending_c = [], [], None, None
     while True:
-        preps = list(base_preps) + extra_prep_names(clips, added)
-        ranked = rank_options(counts, family, mask, guarded, preps, ceilings, crit)
-        edge = base_max_median + step * len(added)
-        if median_of(ranked[0]["prep"]) != edge or len(added) >= max_extensions:
+        preps = list(base_preps) + extra_prep_names(clips, added_m)
+        current = list(ceilings) + [ceiling_key(c) for c in added_c]
+        ranked = rank_options(counts, family, mask, guarded, preps, current, crit)
+        winner, changed, pending_m, pending_c = ranked[0], False, None, None
+        edge = base_max_median + step * len(added_m)
+        if median_of(winner["prep"]) == edge and len(added_m) < max_extensions:
+            if edge + step in available:
+                added_m.append(edge + step)
+                changed = True
+            else:
+                pending_m = edge + step
+        if guarded and ceiling_ext and len(added_c) < ceiling_ext["max"]:
+            values = [float(k) for k in current]
+            lo, hi, w = min(values), max(values), float(winner["ceiling"])
+            nxt = lo - ceiling_ext["step"] if w == lo else hi + ceiling_ext["step"] if w == hi else None
+            if nxt is not None:
+                if nxt in ceiling_ext["available"]:
+                    added_c.append(nxt)
+                    changed = True
+                else:
+                    pending_c = nxt
+        if not changed:
             break
-        nxt = edge + step
-        if nxt in available:
-            added.append(nxt)
-        else:
-            pending = nxt
-            break
-    return ranked, {"extensions": added, "pending": pending}
+    info = {"extensions": added_m, "pending": pending_m}
+    if ceiling_ext:
+        info.update({"ceiling_extensions": added_c, "pending_ceiling": pending_c})
+    return ranked, info
 
 
 def tuning_sets(events, splits):

@@ -1,0 +1,2 @@
+verify-mv: 440 chips x 24 options x 4 families x 3 ceilings: 288 (option, family, ceiling) arrays checked, 0 mismatching
+EXACT

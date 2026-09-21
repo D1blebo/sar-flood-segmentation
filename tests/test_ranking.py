@@ -269,3 +269,48 @@ def test_mv_files_round_trip_and_reproduce_every_stored_ceiling(fake_dataset):
     assert ("m1", names[0], "nominal", "-21") in counts and ("b2_vh", names[1], "nominal", "-9") in counts
     with pytest.raises(FileNotFoundError):
         load_mv(params["unit_dir"], ["Toy_1"], [cfg_preps[7]["name"]])
+
+
+# ---- Amendment 8: guard-ceiling extension inside the ranking -----------------------------------------------------------------
+
+from src.stage1 import ceiling_key
+
+
+def _ceil_counts(by_ceiling):
+    """One chip, one option 'p', guarded family m1: ceiling key -> pooled IoU / 100 (tp = v, fp = 100 - v)."""
+    return {("m1", OPT, "nominal", ceiling_key(c)): _mk([(v, 100 - v, 0)]) for c, v in by_ceiling.items()}
+
+
+OPT = "clip=none,median=0"
+BASE_CEIL = ["-18", "-15", "-12"]
+EXT = {"available": [-24.0, -21.0, -9.0, -6.0], "step": 3.0, "max": 2}
+
+
+def _rank_ceil(scores, ext=EXT, guarded=True):
+    return rank_with_extensions(_ceil_counts(scores), "m1", np.array([True]), guarded, [OPT], ["none"], BASE_CEIL, PRIMARY,
+                                [], base_max_median=0, ceiling_ext=ext)
+
+
+def test_ceiling_extension_follows_the_lower_edge_and_stops_at_the_cap():
+    s = {-24: 10, -21: 20, -18: 30, -15: 25, -12: 20, -9: 5, -6: 5}
+    ranked, info = _rank_ceil(s)                                # -18 wins at the low edge; -21 (20) is worse: stop
+    assert ranked[0]["ceiling"] == "-18" and info["ceiling_extensions"] == [-21.0] and info["pending_ceiling"] is None
+    up = {-24: 50, -21: 40, -18: 30, -15: 25, -12: 20, -9: 5, -6: 5}
+    wide = {**EXT, "available": [-30.0, -27.0, -24.0, -21.0, -9.0, -6.0, -3.0]}   # steps beyond the cap exist and score better
+    ranked, info = _rank_ceil({**up, -21: 60, -24: 70, -27: 80, -30: 90}, ext=wide)   # keeps improving: -21, -24, then the cap of 2
+    assert ranked[0]["ceiling"] == "-24" and info["ceiling_extensions"] == [-21.0, -24.0]
+    ranked, info = _rank_ceil({-18: 10, -15: 20, -12: 30, -9: 40, -6: 50, -3: 60, -21: 0, -24: 0}, ext=wide)   # upper edge, cap of 2
+    assert ranked[0]["ceiling"] == "-6" and info["ceiling_extensions"] == [-9.0, -6.0]
+
+
+def test_ceiling_extension_leaves_interior_winners_plain_variants_and_unavailable_steps_alone():
+    ranked, info = _rank_ceil({-18: 10, -15: 30, -12: 20, -21: 5, -9: 5})
+    assert ranked[0]["ceiling"] == "-15" and info["ceiling_extensions"] == []            # interior: no trigger
+    ranked, info = _rank_ceil({-18: 30, -15: 20, -12: 10, -21: 40}, ext={**EXT, "available": []})
+    assert info["ceiling_extensions"] == [] and info["pending_ceiling"] == -21.0          # triggered but not available
+    plain = {("m1", OPT, "nominal", "plain"): _mk([(20, 80, 0)])}
+    ranked, info = rank_with_extensions(plain, "m1", np.array([True]), False, [OPT], ["none"], BASE_CEIL, PRIMARY, [],
+                                        base_max_median=0, ceiling_ext=EXT)
+    assert info["ceiling_extensions"] == []                                               # a plain variant has no ceiling
+    ranked, info = _rank_ceil({-18: 30, -15: 20, -12: 10}, ext=None)
+    assert set(info) == {"extensions", "pending"}                                          # off by default (sensitivity criterion)
