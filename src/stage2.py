@@ -35,6 +35,10 @@ def stage2_params(cfg):
     p["stage2_dir"] = str(REPO_ROOT / cfg["paths"]["tuning_cache_dir"] / "stage2")
     k1 = plan["m1"]["k"][0]
     p["s2_m1"] = {"k": k1, "n_init": cfg["search_space"]["m1_pixel_kmeans"]["n_init_by_k"][k1]}
+    p["stage3_dir"] = str(REPO_ROOT / cfg["paths"]["tuning_cache_dir"] / "stage3")
+    p["s3"] = {"combos": cfg["search_space"]["m2_slic_kmeans"]["allowed_combinations"],
+               "n_init": cfg["search_space"]["m2_slic_kmeans"]["n_init"]}
+    p["ext_grid"] = {}   # filled by the extension driver: {preprocessing option: [[n_segments, compactness], ...]}
     p["s2_m2"] = {"k": plan["m2"]["k"], "features": plan["m2"]["features"],
                   "n_init": cfg["search_space"]["m2_slic_kmeans"]["n_init"],
                   "grid": [[n, c] for n in plan["m2"]["n_segments"] for c in plan["m2"]["compactness"]
@@ -62,9 +66,11 @@ def compute_stage2(chip, prep, params, kind):
         p = params["s2_m1"]
         m1 = PixelKMeans(p["k"], params["seed"], n_init=p["n_init"], max_iter=params["max_iter"])
         out["configs"] = {f"k{p['k']}": _entry(evaluate_prepared(m1, vv, vh, image_valid, label, jrc, key))}
-    elif kind == "m2":
+    elif kind == "m2" or kind.startswith("m2x"):
+        # 'm2' = the base grid (nominal excluded); 'm2xR' = extension round R, whose configurations are given per option
         p, cache, configs = params["s2_m2"], SegmentationCache(params["slic_cache_dir"]), {}
-        for n, c in p["grid"]:
+        grid = p["grid"] if kind == "m2" else params["ext_grid"][prep["name"]]
+        for n, c in grid:
             m2 = SlicKMeans(p["k"], n, c, p["features"], params["seed"], n_init=p["n_init"], max_iter=params["max_iter"],
                             slic_max_iter=params["slic_max_iter"], cache=cache)
             configs[config_key(n, c)] = _entry(evaluate_prepared(m2, vv, vh, image_valid, label, jrc, key))
@@ -88,6 +94,54 @@ def stage2_unit(unit, params, preps):
             return unit, "skipped", 0.0
         prep = next(p for p in preps if p["name"] == pname)
         content = compute_stage2(read_chip(chip_id, params["data_dir"]), prep, params, kind)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
+        with os.fdopen(fd, "w") as f:
+            json.dump(content, f)
+        os.replace(tmp, path)
+        return unit, "done", time.perf_counter() - t0
+    except Exception as exc:  # noqa: BLE001
+        return unit, f"error: {type(exc).__name__}: {exc}", time.perf_counter() - t0
+
+
+# ---- Stage 3 (protocol A9.1): the allowed (features, k) combinations at a Stage 2 choice -------------------------------------
+
+def stage3_path(stage3_dir, chip_id, prep_name_, n_segments, compactness):
+    return Path(stage3_dir) / chip_id / f"{prep_name_}__{config_key(n_segments, compactness)}.json"
+
+
+def combo_key(features, k):
+    return f"{features}|{k}"
+
+
+def compute_stage3(chip, prep, n_segments, compactness, params):
+    """Counts and mean VV of every allowed (features, k) combination for one chip at one (option, n_segments, compactness)."""
+    clip = params["clip_options"][prep["clip"]]
+    t0 = time.perf_counter()
+    vv, vh = preprocess(chip["vv"], chip["vh"], clip, prep["median"])
+    image_valid = image_valid_mask(chip["vv"], chip["vh"])
+    key = f"{chip['id']}|{prep['name']}"
+    cache = SegmentationCache(params["slic_cache_dir"])
+    combos = {}
+    for features, k in params["s3"]["combos"]:
+        m2 = SlicKMeans(k, n_segments, compactness, features, params["seed"], n_init=params["s3"]["n_init"],
+                        max_iter=params["max_iter"], slic_max_iter=params["slic_max_iter"], cache=cache)
+        combos[combo_key(features, k)] = _entry(evaluate_prepared(m2, vv, vh, image_valid, chip["label"], chip["jrc"], key))
+    return {"version": UNIT_VERSION, "chip": chip["id"], "prep": prep["name"], "n_segments": n_segments,
+            "compactness": compactness, "configs": combos, "seconds": time.perf_counter() - t0}
+
+
+def stage3_unit(unit, params, preps):
+    """Worker: unit is 'CHIP|PREPNAME|N|C'. Same contract as stage2_unit."""
+    t0 = time.perf_counter()
+    try:
+        chip_id, pname, n, c = unit.split("|")
+        n, c = int(n), float(c)
+        path = stage3_path(params["stage3_dir"], chip_id, pname, n, c)
+        if path.exists():
+            return unit, "skipped", 0.0
+        prep = next(p for p in preps if p["name"] == pname)
+        content = compute_stage3(read_chip(chip_id, params["data_dir"]), prep, n, c, params)
         path.parent.mkdir(parents=True, exist_ok=True)
         fd, tmp = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
         with os.fdopen(fd, "w") as f:
