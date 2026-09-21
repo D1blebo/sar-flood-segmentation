@@ -1,0 +1,57 @@
+STAGE 2 EXTENSION m2x1  2026-09-21 20:46:19
+config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD 0da0de69af84; tracked files modified: none
+5280 units, 0 already done, 5280 to run; projected 1.08 h
+  100/5280 units, 2.2 min elapsed, eta 112.0 min
+  200/5280 units, 4.3 min elapsed, eta 109.6 min
+  300/5280 units, 6.5 min elapsed, eta 107.6 min
+  400/5280 units, 8.6 min elapsed, eta 105.3 min
+  500/5280 units, 10.8 min elapsed, eta 103.2 min
+  600/5280 units, 13.0 min elapsed, eta 101.1 min
+  700/5280 units, 15.1 min elapsed, eta 98.9 min
+  800/5280 units, 17.3 min elapsed, eta 96.7 min
+  900/5280 units, 19.2 min elapsed, eta 93.6 min
+  1000/5280 units, 20.4 min elapsed, eta 87.4 min
+  1100/5280 units, 21.6 min elapsed, eta 82.0 min
+  1200/5280 units, 22.7 min elapsed, eta 77.3 min
+  1300/5280 units, 23.9 min elapsed, eta 73.1 min
+  1400/5280 units, 24.9 min elapsed, eta 69.1 min
+  1500/5280 units, 25.9 min elapsed, eta 65.3 min
+  1600/5280 units, 26.9 min elapsed, eta 62.0 min
+  1700/5280 units, 27.9 min elapsed, eta 58.8 min
+  1800/5280 units, 28.9 min elapsed, eta 56.0 min
+  1900/5280 units, 30.0 min elapsed, eta 53.3 min
+  2000/5280 units, 31.0 min elapsed, eta 50.8 min
+  2100/5280 units, 32.0 min elapsed, eta 48.4 min
+  2200/5280 units, 33.0 min elapsed, eta 46.2 min
+  2300/5280 units, 34.1 min elapsed, eta 44.2 min
+  2400/5280 units, 35.3 min elapsed, eta 42.3 min
+  2500/5280 units, 36.4 min elapsed, eta 40.5 min
+  2600/5280 units, 37.6 min elapsed, eta 38.7 min
+  2700/5280 units, 38.7 min elapsed, eta 37.0 min
+  2800/5280 units, 39.8 min elapsed, eta 35.2 min
+  2900/5280 units, 40.8 min elapsed, eta 33.5 min
+  3000/5280 units, 41.9 min elapsed, eta 31.8 min
+  3100/5280 units, 43.0 min elapsed, eta 30.2 min
+  3200/5280 units, 44.4 min elapsed, eta 28.8 min
+  3300/5280 units, 45.7 min elapsed, eta 27.4 min
+  3400/5280 units, 47.1 min elapsed, eta 26.1 min
+  3500/5280 units, 48.5 min elapsed, eta 24.7 min
+  3600/5280 units, 49.9 min elapsed, eta 23.3 min
+  3700/5280 units, 51.2 min elapsed, eta 21.9 min
+  3800/5280 units, 52.6 min elapsed, eta 20.5 min
+  3900/5280 units, 54.0 min elapsed, eta 19.1 min
+  4000/5280 units, 55.3 min elapsed, eta 17.7 min
+  4100/5280 units, 56.5 min elapsed, eta 16.3 min
+  4200/5280 units, 57.8 min elapsed, eta 14.9 min
+  4300/5280 units, 59.0 min elapsed, eta 13.4 min
+  4400/5280 units, 60.3 min elapsed, eta 12.1 min
+  4500/5280 units, 61.5 min elapsed, eta 10.7 min
+  4600/5280 units, 62.7 min elapsed, eta 9.3 min
+  4700/5280 units, 64.0 min elapsed, eta 7.9 min
+  4800/5280 units, 65.2 min elapsed, eta 6.5 min
+  4900/5280 units, 66.5 min elapsed, eta 5.2 min
+  5000/5280 units, 67.7 min elapsed, eta 3.8 min
+  5100/5280 units, 69.0 min elapsed, eta 2.4 min
+  5200/5280 units, 70.3 min elapsed, eta 1.1 min
+  5280/5280 units, 71.2 min elapsed, eta 0.0 min
+finished: 5280 done, 0 errors, wall 71.2 min

@@ -1,0 +1,8 @@
+STAGE 2 RANKING (tuning-set aggregates only; protocol A9)
+config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD 0da0de69af84; tracked files modified: none
+store: 265 configurations; extension rounds present: none
+
+GRID-EDGE RULE (A9.2) TRIGGERED: extension round 1 is needed. Winners at an edge of n_segments or compactness (number of (tuning set, variant) pairs by criterion and variant): {('primary', 'm2'): 10, ('primary', 'm2g'): 2, ('sensitivity', 'm2'): 7, ('sensitivity', 'm2g'): 11}
+  options needing new configurations: 12; new configurations in total: 56; e.g. ('clip=none,median=7', [[200, 0.002], [500, 0.002], [1000, 0.002], [2000, 0.002], [4000, 0.01], [4000, 0.05], [4000, 0.2], [4000, 1.0]])
+  measured M2 stage-2 unit time 8.3 s (15 configs + preprocessing, contended) -> 0.52 s per configuration
+  projected extension time: 1.08 h on 4 workers; rule: run if <= 3 h -> RUN AS DECLARED

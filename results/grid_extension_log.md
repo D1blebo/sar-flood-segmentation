@@ -33,3 +33,17 @@ Rankings under the primary criterion (pooled flood-only IoU over all tuning chip
 | guard ceiling | -18 to -21 | **EXECUTED** (derived from the stored mean VV, exact) | primary criterion: M1g winner at -18 in 3/12 tuning sets (`loeo:Bolivia`, `loeo:India`, `official_valid`). Result: -21 scored LOWER than -18 in all three, so the winners stay at -18, now interior; no further trigger. B2g VV/VH and M2g: no set at an edge |
 | guard ceiling | -12 to -9 | NOT EXECUTED | primary: no winner at -12 (0/12 in every guarded variant). Sensitivity criterion: triggers 12/12 but remains not run by declaration (A7.4), although now free |
 | median window | 11 to 13 | NOT EXECUTED, **OPTIMUM UNRESOLVED** | cap of 2 extensions reached (A2.5; owner's decision A8.2). Winners still at 11: primary B2 VH 11/12 (B1, B2 VV, B2g VH 1/12 each; M2 2/12); sensitivity M2 11/12 (M2g 2/12). **Median windows of 9 to 11 pixels are 90 to 110 m and may blur narrow drains and small water bodies**; state this wherever such a configuration is used. Accra: run with a small-window sensitivity variant (A8.5) |
+
+
+## 2026-09-21, Stage 2 M2 grid-edge rule (A9.2): every trigger, executed or not
+
+Counts are (tuning set, variant) pairs whose winner sat at an edge of `n_segments` or `compactness`. Projected time is from the measured Stage 2 per-unit times on 4 workers; the declared rule was run if <= 3 h.
+
+| Round | Trigger (pairs at an edge) | Projection | Status | Measured |
+|---|---|---|---|---|
+| 1 | primary M2 10, primary M2g 2, sensitivity M2 7, sensitivity M2g 11 | 1.08 h | **EXECUTED** (`m2x1`, 5,280 units) | 71.2 min, 0 errors |
+| 2 | primary M2 8, sensitivity M2 1, sensitivity M2g 10 | 0.87 h | **EXECUTED** (`m2x2`, 3,080 units) | 51.6 min, 0 errors |
+| 3 | `n_segments`: no winner at an edge in any variant or criterion. `compactness`: see below | n/a | NOT EXECUTED, cap of 2 steps per parameter reached (A2.5) | n/a |
+
+**Compactness optimum UNRESOLVED for primary M2.** After the cap, 4 of 12 tuning sets still choose the lowest compactness in their extended grid (0.0004, e.g. `n1000_c0.0004`). Primary M2g and both sensitivity variants have no winner at an edge. A compactness that low means the superpixels follow intensity almost exclusively and are free to become irregular in shape; the true optimum may be lower still and was not searched. State this wherever the primary M2 configuration is used.
+

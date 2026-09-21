@@ -898,6 +898,13 @@ For each (criterion, tuning set, M2 variant): if the Stage 2 winner has `n_segme
 
 For each (criterion, tuning set) the nine selections are written, with every hyperparameter and the tuning-set criterion value only, to `results/frozen/<criterion>/<tuning set>.yaml` and summarised in `results/tuning/frozen_summary.txt`. **No held-out scoring is run** (A3.4): the held-out script stays unwritten and unrun until the project owner approves the frozen configurations.
 
+### A9.4 Stage 2 ranking and edge check (2026-09-21; `results/tuning/stage2_rank_pass1.txt`, `_pass2.txt`, `_pass3.txt`, `stage2_extension_round1.log`, `_round2.log`, `stage2_selection.json`; config sha256 unchanged, code commit `0da0de6`; measured)
+
+- The A9.2 rule triggered after the base grid and again after round 1; both rounds were projected under 3 h (1.08 h, 0.87 h) and were run as declared (71.2 and 51.6 min, 0 errors). After round 2 no further trigger remained, and the Stage 2 selection was written.
+- No `n_segments` winner is at a grid edge for any variant or criterion.
+- **Unresolved:** primary M2 has 4 of 12 tuning sets whose winner is at the lowest compactness (0.0004) with the cap of 2 steps reached. The optimum there is not located (logged in `results/grid_extension_log.md`).
+- Stage 2 winners (counts over the 12 tuning sets): primary M2 `n4000_c0.2` 4, `n1000_c0.0004` 4, `n1000_c0.2` 2, `n2000_c0.2` 1, `n1000_c0.01` 1; primary M2g `n500_c0.05` 7, `n1000_c0.2` 3, `n2000_c0.2` 2; sensitivity M2 `n2000_c0.2` 6, `n1000_c0.2` 5, `n4000_c0.2` 1; sensitivity M2g `n4000_c0.2` 10, others 1 each.
+
 ---
 `configs/config.yaml` sha256 history:
 

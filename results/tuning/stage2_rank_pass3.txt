@@ -1,0 +1,17 @@
+STAGE 2 RANKING (tuning-set aggregates only; protocol A9)
+config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD 0da0de69af84; tracked files modified: none
+store: 361 configurations; extension rounds present: ['m2x1', 'm2x2']
+
+no further extension triggers: Stage 2 selection is final; written to results/tuning/stage2_selection.json
+
+PRIMARY: M2 grid at the winners (n_segments, compactness), by variant
+  m2   n4000_c0.2 x4, n1000_c0.0004 x4, n1000_c0.2 x2, n2000_c0.2 x1, n1000_c0.01 x1
+  m2g  n500_c0.05 x7, n1000_c0.2 x3, n2000_c0.2 x2
+  m1   k3 at clip=narrow,median=9 x9, k3 at clip=narrow,median=7 x3
+  m1g  k2 at clip=narrow,median=9 x6, k2 at clip=narrow,median=7 x4, k2 at clip=narrow,median=3 x2
+
+SENSITIVITY: M2 grid at the winners (n_segments, compactness), by variant
+  m2   n2000_c0.2 x6, n1000_c0.2 x5, n4000_c0.2 x1
+  m2g  n4000_c0.2 x10, n1000_c0.2 x1, n2000_c0.2 x1
+  m1   k3 at clip=narrow,median=7 x10, k3 at clip=narrow,median=5 x2
+  m1g  k3 at clip=narrow,median=5 x7, k3 at clip=narrow,median=7 x4, k3 at clip=narrow,median=3 x1
