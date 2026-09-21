@@ -1,0 +1,209 @@
+STAGE 1 RANKING REPORT, re-ranked under the amended criterion (tuning-set aggregates only; no held-out chip is scored)
+config sha256 5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e; git HEAD 327ebd9b1fdf; tracked files modified: none
+units loaded: 440 chips x 16 preprocessing options (base 16 + extension medians none); truth/domain consistency check passed
+tuning sets (chips in the tuning set / of which have flood-only truth):
+  loeo:Bolivia 425/378; loeo:Ghana 392/366; loeo:India 372/327; loeo:Mekong 410/364; loeo:Nigeria 422/375; loeo:Pakistan 412/372; loeo:Paraguay 374/337; loeo:Somalia 414/371; loeo:Spain 410/363; loeo:Sri-Lanka 398/353; loeo:USA 371/324; official_valid 86/77
+reproduction check: the declared criterion on the 16 base options reproduces the committed Stage 1 rankings (aa6ea93) exactly: True
+
+=== MEDIAN-WINDOW EXTENSION STATUS (grid-edge rule A2.5, per criterion / tuning set / variant) ===
+
+PRIMARY (A7): pooled flood-only IoU over ALL tuning chips
+  variant    winner at edge 7 (no extension needed yet)  extended to 9   to 11  needs units
+  b1                                                  0              0       0          [9]
+  b2_vv                                               0              0       0          [9]
+  b2_vh                                               0              0       0          [9]
+  b2g_vv                                              0              0       0          [9]
+  b2g_vh                                              0              0       0          [9]
+  m1                                                  0              0       0          [9]
+  m1g                                                 0              0       0          [9]
+  m2                                                  0              0       0          [9]
+  m2g                                                 0              0       0            -
+
+SENSITIVITY (declared): mean per-chip flood-only IoU over tuning chips with flood
+  variant    winner at edge 7 (no extension needed yet)  extended to 9   to 11  needs units
+  b1                                                  0              0       0            -
+  b2_vv                                               0              0       0          [9]
+  b2_vh                                               0              0       0          [9]
+  b2g_vv                                              0              0       0          [9]
+  b2g_vh                                              0              0       0          [9]
+  m1                                                  0              0       0          [9]
+  m1g                                                 0              0       0          [9]
+  m2                                                  0              0       0          [9]
+  m2g                                                 0              0       0          [9]
+
+PENDING: the rule triggers for median window(s) [9] whose units are not computed. Run: python scripts/03_tune.py compute --medians 9
+
+=== STAGE 1 TABLE UNDER BOTH CRITERIA (top-1 over the 12 tuning sets; final option lists after any executed extension) ===
+variant  | PRIMARY pooled IoU: range  most common winner | SENSITIVITY mean per-chip IoU: range  most common winner
+b1       |             0.330 - 0.413  clip=none,median=7/-16 (10/12)       |                        0.227 - 0.276  clip=none,median=5/-14 (11/12)
+b2_vv    |             0.123 - 0.157  clip=narrow,median=7 (12/12)         |                        0.203 - 0.248  clip=narrow,median=7 (12/12)
+b2_vh    |             0.153 - 0.193  clip=narrow,median=7 (12/12)         |                        0.220 - 0.262  clip=narrow,median=7 (12/12)
+b2g_vv   |             0.338 - 0.420  clip=narrow,median=7/-15 (11/12)     |                        0.184 - 0.226  clip=narrow,median=7/-12 (12/12)
+b2g_vh   |             0.338 - 0.439  clip=narrow,median=7/-15 (11/12)     |                        0.179 - 0.215  clip=narrow,median=7/-12 (12/12)
+m1       |             0.176 - 0.219  clip=narrow,median=7 (12/12)         |                        0.237 - 0.269  clip=narrow,median=7 (10/12)
+m1g      |             0.307 - 0.375  clip=narrow,median=7/-15 (7/12)      |                        0.217 - 0.246  clip=narrow,median=5/-12 (7/12)
+m2       |             0.136 - 0.172  clip=none,median=7 (10/12)           |                        0.199 - 0.239  clip=none,median=7 (12/12)
+m2g      |             0.333 - 0.420  clip=none,median=3/-15 (8/12)        |                        0.167 - 0.202  clip=none,median=5/-12 (8/12)
+
+=== b1: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=none,median=7 thr -16 (0.375)                 2. clip=wide,median=7 thr -16 (0.375)
+  loeo:Ghana             1. clip=none,median=7 thr -16 (0.387)                 2. clip=wide,median=7 thr -16 (0.387)
+  loeo:India             1. clip=none,median=7 thr -16 (0.381)                 2. clip=wide,median=7 thr -16 (0.381)
+  loeo:Mekong            1. clip=none,median=7 thr -16 (0.330)                 2. clip=wide,median=7 thr -16 (0.330)
+  loeo:Nigeria           1. clip=none,median=7 thr -16 (0.362)                 2. clip=wide,median=7 thr -16 (0.362)
+  loeo:Pakistan          1. clip=none,median=7 thr -16 (0.393)                 2. clip=wide,median=7 thr -16 (0.393)
+  loeo:Paraguay          1. clip=none,median=7 thr -16 (0.406)                 2. clip=wide,median=7 thr -16 (0.406)
+  loeo:Somalia           1. clip=none,median=7 thr -15 (0.402)                 2. clip=wide,median=7 thr -15 (0.402)
+  loeo:Spain             1. clip=none,median=7 thr -16 (0.371)                 2. clip=wide,median=7 thr -16 (0.371)
+  loeo:Sri-Lanka         1. clip=none,median=7 thr -16 (0.394)                 2. clip=wide,median=7 thr -16 (0.394)
+  loeo:USA               1. clip=none,median=7 thr -15 (0.413)                 2. clip=wide,median=7 thr -15 (0.413)
+  official_valid         1. clip=none,median=7 thr -16 (0.391)                 2. clip=wide,median=7 thr -16 (0.391)
+
+=== b2_vv: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 (0.136)                       2. clip=medium,median=7 (0.136)
+  loeo:Ghana             1. clip=narrow,median=7 (0.149)                       2. clip=medium,median=7 (0.149)
+  loeo:India             1. clip=narrow,median=7 (0.135)                       2. clip=medium,median=7 (0.135)
+  loeo:Mekong            1. clip=narrow,median=7 (0.123)                       2. clip=medium,median=7 (0.123)
+  loeo:Nigeria           1. clip=narrow,median=7 (0.135)                       2. clip=medium,median=7 (0.135)
+  loeo:Pakistan          1. clip=narrow,median=7 (0.146)                       2. clip=medium,median=7 (0.145)
+  loeo:Paraguay          1. clip=narrow,median=7 (0.157)                       2. clip=medium,median=7 (0.156)
+  loeo:Somalia           1. clip=narrow,median=7 (0.146)                       2. clip=medium,median=7 (0.145)
+  loeo:Spain             1. clip=narrow,median=7 (0.142)                       2. clip=none,median=7 (0.141)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 (0.149)                       2. clip=medium,median=7 (0.149)
+  loeo:USA               1. clip=narrow,median=7 (0.155)                       2. clip=medium,median=7 (0.155)
+  official_valid         1. clip=narrow,median=7 (0.140)                       2. clip=wide,median=7 (0.139)
+
+=== b2_vh: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 (0.165)                       2. clip=medium,median=7 (0.163)
+  loeo:Ghana             1. clip=narrow,median=7 (0.182)                       2. clip=medium,median=7 (0.180)
+  loeo:India             1. clip=narrow,median=7 (0.165)                       2. clip=medium,median=7 (0.162)
+  loeo:Mekong            1. clip=narrow,median=7 (0.153)                       2. clip=medium,median=7 (0.152)
+  loeo:Nigeria           1. clip=narrow,median=7 (0.165)                       2. clip=medium,median=7 (0.163)
+  loeo:Pakistan          1. clip=narrow,median=7 (0.176)                       2. clip=medium,median=7 (0.174)
+  loeo:Paraguay          1. clip=narrow,median=7 (0.176)                       2. clip=wide,median=7 (0.174)
+  loeo:Somalia           1. clip=narrow,median=7 (0.177)                       2. clip=medium,median=7 (0.175)
+  loeo:Spain             1. clip=narrow,median=7 (0.170)                       2. clip=medium,median=7 (0.168)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 (0.179)                       2. clip=medium,median=7 (0.177)
+  loeo:USA               1. clip=narrow,median=7 (0.193)                       2. clip=medium,median=7 (0.191)
+  official_valid         1. clip=narrow,median=7 (0.179)                       2. clip=wide,median=7 (0.177)
+
+=== b2g_vv: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 ceil -15 (0.378)              2. clip=medium,median=7 ceil -15 (0.377)
+  loeo:Ghana             1. clip=narrow,median=7 ceil -15 (0.389)              2. clip=medium,median=7 ceil -15 (0.388)
+  loeo:India             1. clip=narrow,median=7 ceil -15 (0.390)              2. clip=medium,median=7 ceil -15 (0.389)
+  loeo:Mekong            1. clip=narrow,median=7 ceil -15 (0.338)              2. clip=medium,median=7 ceil -15 (0.338)
+  loeo:Nigeria           1. clip=narrow,median=7 ceil -15 (0.376)              2. clip=medium,median=7 ceil -15 (0.376)
+  loeo:Pakistan          1. clip=narrow,median=7 ceil -15 (0.410)              2. clip=wide,median=7 ceil -15 (0.410)
+  loeo:Paraguay          1. clip=narrow,median=7 ceil -15 (0.418)              2. clip=wide,median=7 ceil -15 (0.418)
+  loeo:Somalia           1. clip=narrow,median=7 ceil -15 (0.420)              2. clip=wide,median=7 ceil -15 (0.420)
+  loeo:Spain             1. clip=narrow,median=7 ceil -15 (0.382)              2. clip=wide,median=7 ceil -15 (0.382)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 ceil -15 (0.406)              2. clip=wide,median=7 ceil -15 (0.405)
+  loeo:USA               1. clip=narrow,median=7 ceil -15 (0.417)              2. clip=medium,median=7 ceil -15 (0.417)
+  official_valid         1. clip=narrow,median=5 ceil -15 (0.412)              2. clip=medium,median=7 ceil -15 (0.411)
+
+=== b2g_vh: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 ceil -15 (0.375)              2. clip=narrow,median=5 ceil -15 (0.374)
+  loeo:Ghana             1. clip=narrow,median=5 ceil -15 (0.388)              2. clip=narrow,median=7 ceil -15 (0.388)
+  loeo:India             1. clip=narrow,median=7 ceil -15 (0.402)              2. clip=narrow,median=5 ceil -15 (0.401)
+  loeo:Mekong            1. clip=narrow,median=7 ceil -15 (0.338)              2. clip=narrow,median=5 ceil -15 (0.337)
+  loeo:Nigeria           1. clip=narrow,median=7 ceil -15 (0.374)              2. clip=narrow,median=5 ceil -15 (0.373)
+  loeo:Pakistan          1. clip=narrow,median=7 ceil -15 (0.406)              2. clip=narrow,median=5 ceil -15 (0.405)
+  loeo:Paraguay          1. clip=narrow,median=7 ceil -15 (0.424)              2. clip=narrow,median=5 ceil -15 (0.423)
+  loeo:Somalia           1. clip=narrow,median=7 ceil -15 (0.415)              2. clip=narrow,median=5 ceil -15 (0.413)
+  loeo:Spain             1. clip=narrow,median=7 ceil -15 (0.379)              2. clip=narrow,median=5 ceil -15 (0.378)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 ceil -15 (0.406)              2. clip=narrow,median=5 ceil -15 (0.405)
+  loeo:USA               1. clip=narrow,median=7 ceil -15 (0.402)              2. clip=narrow,median=5 ceil -15 (0.401)
+  official_valid         1. clip=narrow,median=7 ceil -15 (0.439)              2. clip=narrow,median=5 ceil -15 (0.434)
+
+=== m1: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=7 (0.191)                       2. clip=narrow,median=5 (0.190)
+  loeo:Ghana             1. clip=narrow,median=7 (0.213)                       2. clip=narrow,median=5 (0.213)
+  loeo:India             1. clip=narrow,median=7 (0.187)                       2. clip=narrow,median=5 (0.184)
+  loeo:Mekong            1. clip=narrow,median=7 (0.176)                       2. clip=narrow,median=5 (0.174)
+  loeo:Nigeria           1. clip=narrow,median=7 (0.194)                       2. clip=narrow,median=5 (0.192)
+  loeo:Pakistan          1. clip=narrow,median=7 (0.205)                       2. clip=narrow,median=5 (0.202)
+  loeo:Paraguay          1. clip=narrow,median=7 (0.219)                       2. clip=narrow,median=5 (0.217)
+  loeo:Somalia           1. clip=narrow,median=7 (0.206)                       2. clip=narrow,median=5 (0.203)
+  loeo:Spain             1. clip=narrow,median=7 (0.197)                       2. clip=narrow,median=5 (0.194)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 (0.208)                       2. clip=narrow,median=5 (0.205)
+  loeo:USA               1. clip=narrow,median=7 (0.211)                       2. clip=narrow,median=5 (0.209)
+  official_valid         1. clip=narrow,median=7 (0.178)                       2. clip=narrow,median=5 (0.178)
+
+=== m1g: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=narrow,median=0 ceil -18 (0.343)              2. clip=narrow,median=3 ceil -18 (0.339)
+  loeo:Ghana             1. clip=narrow,median=7 ceil -15 (0.353)              2. clip=narrow,median=5 ceil -15 (0.351)
+  loeo:India             1. clip=narrow,median=0 ceil -18 (0.341)              2. clip=narrow,median=7 ceil -15 (0.339)
+  loeo:Mekong            1. clip=narrow,median=7 ceil -15 (0.307)              2. clip=narrow,median=5 ceil -15 (0.304)
+  loeo:Nigeria           1. clip=narrow,median=7 ceil -15 (0.342)              2. clip=narrow,median=5 ceil -15 (0.339)
+  loeo:Pakistan          1. clip=narrow,median=5 ceil -15 (0.356)              2. clip=narrow,median=7 ceil -15 (0.355)
+  loeo:Paraguay          1. clip=narrow,median=7 ceil -15 (0.375)              2. clip=narrow,median=5 ceil -15 (0.371)
+  loeo:Somalia           1. clip=narrow,median=7 ceil -15 (0.370)              2. clip=narrow,median=5 ceil -15 (0.366)
+  loeo:Spain             1. clip=narrow,median=7 ceil -15 (0.340)              2. clip=narrow,median=5 ceil -15 (0.337)
+  loeo:Sri-Lanka         1. clip=narrow,median=7 ceil -15 (0.360)              2. clip=narrow,median=5 ceil -15 (0.357)
+  loeo:USA               1. clip=narrow,median=5 ceil -15 (0.372)              2. clip=narrow,median=7 ceil -15 (0.371)
+  official_valid         1. clip=narrow,median=0 ceil -18 (0.359)              2. clip=narrow,median=3 ceil -18 (0.352)
+
+=== m2: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=none,median=7 (0.148)                         2. clip=medium,median=7 (0.148)
+  loeo:Ghana             1. clip=none,median=7 (0.161)                         2. clip=wide,median=7 (0.161)
+  loeo:India             1. clip=none,median=7 (0.148)                         2. clip=medium,median=7 (0.148)
+  loeo:Mekong            1. clip=none,median=7 (0.136)                         2. clip=wide,median=7 (0.136)
+  loeo:Nigeria           1. clip=none,median=7 (0.147)                         2. clip=wide,median=7 (0.147)
+  loeo:Pakistan          1. clip=none,median=7 (0.158)                         2. clip=medium,median=7 (0.157)
+  loeo:Paraguay          1. clip=narrow,median=7 (0.167)                       2. clip=medium,median=5 (0.167)
+  loeo:Somalia           1. clip=none,median=7 (0.158)                         2. clip=medium,median=7 (0.158)
+  loeo:Spain             1. clip=medium,median=7 (0.154)                       2. clip=none,median=7 (0.153)
+  loeo:Sri-Lanka         1. clip=none,median=7 (0.161)                         2. clip=medium,median=7 (0.160)
+  loeo:USA               1. clip=none,median=7 (0.172)                         2. clip=medium,median=7 (0.171)
+  official_valid         1. clip=none,median=7 (0.150)                         2. clip=wide,median=7 (0.150)
+
+=== m2g: best two options per tuning set, PRIMARY criterion (pooled flood-only IoU on that tuning set) ===
+  loeo:Bolivia           1. clip=none,median=3 ceil -15 (0.373)                2. clip=wide,median=3 ceil -15 (0.372)
+  loeo:Ghana             1. clip=wide,median=3 ceil -15 (0.389)                2. clip=none,median=3 ceil -15 (0.389)
+  loeo:India             1. clip=none,median=3 ceil -15 (0.399)                2. clip=wide,median=3 ceil -15 (0.398)
+  loeo:Mekong            1. clip=wide,median=3 ceil -15 (0.333)                2. clip=none,median=3 ceil -15 (0.333)
+  loeo:Nigeria           1. clip=none,median=3 ceil -15 (0.365)                2. clip=wide,median=3 ceil -15 (0.365)
+  loeo:Pakistan          1. clip=none,median=3 ceil -15 (0.402)                2. clip=wide,median=3 ceil -15 (0.400)
+  loeo:Paraguay          1. clip=none,median=3 ceil -15 (0.420)                2. clip=wide,median=3 ceil -15 (0.420)
+  loeo:Somalia           1. clip=none,median=3 ceil -15 (0.404)                2. clip=none,median=5 ceil -15 (0.403)
+  loeo:Spain             1. clip=wide,median=3 ceil -15 (0.380)                2. clip=none,median=3 ceil -15 (0.379)
+  loeo:Sri-Lanka         1. clip=none,median=3 ceil -15 (0.403)                2. clip=wide,median=3 ceil -15 (0.402)
+  loeo:USA               1. clip=wide,median=3 ceil -15 (0.401)                2. clip=none,median=3 ceil -15 (0.401)
+  official_valid         1. clip=none,median=3 ceil -15 (0.401)                2. clip=medium,median=5 ceil -15 (0.398)
+
+=== GRID EDGES NOT EXECUTED AUTOMATICALLY (A7.4): guard ceiling and B1 threshold ===
+
+PRIMARY (A7): pooled flood-only IoU over ALL tuning chips
+  b2g_vv  winning ceiling by tuning set: -18 dB 0/12, -15 dB 12/12, -12 dB 0/12  -> at an edge in 0/12; exact ties among ceilings in 0/12
+  b2g_vh  winning ceiling by tuning set: -18 dB 0/12, -15 dB 12/12, -12 dB 0/12  -> at an edge in 0/12; exact ties among ceilings in 0/12
+  m1g     winning ceiling by tuning set: -18 dB 3/12, -15 dB 9/12, -12 dB 0/12  -> at an edge in 3/12; exact ties among ceilings in 0/12
+  m2g     winning ceiling by tuning set: -18 dB 0/12, -15 dB 12/12, -12 dB 0/12  -> at an edge in 0/12; exact ties among ceilings in 0/12
+  b1      winning thresholds [-16.0, -15.0] dB (grid edges -30 and -8)
+
+SENSITIVITY (declared): mean per-chip flood-only IoU over tuning chips with flood
+  b2g_vv  winning ceiling by tuning set: -18 dB 0/12, -15 dB 0/12, -12 dB 12/12  -> at an edge in 12/12; exact ties among ceilings in 0/12
+  b2g_vh  winning ceiling by tuning set: -18 dB 0/12, -15 dB 0/12, -12 dB 12/12  -> at an edge in 12/12; exact ties among ceilings in 0/12
+  m1g     winning ceiling by tuning set: -18 dB 0/12, -15 dB 0/12, -12 dB 12/12  -> at an edge in 12/12; exact ties among ceilings in 0/12
+  m2g     winning ceiling by tuning set: -18 dB 0/12, -15 dB 0/12, -12 dB 12/12  -> at an edge in 12/12; exact ties among ceilings in 0/12
+  b1      winning thresholds [-15.0, -14.0] dB (grid edges -30 and -8)
+
+=== STAGE-2 UNION (A5.3), per criterion: top 2 per tuning set, at most 6 options ===
+
+PRIMARY (A7): pooled flood-only IoU over ALL tuning chips
+  m1   2 kept of 2 distinct: clip=narrow,median=7 (12/12), clip=narrow,median=5 (12/12); fallback used by 0/12 sets
+  m1g  4 kept of 4 distinct: clip=narrow,median=7 (10/12), clip=narrow,median=5 (9/12), clip=narrow,median=0 (3/12), clip=narrow,median=3 (2/12); fallback used by 0/12 sets
+  m2   5 kept of 5 distinct: clip=none,median=7 (11/12), clip=medium,median=7 (7/12), clip=wide,median=7 (4/12), clip=medium,median=5 (1/12), clip=narrow,median=7 (1/12); fallback used by 0/12 sets
+  m2g  4 kept of 4 distinct: clip=none,median=3 (12/12), clip=wide,median=3 (10/12), clip=none,median=5 (1/12), clip=medium,median=5 (1/12); fallback used by 0/12 sets
+
+SENSITIVITY (declared): mean per-chip flood-only IoU over tuning chips with flood
+  m1   4 kept of 4 distinct: clip=narrow,median=7 (11/12), clip=narrow,median=5 (10/12), clip=medium,median=7 (2/12), clip=narrow,median=3 (1/12); fallback used by 0/12 sets
+  m1g  3 kept of 3 distinct: clip=narrow,median=5 (12/12), clip=narrow,median=7 (11/12), clip=narrow,median=3 (1/12); fallback used by 0/12 sets
+  m2   2 kept of 2 distinct: clip=none,median=7 (12/12), clip=wide,median=7 (12/12); fallback used by 0/12 sets
+  m2g  3 kept of 3 distinct: clip=none,median=7 (12/12), clip=none,median=5 (9/12), clip=wide,median=7 (3/12); fallback used by 0/12 sets
+
+=== STAGE-2 COST (measured per-unit times, contended: mean seconds preprocess 0.30, b1 0.10, b2 0.06, m1 1.77, m2 0.64) ===
+  primary criterion only                        : 8 distinct M2 options, 4 distinct M1 options; 9.6 h of contended unit time = about 2.4 h wall on 4 workers
+  primary + sensitivity (options computed once) : 8 distinct M2 options, 5 distinct M1 options; 9.7 h of contended unit time = about 2.4 h wall on 4 workers
+  (M1 stage 2 is ASSUMED to cost 30% of a stage-1 M1 unit; M2: 15 new (n_segments, compactness) configurations per option)
+
+STOP: stage 2 does not start until the project owner approves the union and cost.

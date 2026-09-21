@@ -777,6 +777,47 @@ The Stage 1 counts are re-used, so re-ranking costs nothing. The rule is then ap
   to the lowest ceiling by config order, so ties are flagged rather than counted as evidence for the edge. For the sensitivity criterion the ceiling extension is **not run**: reason declared now, the guard cannot win under that criterion, and the run would cost about 81 minutes to approach the plain method.
 - Every trigger is logged in `results/grid_extension_log.md` as executed or not executed, with the reason.
 
+### A7.5 Stage 1 re-ranked under the amended criterion (2026-09-20/21; `results/tuning/stage1_report_v2.txt`, `stage1_rankings.json`; config sha256 unchanged from A7, code commit `327ebd9`)
+
+**Checks:** re-ranking used the existing counts (no recompute) and, on the 16 base options, the declared criterion reproduces the committed Stage 1 rankings (`aa6ea93`) exactly. Truth and domain counts are identical across
+all candidates. All numbers are aggregates over each tuning set's own chips.
+
+**Stage 1 under both criteria** (top-1 over the 12 tuning sets, after the executed median extensions; "winner" is the most common one):
+
+| Variant | PRIMARY: pooled IoU, all tuning chips | most common winner | SENSITIVITY: mean per-chip IoU | most common winner |
+|---|---|---|---|---|
+| B1 | 0.330 - 0.413 | none, median 7, thr -16 (7/12) | 0.227 - 0.276 | none, median 5, thr -14 (11/12) |
+| B2 VV | 0.124 - 0.158 | narrow, median 9 (11/12) | 0.205 - 0.249 | narrow, median 9 (12/12) |
+| B2 VH | 0.155 - 0.197 | narrow, median 11 (11/12) | 0.223 - 0.265 | narrow, median 9 (12/12) |
+| B2g VV | 0.338 - 0.422 | narrow, median 7, ceil -15 (10/12) | 0.186 - 0.227 | narrow, median 9, ceil -12 (9/12) |
+| B2g VH | 0.339 - 0.442 | narrow, median 9, ceil -15 (10/12) | 0.179 - 0.215 | narrow, median 7, ceil -12 (8/12) |
+| M1 | 0.176 - 0.221 | narrow, median 9 (9/12) | 0.237 - 0.269 | narrow, median 7 (10/12) |
+| M1g | 0.307 - 0.375 | narrow, median 7, ceil -15 (7/12) | 0.217 - 0.246 | narrow, median 5, ceil -12 (7/12) |
+| M2 (nominal `vv_vh`, k = 2) | 0.136 - 0.172 | none, median 7 (8/12) | 0.200 - 0.241 | wide, median 11 (11/12) |
+| M2g | 0.333 - 0.420 | none, median 3, ceil -15 (8/12) | 0.167 - 0.202 | none, median 5, ceil -12 (8/12) |
+
+Reading (tuning aggregates from stage-1 nominal settings, not results): under the amended criterion **the guard is the decisive ingredient**: the plain rule fires on flood-free chips and pooled IoU is 0.12 to 0.22, while every guarded variant reaches
+0.31 to 0.44; the guarded unsupervised methods are then about level with the tuned fixed threshold B1 (0.33 to 0.41). Under the declared criterion the ordering is the opposite for the guard (A6.5). Stage-1 preprocessing
+keeps favouring heavy speckle filtering (median windows 9 to 11 pixels, that is 90 to 110 m at 10 m pixels), which would blur small water bodies; that is what the tuning criteria reward here, and it is a limitation to keep in mind for narrow urban drains.
+
+**Grid-edge triggers, each logged in `results/grid_extension_log.md` as executed or not, with the reason:**
+
+| Trigger | Status |
+|---|---|
+| median 7 to 9 | **executed** (1,760 units, 22.2 min, 0 errors), triggered under both criteria |
+| median 9 to 11 | **executed** (1,760 units, 23.4 min, 0 errors), triggered where the winner moved to 9 |
+| median 11 to 13 | **not executed**: the cap of 2 extensions (A2.5) is reached. Winners still at 11: PRIMARY B2 VH 11/12, B1 1/12, B2 VV 1/12, B2g VH 1/12, M2 2/12; SENSITIVITY M2 11/12, M2g 2/12 |
+| guard ceiling -12 to -9 | **not executed**: under the primary criterion no winner is at -12 (0/12 for every guarded variant), so it no longer triggers. Under the sensitivity criterion it triggers (12/12) and is **not run by declaration** (A7.4) |
+| guard ceiling -18 to -21 | **triggered under the primary criterion for M1g in 3 of 12 tuning sets (`loeo:Bolivia`, `loeo:India`, `official_valid`); not executed, waiting for the project owner** as instructed. It needs M1 re-run over 24 options x 440 chips, about 96 min |
+| B1 threshold | not triggered (winners -16, -15, -14 dB; interior) |
+| clip | categorical, never extended |
+
+**Union (A5.3) under the primary criterion, after the extensions:** M1 4 options, M1g 5, **M2 6 kept of 8 distinct (the cap binds; 2 of 12 tuning sets use the fallback)**, M2g 4; 10 distinct M2 options and 6 distinct M1 options in total.
+Under the sensitivity criterion: M1 5, M1g 3, M2 4, M2g 5. **Stage-2 cost**, from the measured (contended) per-unit times: primary criterion only about **2.8 h of wall time** on 4 workers (11.4 h of contended unit time);
+primary plus sensitivity, computing shared options once, about **4.0 h** (14 distinct M2 options, 7 distinct M1 options). M1 stage 2 is assumed to cost 30% of a stage-1 M1 unit. If the M1g ceiling extension is run, the M1g options, and so the union, may change.
+
+**Pending for the project owner:** the M1g ceiling extension (-18 to -21); approval of the union and cost; the headline score (A7.3). **Stage 2 has not started.**
+
 ---
 `configs/config.yaml` sha256 history:
 
@@ -789,4 +830,4 @@ The Stage 1 counts are re-used, so re-ranking costs nothing. The rule is then ap
 - after Amendment 5 declarations, checks not yet run: `1f1572513f168a93eef5d41099bdd26efd4eed50dac76eca0d53aae6ea1dff23`
 - after A5.5, M2 `n_init` 10 added: `ae1dbc6e84fc1b14f4409188e5e5bd5d74a28b8f1fe05607eeca9d8780b68b0b`
 - after Amendment 6 (Stage 1 ran with exactly this config, code commit `f569460`): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`
-- after Amendment 7, before any re-ranking (current): `5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e`
+- after Amendment 7 (current; the re-ranking and the median extensions ran with exactly this config, code commit `327ebd9`): `5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e`

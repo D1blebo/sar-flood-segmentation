@@ -1,0 +1,25 @@
+STAGE 1 compute  2026-09-20 23:59:40  (grid-edge extension: median windows [9])
+config sha256 5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e
+git HEAD 327ebd9b1fdf; tracked files modified since HEAD: results/tuning/stage1_rankings.json
+chips in the index: 446; eligible (>= 1 valid pixel): 440; preprocessing options: 20
+units: 8800 total, 7040 already done, 1760 to run; 4 workers
+  100/1760 units, 1.1 min elapsed, 1.46 units/s, eta 19.0 min
+  200/1760 units, 2.5 min elapsed, 1.31 units/s, eta 19.8 min
+  300/1760 units, 3.8 min elapsed, 1.31 units/s, eta 18.6 min
+  400/1760 units, 5.1 min elapsed, 1.31 units/s, eta 17.3 min
+  500/1760 units, 6.4 min elapsed, 1.30 units/s, eta 16.1 min
+  600/1760 units, 7.7 min elapsed, 1.31 units/s, eta 14.8 min
+  700/1760 units, 9.0 min elapsed, 1.30 units/s, eta 13.6 min
+  800/1760 units, 10.2 min elapsed, 1.31 units/s, eta 12.2 min
+  900/1760 units, 11.5 min elapsed, 1.31 units/s, eta 11.0 min
+  1000/1760 units, 12.7 min elapsed, 1.32 units/s, eta 9.6 min
+  1100/1760 units, 13.9 min elapsed, 1.31 units/s, eta 8.4 min
+  1200/1760 units, 15.3 min elapsed, 1.31 units/s, eta 7.1 min
+  1300/1760 units, 16.5 min elapsed, 1.31 units/s, eta 5.9 min
+  1400/1760 units, 17.8 min elapsed, 1.31 units/s, eta 4.6 min
+  1500/1760 units, 19.1 min elapsed, 1.31 units/s, eta 3.3 min
+  1600/1760 units, 20.3 min elapsed, 1.32 units/s, eta 2.0 min
+  1700/1760 units, 21.5 min elapsed, 1.32 units/s, eta 0.8 min
+  1760/1760 units, 22.2 min elapsed, 1.32 units/s, eta 0.0 min
+
+finished: 1760 done, 0 errors; wall 22.2 min; sum of unit times 88.6 min -> parallel speedup 3.99x (measured on 1760 units)
