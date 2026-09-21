@@ -1,0 +1,48 @@
+{
+ "options": {
+  "pooled_all": {
+   "m1": [
+    "clip=narrow,median=9",
+    "clip=narrow,median=7",
+    "clip=narrow,median=5",
+    "clip=narrow,median=11",
+    "clip=narrow,median=0",
+    "clip=narrow,median=3"
+   ],
+   "m2": [
+    "clip=none,median=7",
+    "clip=medium,median=7",
+    "clip=wide,median=7",
+    "clip=narrow,median=11",
+    "clip=wide,median=9",
+    "clip=narrow,median=7",
+    "clip=none,median=3",
+    "clip=wide,median=3",
+    "clip=none,median=5",
+    "clip=medium,median=5"
+   ]
+  },
+  "mean_flood": {
+   "m1": [
+    "clip=narrow,median=7",
+    "clip=narrow,median=5",
+    "clip=medium,median=7",
+    "clip=narrow,median=9",
+    "clip=narrow,median=3"
+   ],
+   "m2": [
+    "clip=wide,median=11",
+    "clip=none,median=11",
+    "clip=wide,median=9",
+    "clip=none,median=9",
+    "clip=none,median=7",
+    "clip=none,median=5",
+    "clip=medium,median=9"
+   ]
+  }
+ },
+ "projected_hours": {
+  "primary": 3.099861111111111,
+  "sensitivity_extra": 1.1960972222222221
+ }
+}

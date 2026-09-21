@@ -1,0 +1,7 @@
+STAGE 2 PLAN (options come from the final stage-1 union, A5.3)
+  primary      M1 options (6): ['clip=narrow,median=9', 'clip=narrow,median=7', 'clip=narrow,median=5', 'clip=narrow,median=11', 'clip=narrow,median=0', 'clip=narrow,median=3']
+               M2 options (10): ['clip=none,median=7', 'clip=medium,median=7', 'clip=wide,median=7', 'clip=narrow,median=11', 'clip=wide,median=9', 'clip=narrow,median=7', 'clip=none,median=3', 'clip=wide,median=3', 'clip=none,median=5', 'clip=medium,median=5']
+  sensitivity  M1 options (5): ['clip=narrow,median=7', 'clip=narrow,median=5', 'clip=medium,median=7', 'clip=narrow,median=9', 'clip=narrow,median=3']
+               M2 options (7): ['clip=wide,median=11', 'clip=none,median=11', 'clip=wide,median=9', 'clip=none,median=9', 'clip=none,median=7', 'clip=none,median=5', 'clip=medium,median=9']
+projected wall time on 4 workers (from measured contended unit times): primary 3.1 h; sensitivity, only the options not already computed (1 M1, 4 M2): 1.2 h; total 4.3 h
+rule (A8.4): start automatically unless the projection exceeds 6 h -> START AUTOMATICALLY
