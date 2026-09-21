@@ -863,6 +863,16 @@ When the frozen configuration is run on Accra, it is run **once as chosen and on
 motivated by A8.2 (blur of narrow drains). It is not a second method, is not tuned, and nothing is selected from it. Every Accra output remains labelled **UNVALIDATED: no ground truth** unless validation polygons are supplied, and the Accra configuration
 itself (proposal: tune on all 446 chips pooled) still needs the project owner's approval before Stage 4.
 
+### A8.6 Ceiling extension executed, final Stage 1 union, and Stage 2 started (2026-09-21; `results/tuning/stage1_report_v3.txt`, `verify_mv.txt`; config sha256 unchanged from A8, code commit `f3de1f0`)
+
+- **Mean VV stored:** 10,560 files (440 chips x 24 options), 0 errors, 90.8 min. **Exactness check passed**: counts derived from the stored mean VV equal the stored counts for all 288 (option, family, ceiling) arrays, each over all 440 chips, with 0 mismatches
+  (`results/tuning/verify_mv.txt`). The ranking re-runs the check itself and refuses to continue on a mismatch.
+- **Ceiling extension (primary criterion), executed as declared:** M1g's winner was at -18 in 3 of 12 tuning sets (`loeo:Bolivia`, `loeo:India`, `official_valid`). Ceiling -21 was added for those sets; **it scored lower than -18 in all three**, so their winners stay at -18, which is now interior,
+  and **nothing further triggers** (B2g VV/VH and M2g: winners at -15 in 12 of 12 sets; M1g: -18 in 3, -15 in 9). The extension changed no option list, so the union and cost of A7.5 stand.
+- **Median window:** not extended beyond the cap; the optimum is unresolved (A8.2); winners still at 11: primary B2 VH 11/12; sensitivity M2 11/12.
+- **Final union (primary criterion):** M1 4 options, M1g 5, M2 6 kept of 8 distinct (cap binding, 2 tuning sets use the fallback), M2g 4. Sensitivity criterion: M1 5, M1g 3, M2 4, M2g 5. Projected Stage 2: about 2.8 h wall (primary) and 4.0 h in total with the sensitivity options, **below the 6-hour threshold**,
+  so Stage 2 **starts automatically** under A8.4: primary first, then sensitivity, in the background, resumable, with a log (`results/tuning/stage2_compute.log`).
+
 ---
 `configs/config.yaml` sha256 history:
 
@@ -876,4 +886,4 @@ itself (proposal: tune on all 446 chips pooled) still needs the project owner's 
 - after A5.5, M2 `n_init` 10 added: `ae1dbc6e84fc1b14f4409188e5e5bd5d74a28b8f1fe05607eeca9d8780b68b0b`
 - after Amendment 6 (Stage 1 ran with exactly this config, code commit `f569460`): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`
 - after Amendment 7 (the re-ranking and the median extensions ran with exactly this config, code commit `327ebd9`): `5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e`
-- after Amendment 8, before any run under it (current): `0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc`
+- after Amendment 8 (current; the mean-VV run, the ceiling extension and Stage 2 use exactly this config, code commit `f3de1f0`): `0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc`

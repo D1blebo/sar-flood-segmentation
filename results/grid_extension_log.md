@@ -24,3 +24,12 @@ Rankings under the primary criterion (pooled flood-only IoU over all tuning chip
 | guard ceiling | -18 to -21 | NOT EXECUTED, WAITING FOR THE PROJECT OWNER | primary: M1g winner at -18 in 3/12 tuning sets (`loeo:Bolivia`, `loeo:India`, `official_valid`). B2g VV/VH and M2g: 0/12 at an edge. Cost about 96 min (M1 over 24 options x 440 chips) |
 | B1 threshold | +/- 1 dB | NOT TRIGGERED | winners -16, -15, -14 dB; grid edges -30 and -8 |
 | clip | n/a | NEVER EXTENDED | categorical |
+
+
+## 2026-09-21, after Amendment 8: ceiling extension executed, median optimum logged as unresolved
+
+| Parameter | Step | Status | Reason and numbers |
+|---|---|---|---|
+| guard ceiling | -18 to -21 | **EXECUTED** (derived from the stored mean VV, exact) | primary criterion: M1g winner at -18 in 3/12 tuning sets (`loeo:Bolivia`, `loeo:India`, `official_valid`). Result: -21 scored LOWER than -18 in all three, so the winners stay at -18, now interior; no further trigger. B2g VV/VH and M2g: no set at an edge |
+| guard ceiling | -12 to -9 | NOT EXECUTED | primary: no winner at -12 (0/12 in every guarded variant). Sensitivity criterion: triggers 12/12 but remains not run by declaration (A7.4), although now free |
+| median window | 11 to 13 | NOT EXECUTED, **OPTIMUM UNRESOLVED** | cap of 2 extensions reached (A2.5; owner's decision A8.2). Winners still at 11: primary B2 VH 11/12 (B1, B2 VV, B2g VH 1/12 each; M2 2/12); sensitivity M2 11/12 (M2g 2/12). **Median windows of 9 to 11 pixels are 90 to 110 m and may blur narrow drains and small water bodies**; state this wherever such a configuration is used. Accra: run with a small-window sensitivity variant (A8.5) |
