@@ -22,10 +22,10 @@ import numpy as np
 
 from src.config import REPO_ROOT, load_config
 from src.parallel import stream_map
-from src.ranking import (FLOOD, PRIMARY, SENSITIVITY, VARIANTS, available_extra_medians, check_consistency, criterion,
+from src.ranking import (add_derived_ceilings, load_mv, verify_derived_ceilings, FLOOD, PRIMARY, SENSITIVITY, VARIANTS, available_extra_medians, check_consistency, criterion,
                          extra_prep_names, load_units, measured_speedup, median_of, project_stage2_cost,
                          rank_options, rank_with_extensions, stage2_union, tuning_sets, _key)
-from src.stage1 import (ceiling_key, eligible_chips, load_or_build_chip_index, preprocessing_options,
+from src.stage1 import (ceiling_key, eligible_chips, load_or_build_chip_index, mv_path, mv_unit, preprocessing_options,
                         stage1_params, stage1_unit, unit_path)
 
 # variant name -> (family in the count cache, guarded?)
@@ -38,11 +38,13 @@ def git(*args):
     return subprocess.run(["git", *args], cwd=REPO_ROOT, capture_output=True, text=True).stdout.strip()
 
 
-def compute(extra_medians=()):
+def compute(extra_medians=(), kind="counts"):
+    """kind='counts': the stage-1 count units; kind='mv': the mean-VV files (protocol A8.3)."""
+    worker, path_of = (stage1_unit, unit_path) if kind == "counts" else (mv_unit, mv_path)
     cfg = load_config()
     params, preps = stage1_params(cfg), preprocessing_options(cfg, extra_medians)
     sha = hashlib.sha256((REPO_ROOT / "configs" / "config.yaml").read_bytes()).hexdigest()
-    print(f"STAGE 1 compute  {time.strftime('%Y-%m-%d %H:%M:%S')}"
+    print(f"STAGE 1 compute ({kind})  {time.strftime('%Y-%m-%d %H:%M:%S')}"
           + (f"  (grid-edge extension: median windows {list(extra_medians)})" if extra_medians else ""), flush=True)
     print(f"config sha256 {sha}", flush=True)
     print(f"git HEAD {git('rev-parse', 'HEAD')[:12]}; tracked files modified since HEAD: "
@@ -52,13 +54,13 @@ def compute(extra_medians=()):
     print(f"chips in the index: {len(index)}; eligible (>= 1 valid pixel): {len(chips)}; "
           f"preprocessing options: {len(preps)}", flush=True)
     units = [f"{c}|{p['name']}" for c in chips for p in preps]
-    todo = [u for u in units if not unit_path(params["unit_dir"], *u.split("|", 1)).exists()]
+    todo = [u for u in units if not path_of(params["unit_dir"], *u.split("|", 1)).exists()]
     print(f"units: {len(units)} total, {len(units) - len(todo)} already done, {len(todo)} to run; "
           f"{cfg['compute']['n_jobs']} workers", flush=True)
 
     t0, done, errors, busy = time.perf_counter(), 0, [], 0.0
     log_every = 100
-    for unit, status, secs in stream_map(stage1_unit, todo, cfg["compute"]["n_jobs"], chunksize=2,
+    for unit, status, secs in stream_map(worker, todo, cfg["compute"]["n_jobs"], chunksize=2,
                                          params=params, preps=preps):
         done += 1
         busy += secs
@@ -85,6 +87,23 @@ CRITERION_LABEL = {PRIMARY: "PRIMARY (A7): pooled flood-only IoU over ALL tuning
 
 def value(r, crit):
     return r["pooled"] if crit == PRIMARY else r["mean"]
+
+
+def verify_mv():
+    """Exactness check (A8.3): counts derived from the stored mean VV must equal the stored counts at -18, -15, -12."""
+    cfg = load_config()
+    clips = list(cfg["preprocess"]["clip_options"])
+    names = [p["name"] for p in preprocessing_options(cfg, [9, 11])]
+    index = load_or_build_chip_index(cfg)
+    chips = eligible_chips(index)
+    params = stage1_params(cfg)
+    counts, _ = load_units(params["unit_dir"], chips, names)
+    mv = load_mv(params["unit_dir"], chips, names)
+    checked, bad = verify_derived_ceilings(counts, mv, params["ceilings"])
+    print(f"verify-mv: {len(chips)} chips x {len(names)} options x 4 families x {len(params['ceilings'])} ceilings: "
+          f"{checked} (option, family, ceiling) arrays checked, {bad} mismatching")
+    print("EXACT" if bad == 0 else "MISMATCH: do not use derived ceilings")
+    sys.exit(0 if bad == 0 else 1)
 
 
 def fmt(r, guarded, crit):
@@ -248,6 +267,10 @@ if __name__ == "__main__":
     if cmd == "compute":
         med = [int(x) for x in sys.argv[3:]] if len(sys.argv) > 2 and sys.argv[2] == "--medians" else []
         compute(med)
+    elif cmd == "mv":
+        compute([9, 11], kind="mv")
+    elif cmd == "verify-mv":
+        verify_mv()
     elif cmd == "rank":
         rank(dry=int(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[2] == "--dry" else None)
     else:

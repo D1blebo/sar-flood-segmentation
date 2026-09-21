@@ -14,7 +14,7 @@ from pathlib import Path
 import numpy as np
 
 from src.metrics import MODES
-from src.stage1 import ceiling_key, unit_path
+from src.stage1 import ceiling_key, mv_path, unit_path
 
 FLOOD, ALL = MODES.index("flood_only"), MODES.index("all_water")
 PLAIN_FAMILIES = ("b2_vv", "b2_vh", "m1", "m2")
@@ -215,3 +215,59 @@ def project_stage2_cost(unions, seconds, n_chips, speedup, m1_stage2_fraction=0.
     return {"m2_options": len(m2_opts), "m1_options": len(m1_opts), "m2_seconds_per_config_chip": m2_s,
             "m1_seconds_per_unit": m1_s, "serial_h": serial / 3600.0,
             "wall_h": serial / 3600.0 / speedup if speedup else None, "speedup_used": speedup}
+
+
+# ---- counts at any ceiling, derived from the stored mean VV (protocol A8.3) ----------------------------------------------
+
+def derive_ceiling_counts(plain, mv, ceiling):
+    """
+    Counts of the guarded variant at `ceiling`, from the plain counts (n, 2, 5) and the predicted region's mean VV per chip
+    (n,), NaN where nothing was predicted. The guard keeps the prediction iff mean VV < ceiling; on abstention TP = FP = 0,
+    FN = TP + FN, TN = domain - FN. Exactly what apply_abstention_ceiling would give.
+    """
+    out = plain.copy()
+    a = np.asarray(mv, dtype=float) >= ceiling          # NaN compares False: an empty prediction is left as it is
+    truth = plain[:, :, 0] + plain[:, :, 2]
+    out[a, :, 0] = 0
+    out[a, :, 1] = 0
+    out[a, :, 2] = truth[a]
+    out[a, :, 3] = plain[a, :, 4] - truth[a]
+    return out
+
+
+def load_mv(unit_dir, chips, preps):
+    """{(family, prep): float array (n_chips,)} of the predicted region's mean VV, NaN where empty. Raises if a file is missing."""
+    mv, missing = {}, []
+    for ci, chip in enumerate(chips):
+        for prep in preps:
+            path = mv_path(unit_dir, chip, prep)
+            if not path.exists():
+                missing.append(f"{chip}|{prep}")
+                continue
+            unit = json.loads(path.read_text())
+            for fam in PLAIN_FAMILIES:
+                a = mv.setdefault((fam, prep), np.full(len(chips), np.nan))
+                a[ci] = np.nan if unit[fam] is None else unit[fam]
+    if missing:
+        raise FileNotFoundError(f"{len(missing)} mean-VV files missing, e.g. {missing[:3]}")
+    return mv
+
+
+def add_derived_ceilings(counts, mv, ceilings):
+    """Add counts[(family, prep, 'nominal', key)] for every ceiling in `ceilings` (floats) that is not already there."""
+    for (fam, prep), a in mv.items():
+        plain = counts[(fam, prep, "nominal", "plain")]
+        for c in ceilings:
+            counts.setdefault((fam, prep, "nominal", ceiling_key(c)), derive_ceiling_counts(plain, a, c))
+
+
+def verify_derived_ceilings(counts, mv, ceilings):
+    """(checked, mismatched): derived counts against the stored ones for ceilings that were computed directly."""
+    checked = bad = 0
+    for (fam, prep), a in mv.items():
+        plain = counts[(fam, prep, "nominal", "plain")]
+        for c in ceilings:
+            stored = counts[(fam, prep, "nominal", ceiling_key(c))]
+            checked += 1
+            bad += not np.array_equal(stored, derive_ceiling_counts(plain, a, c))
+    return checked, bad

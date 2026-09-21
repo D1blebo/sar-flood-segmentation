@@ -215,3 +215,57 @@ def test_union_counts_an_absent_option_as_rank_length_plus_one():
     out = stage2_union(rankings, order, top=1, cap=3)
     assert out["mean_rank"]["c"] == pytest.approx((3 + 3) / 2)    # rank 3 in s1; absent from s2, length 2 + 1 = 3
     assert out["mean_rank"]["a"] == 1.0
+
+
+# ---- Amendment 8: mean VV stored per unit; counts at any ceiling derived exactly -------------------------------------------
+
+from src.evaluate import evaluate_chip
+from src.methods import PixelKMeans
+from src.ranking import add_derived_ceilings, derive_ceiling_counts, load_mv, verify_derived_ceilings
+from src.stage1 import mv_path, mv_unit
+
+
+def test_derive_ceiling_counts_hand_computed_including_boundary_and_empty():
+    plain = counts_array([(8, 1, 1, 90, 100), (0, 5, 4, 91, 100), (0, 0, 3, 97, 100)])
+    mv = np.array([-20.0, -10.0, np.nan])                     # chip 2 predicted nothing
+    out = derive_ceiling_counts(plain, mv, -15.0)
+    assert out[0, FLOOD].tolist() == [8, 1, 1, 90, 100]       # -20 < -15: keep
+    assert out[1, FLOOD].tolist() == [0, 0, 4, 96, 100]       # -10 >= -15: abstain, FN = truth (4), TN = 100 - 4
+    assert out[2, FLOOD].tolist() == [0, 0, 3, 97, 100]       # empty prediction: unchanged
+    assert derive_ceiling_counts(plain, np.array([-15.0, -15.0, np.nan]), -15.0)[0, FLOOD].tolist() == [0, 0, 9, 91, 100]  # equal abstains
+    assert plain[0, FLOOD].tolist() == [8, 1, 1, 90, 100]     # the input is not modified
+
+
+@pytest.mark.parametrize("water_shift", [0.0, 10.0])          # water at about -24 dB and at about -14 dB
+def test_derived_counts_equal_the_direct_guard_for_every_ceiling(toy_chip, water_shift):
+    chip = dict(toy_chip)
+    vv = toy_chip["vv"].copy()
+    vv[10:30, 10:35] += water_shift
+    chip["vv"] = vv
+    ceilings = [-30.0, -21.0, -18.0, -15.0, -12.0, -9.0, -6.0]
+    direct = evaluate_chip(PixelKMeans(2, 0), chip, ceilings_db=ceilings)
+    plain = np.array([[[direct[m][k] for k in ("tp", "fp", "fn", "tn", "domain")] for m in ("flood_only", "all_water")]])
+    mv = np.array([np.nan if direct["water_mean_vv"] is None else direct["water_mean_vv"]])
+    for c in ceilings:
+        want = np.array([[[direct["guarded"][c][m][k] for k in ("tp", "fp", "fn", "tn", "domain")]
+                          for m in ("flood_only", "all_water")]])
+        assert np.array_equal(derive_ceiling_counts(plain, mv, c), want), c
+
+
+def test_mv_files_round_trip_and_reproduce_every_stored_ceiling(fake_dataset):
+    params, preps = fake_dataset
+    cfg_preps = preprocessing_options(load_config())
+    names = [p["name"] for p in cfg_preps[:2]]
+    for n in names:
+        assert stage1_unit(f"Toy_1|{n}", params, cfg_preps)[1] == "done"
+        assert mv_unit(f"Toy_1|{n}", params, cfg_preps)[1] == "done"
+    assert mv_unit(f"Toy_1|{names[0]}", params, cfg_preps)[1] == "skipped"              # resumable
+    assert not list(mv_path(params["unit_dir"], "Toy_1", names[0]).parent.glob("*.tmp"))
+    counts, _ = load_units(params["unit_dir"], ["Toy_1"], names)
+    mv = load_mv(params["unit_dir"], ["Toy_1"], names)
+    checked, bad = verify_derived_ceilings(counts, mv, params["ceilings"])
+    assert checked == 4 * 2 * 3 and bad == 0                                              # 4 families x 2 options x 3 ceilings
+    add_derived_ceilings(counts, mv, [-21.0, -9.0])
+    assert ("m1", names[0], "nominal", "-21") in counts and ("b2_vh", names[1], "nominal", "-9") in counts
+    with pytest.raises(FileNotFoundError):
+        load_mv(params["unit_dir"], ["Toy_1"], [cfg_preps[7]["name"]])

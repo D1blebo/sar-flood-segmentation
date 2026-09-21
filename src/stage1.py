@@ -80,6 +80,19 @@ def _enc_with_ceilings(res, ceilings):
     return out
 
 
+def make_m1(params):
+    """The stage-1 nominal M1 (k, n_init from the frozen params)."""
+    return PixelKMeans(params["m1"]["k"], params["seed"], n_init=params["m1"]["n_init"], max_iter=params["max_iter"])
+
+
+def make_m2(params):
+    """The stage-1 nominal M2, reading and writing the on-disk segmentation cache."""
+    p2 = params["m2"]
+    return SlicKMeans(p2["k"], p2["n_segments"], p2["compactness"], p2["features"], params["seed"],
+                      n_init=p2["n_init"], max_iter=params["max_iter"], slic_max_iter=params["slic_max_iter"],
+                      cache=SegmentationCache(params["slic_cache_dir"]))
+
+
 def compute_stage1_counts(chip, prep, params):
     """The content of one unit for an already-loaded chip. `prep` is one preprocessing_options entry."""
     clip = params["clip_options"][prep["clip"]]
@@ -105,16 +118,13 @@ def compute_stage1_counts(chip, prep, params):
     seconds["b2"] = time.perf_counter() - t0
 
     t0 = time.perf_counter()
-    m1 = PixelKMeans(params["m1"]["k"], params["seed"], n_init=params["m1"]["n_init"], max_iter=params["max_iter"])
+    m1 = make_m1(params)
     out["m1"] = _enc_with_ceilings(
         evaluate_prepared(m1, vv, vh, image_valid, label, jrc, key, ceilings_db=ceilings), ceilings)
     seconds["m1"] = time.perf_counter() - t0
 
     t0 = time.perf_counter()
-    p2 = params["m2"]
-    m2 = SlicKMeans(p2["k"], p2["n_segments"], p2["compactness"], p2["features"], params["seed"],
-                    n_init=p2["n_init"], max_iter=params["max_iter"], slic_max_iter=params["slic_max_iter"],
-                    cache=SegmentationCache(params["slic_cache_dir"]))
+    m2 = make_m2(params)
     out["m2"] = _enc_with_ceilings(
         evaluate_prepared(m2, vv, vh, image_valid, label, jrc, key, ceilings_db=ceilings), ceilings)
     seconds["m2"] = time.perf_counter() - t0
@@ -184,3 +194,45 @@ def load_or_build_chip_index(cfg):
 def eligible_chips(index):
     """Chips with at least one valid pixel; the rest are excluded from every metric (protocol section 2)."""
     return sorted(c for c, v in index.items() if v["domain_all"] > 0)
+
+
+# ---- mean-VV units (protocol A8.3): one extra file per unit, so counts at any ceiling can be derived ----------------------
+
+def mv_path(unit_dir, chip_id, prep_name_):
+    return Path(unit_dir) / chip_id / f"{prep_name_}.mv.json"
+
+
+def compute_mv(chip, prep, params):
+    """Mean VV of the predicted water region of B2-VV, B2-VH, M1 and M2, with exactly the stage-1 settings."""
+    clip = params["clip_options"][prep["clip"]]
+    seconds, t0 = {}, time.perf_counter()
+    vv, vh = preprocess(chip["vv"], chip["vh"], clip, prep["median"])
+    image_valid = image_valid_mask(chip["vv"], chip["vh"])
+    label, jrc, key = chip["label"], chip["jrc"], f"{chip['id']}|{prep['name']}"
+    out = {"version": UNIT_VERSION, "chip": chip["id"], "prep": prep["name"]}
+    for band in ("vv", "vh"):
+        out[f"b2_{band}"] = evaluate_prepared(OtsuThreshold(band), vv, vh, image_valid, label, jrc)["water_mean_vv"]
+    out["m1"] = evaluate_prepared(make_m1(params), vv, vh, image_valid, label, jrc, key)["water_mean_vv"]
+    out["m2"] = evaluate_prepared(make_m2(params), vv, vh, image_valid, label, jrc, key)["water_mean_vv"]
+    out["seconds"] = time.perf_counter() - t0
+    return out
+
+
+def mv_unit(unit, params, preps):
+    """Worker for the mean-VV files; same contract as stage1_unit (never raises, atomic write, skips finished units)."""
+    t0 = time.perf_counter()
+    try:
+        chip_id, pname = unit.split("|", 1)
+        path = mv_path(params["unit_dir"], chip_id, pname)
+        if path.exists():
+            return unit, "skipped", 0.0
+        prep = next(p for p in preps if p["name"] == pname)
+        content = compute_mv(read_chip(chip_id, params["data_dir"]), prep, params)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
+        with os.fdopen(fd, "w") as f:
+            json.dump(content, f)
+        os.replace(tmp, path)
+        return unit, "done", time.perf_counter() - t0
+    except Exception as exc:  # noqa: BLE001
+        return unit, f"error: {type(exc).__name__}: {exc}", time.perf_counter() - t0

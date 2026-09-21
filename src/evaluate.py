@@ -46,7 +46,9 @@ def evaluate_prepared(method, vv, vh, image_valid, label, jrc, cache_key=None, w
     else:
         pred = method.predict(vv, vh, cache_key)
 
-    out = {}
+    # Mean VV of the predicted region: the abstention guard keeps a prediction iff this is below the ceiling, so storing it
+    # lets the counts at ANY ceiling be derived later (protocol A8.3). None if nothing is predicted.
+    out = {"water_mean_vv": float(vv[pred].mean()) if pred.any() else None}
     for mode in MODES:
         domain, truth = evaluation_domain_and_truth(image_valid, label, jrc, mode)
         out[mode] = confusion_counts(pred, truth, domain)
