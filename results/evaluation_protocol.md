@@ -874,6 +874,31 @@ itself (proposal: tune on all 446 chips pooled) still needs the project owner's 
   so Stage 2 **starts automatically** under A8.4: primary first, then sensitivity, in the background, resumable, with a log (`results/tuning/stage2_compute.log`).
 
 ---
+
+## Amendment 9 (2026-09-21, after the Stage 2 compute, BEFORE any Stage 2 ranking, edge check or Stage 3)
+
+Stage 2's counts are computed (primary phase 156 min, sensitivity phase 65 min, 0 errors; 3,080 M1 and 6,160 M2 units). This section declares how they are turned into the final selections, before they are ranked. Nothing here changes an earlier definition.
+
+### A9.1 The nine selections per (criterion, tuning set)
+
+Everything below is done separately for the **primary** criterion (A7.2) and the **sensitivity** criterion (A7.3), for each of the 12 tuning sets, using only that set's tuning chips. Ties go to the candidate earlier in config order (options in the order of the set's assigned list, configurations in grid order, ceilings in list order).
+
+- **B1, B2 VV, B2 VH, B2g VV, B2g VH** end at Stage 1: the top-1 of the final Stage 1 ranking (B1: option and threshold; B2: option; B2g: option and ceiling).
+- **M1 and M1g** (A6.3): candidates are (a) k = 3 (`n_init` 10) at the set's Stage 1 winning option, and (b) k = 2 (`n_init` 3) at each of the set's assigned options (A5.3). The best candidate by the criterion is the final choice. M1g is chosen jointly with its ceiling.
+- **M2 and M2g, Stage 2:** candidates are each of the set's assigned options for that variant x each (`n_segments`, `compactness`) of the grid (the nominal 500 / 0.05 comes from Stage 1), at `vv_vh`, k = 2, `n_init` 10. The best by the criterion is the Stage 2 choice; M2g jointly with its ceiling.
+- **M2 and M2g, Stage 3:** on that Stage 2 choice, the six allowed (features, k) combinations of A6.2 at `n_init` 10, read from the segmentation cache (the combination (`vv_vh`, 2) is the Stage 2 configuration itself and serves as a determinism check). The best by the criterion is the final M2 / M2g configuration.
+- **Ceiling (guarded variants) at every stage** is chosen jointly with the configuration from the ceilings -18, -15, -12. Under the **primary** criterion the ceiling edge rule (A8.3: step 3 dB, either edge, at most 2 steps per (set, variant) within a stage, counts derived exactly from the stored mean VV) is applied at each stage; under the sensitivity criterion it is not run (A7.4).
+
+### A9.2 M2 grid-edge rule at Stage 2 (A2.5, A8.4)
+
+For each (criterion, tuning set, M2 variant): if the Stage 2 winner has `n_segments` at the smallest or largest value of that set's current grid, or `compactness` at the smallest or largest, the grid is extended by one step for that (set, variant) only: `n_segments` x2 above 2000 or /2 below 200 (integers); `compactness` x5 above 1.0 or /5 below 0.01; at most 2 steps per parameter. For every assigned option of that (set, variant) the new configurations are the new value crossed with the current values of the other parameter. Only configurations that the cache does not yet hold are computed.
+**Cost rule (A8.4):** the projected wall time of an extension round is computed from the measured Stage 2 per-unit times on 4 workers. **If it is 3 hours or less, the round is run as declared; if it is more, I show the cost and wait.** The rule is re-applied after each round (cap 2 steps per parameter). M1 has no numeric grid to extend (k is never extended).
+
+### A9.3 Frozen configurations
+
+For each (criterion, tuning set) the nine selections are written, with every hyperparameter and the tuning-set criterion value only, to `results/frozen/<criterion>/<tuning set>.yaml` and summarised in `results/tuning/frozen_summary.txt`. **No held-out scoring is run** (A3.4): the held-out script stays unwritten and unrun until the project owner approves the frozen configurations.
+
+---
 `configs/config.yaml` sha256 history:
 
 - when this protocol was first written: `3e8b2fb240b85a7903b30f0a2a788d86b17f8ba9216eb5ea9d354e1321364991`

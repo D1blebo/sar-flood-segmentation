@@ -1,0 +1,101 @@
+STAGE 2 compute  2026-09-21 09:31:14
+config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc
+git HEAD 1c488d012f95; tracked files modified since HEAD: none; 440 chips; 4 workers
+
+PHASE primary: 7040 units, 68 already done, 6972 to run
+  100/6972 units, 0.4 min elapsed, 3.87 units/s, eta 29.6 min
+  200/6972 units, 0.9 min elapsed, 3.79 units/s, eta 29.8 min
+  300/6972 units, 1.3 min elapsed, 3.79 units/s, eta 29.3 min
+  400/6972 units, 1.7 min elapsed, 3.92 units/s, eta 28.0 min
+  500/6972 units, 2.0 min elapsed, 4.09 units/s, eta 26.4 min
+  600/6972 units, 2.4 min elapsed, 4.23 units/s, eta 25.1 min
+  700/6972 units, 2.7 min elapsed, 4.34 units/s, eta 24.1 min
+  800/6972 units, 3.0 min elapsed, 4.41 units/s, eta 23.3 min
+  900/6972 units, 3.3 min elapsed, 4.59 units/s, eta 22.1 min
+  1000/6972 units, 3.5 min elapsed, 4.76 units/s, eta 20.9 min
+  1100/6972 units, 3.7 min elapsed, 4.89 units/s, eta 20.0 min
+  1200/6972 units, 4.0 min elapsed, 5.00 units/s, eta 19.2 min
+  1300/6972 units, 4.4 min elapsed, 4.93 units/s, eta 19.2 min
+  1400/6972 units, 5.0 min elapsed, 4.71 units/s, eta 19.7 min
+  1500/6972 units, 5.5 min elapsed, 4.54 units/s, eta 20.1 min
+  1600/6972 units, 6.1 min elapsed, 4.39 units/s, eta 20.4 min
+  1700/6972 units, 6.6 min elapsed, 4.31 units/s, eta 20.4 min
+  1800/6972 units, 6.7 min elapsed, 4.47 units/s, eta 19.3 min
+  1900/6972 units, 6.8 min elapsed, 4.63 units/s, eta 18.3 min
+  2000/6972 units, 7.0 min elapsed, 4.79 units/s, eta 17.3 min
+  2100/6972 units, 7.1 min elapsed, 4.93 units/s, eta 16.5 min
+  2200/6972 units, 7.3 min elapsed, 5.05 units/s, eta 15.7 min
+  2300/6972 units, 7.4 min elapsed, 5.17 units/s, eta 15.1 min
+  2400/6972 units, 7.6 min elapsed, 5.28 units/s, eta 14.4 min
+  2500/6972 units, 7.8 min elapsed, 5.37 units/s, eta 13.9 min
+  2600/6972 units, 8.9 min elapsed, 4.89 units/s, eta 14.9 min
+  2700/6972 units, 12.3 min elapsed, 3.66 units/s, eta 19.5 min
+  2800/6972 units, 15.7 min elapsed, 2.97 units/s, eta 23.4 min
+  2900/6972 units, 19.1 min elapsed, 2.53 units/s, eta 26.9 min
+  3000/6972 units, 22.7 min elapsed, 2.21 units/s, eta 30.0 min
+  3100/6972 units, 26.4 min elapsed, 1.96 units/s, eta 33.0 min
+  3200/6972 units, 29.8 min elapsed, 1.79 units/s, eta 35.1 min
+  3300/6972 units, 33.2 min elapsed, 1.65 units/s, eta 37.0 min
+  3400/6972 units, 36.7 min elapsed, 1.55 units/s, eta 38.5 min
+  3500/6972 units, 40.1 min elapsed, 1.46 units/s, eta 39.8 min
+  3600/6972 units, 43.5 min elapsed, 1.38 units/s, eta 40.7 min
+  3700/6972 units, 46.9 min elapsed, 1.31 units/s, eta 41.5 min
+  3800/6972 units, 50.3 min elapsed, 1.26 units/s, eta 42.0 min
+  3900/6972 units, 53.7 min elapsed, 1.21 units/s, eta 42.3 min
+  4000/6972 units, 57.3 min elapsed, 1.16 units/s, eta 42.6 min
+  4100/6972 units, 61.0 min elapsed, 1.12 units/s, eta 42.7 min
+  4200/6972 units, 64.6 min elapsed, 1.08 units/s, eta 42.6 min
+  4300/6972 units, 68.2 min elapsed, 1.05 units/s, eta 42.4 min
+  4400/6972 units, 71.8 min elapsed, 1.02 units/s, eta 42.0 min
+  4500/6972 units, 75.2 min elapsed, 1.00 units/s, eta 41.3 min
+  4600/6972 units, 78.6 min elapsed, 0.98 units/s, eta 40.5 min
+  4700/6972 units, 82.0 min elapsed, 0.96 units/s, eta 39.6 min
+  4800/6972 units, 85.2 min elapsed, 0.94 units/s, eta 38.6 min
+  4900/6972 units, 88.5 min elapsed, 0.92 units/s, eta 37.4 min
+  5000/6972 units, 91.8 min elapsed, 0.91 units/s, eta 36.2 min
+  5100/6972 units, 95.6 min elapsed, 0.89 units/s, eta 35.1 min
+  5200/6972 units, 98.9 min elapsed, 0.88 units/s, eta 33.7 min
+  5300/6972 units, 102.0 min elapsed, 0.87 units/s, eta 32.2 min
+  5400/6972 units, 105.2 min elapsed, 0.86 units/s, eta 30.6 min
+  5500/6972 units, 108.4 min elapsed, 0.85 units/s, eta 29.0 min
+  5600/6972 units, 111.5 min elapsed, 0.84 units/s, eta 27.3 min
+  5700/6972 units, 114.6 min elapsed, 0.83 units/s, eta 25.6 min
+  5800/6972 units, 117.8 min elapsed, 0.82 units/s, eta 23.8 min
+  5900/6972 units, 121.0 min elapsed, 0.81 units/s, eta 22.0 min
+  6000/6972 units, 124.1 min elapsed, 0.81 units/s, eta 20.1 min
+  6100/6972 units, 127.3 min elapsed, 0.80 units/s, eta 18.2 min
+  6200/6972 units, 130.5 min elapsed, 0.79 units/s, eta 16.2 min
+  6300/6972 units, 133.7 min elapsed, 0.79 units/s, eta 14.3 min
+  6400/6972 units, 136.9 min elapsed, 0.78 units/s, eta 12.2 min
+  6500/6972 units, 140.1 min elapsed, 0.77 units/s, eta 10.2 min
+  6600/6972 units, 143.3 min elapsed, 0.77 units/s, eta 8.1 min
+  6700/6972 units, 146.5 min elapsed, 0.76 units/s, eta 5.9 min
+  6800/6972 units, 149.7 min elapsed, 0.76 units/s, eta 3.8 min
+  6900/6972 units, 153.8 min elapsed, 0.75 units/s, eta 1.6 min
+  6972/6972 units, 156.1 min elapsed, 0.74 units/s, eta 0.0 min
+PHASE primary finished: 6972 done, 0 errors, wall 156.1 min
+
+PHASE sensitivity: 5280 units, 3080 already done, 2200 to run
+  100/2200 units, 0.4 min elapsed, 4.39 units/s, eta 8.0 min
+  200/2200 units, 0.7 min elapsed, 4.68 units/s, eta 7.1 min
+  300/2200 units, 1.1 min elapsed, 4.73 units/s, eta 6.7 min
+  400/2200 units, 1.4 min elapsed, 4.75 units/s, eta 6.3 min
+  500/2200 units, 3.7 min elapsed, 2.23 units/s, eta 12.7 min
+  600/2200 units, 7.4 min elapsed, 1.36 units/s, eta 19.6 min
+  700/2200 units, 11.0 min elapsed, 1.06 units/s, eta 23.6 min
+  800/2200 units, 14.7 min elapsed, 0.91 units/s, eta 25.6 min
+  900/2200 units, 18.3 min elapsed, 0.82 units/s, eta 26.4 min
+  1000/2200 units, 21.9 min elapsed, 0.76 units/s, eta 26.3 min
+  1100/2200 units, 25.6 min elapsed, 0.72 units/s, eta 25.6 min
+  1200/2200 units, 29.2 min elapsed, 0.68 units/s, eta 24.3 min
+  1300/2200 units, 32.9 min elapsed, 0.66 units/s, eta 22.7 min
+  1400/2200 units, 36.4 min elapsed, 0.64 units/s, eta 20.8 min
+  1500/2200 units, 40.0 min elapsed, 0.63 units/s, eta 18.7 min
+  1600/2200 units, 43.6 min elapsed, 0.61 units/s, eta 16.4 min
+  1700/2200 units, 47.2 min elapsed, 0.60 units/s, eta 13.9 min
+  1800/2200 units, 50.2 min elapsed, 0.60 units/s, eta 11.2 min
+  1900/2200 units, 54.0 min elapsed, 0.59 units/s, eta 8.5 min
+  2000/2200 units, 57.6 min elapsed, 0.58 units/s, eta 5.8 min
+  2100/2200 units, 61.3 min elapsed, 0.57 units/s, eta 2.9 min
+  2200/2200 units, 64.9 min elapsed, 0.56 units/s, eta 0.0 min
+PHASE sensitivity finished: 2200 done, 0 errors, wall 64.9 min
