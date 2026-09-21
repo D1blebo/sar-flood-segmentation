@@ -216,7 +216,7 @@ values are in `configs/config.yaml`, whose new sha256 is at the end of this file
   macro-average is the unweighted mean over the sampled events.
 - **Reported:** the macro-average over the 11 events with this event-level interval, for both per-event
   statistics (mean per-chip flood-only IoU over chips with flood, and pooled flood-only IoU). The mean
-  per-chip IoU is the headline **[my choice]** because it is the selection criterion.
+  per-chip IoU is the headline **[my choice]** because it is the selection criterion. **[Superseded by Amendment 8, A8.1: the headline is pooled flood-only IoU.]**
 - **Caveat, stated plainly:** per-event intervals (chips resampled within one event) **treat chips
   within an event as independent**. Chips from one flood event are spatially and radiometrically
   correlated, so these intervals **understate** the true uncertainty. The official-split intervals
@@ -819,6 +819,51 @@ primary plus sensitivity, computing shared options once, about **4.0 h** (14 dis
 **Pending for the project owner:** the M1g ceiling extension (-18 to -21); approval of the union and cost; the headline score (A7.3). **Stage 2 has not started.**
 
 ---
+
+## Amendment 8 (2026-09-21, before any held-out score exists and before Stage 2)
+
+Decisions of the project owner after the amended-criterion re-ranking (A7.5).
+
+### A8.1 Headline score
+
+The **headline held-out score is pooled flood-only IoU over all evaluation chips**: the sum of TP over the sum of (TP + FP + FN), flood-only counts (section 1), over every chip in the evaluation set, with or without flood (a chip with an empty
+domain contributes nothing). It is the same quantity as the selection criterion (A7.2). **It is always reported next to** (i) the **mean per-chip flood-only IoU** over evaluation chips with flood; (ii) the **macro-average over the 11 events**
+with an **event-level bootstrap CI** (two-level bootstrap of A2.2: resample events, then chips within each sampled event; the per-event statistic is the pooled flood-only IoU of that event's chips, and the mean per-chip macro-average is
+reported too); (iii) the **flood-free false-positive fraction** (the fraction of flood-free chips with any predicted flood, and the pooled false-positive rate, per A2 of Amendment 2). This supersedes the headline statement of A2.2 and the open item of A7.3.
+The all-water metric stays secondary. The caveats of A2.2 (within-event chips treated as independent) and A7.2 (pooling weights chips by pixels) stay attached to the numbers.
+
+### A8.2 Median window: no extension beyond the declared cap, and the optimum is unresolved
+
+The median-window grid is **not extended beyond the cap of two extensions** (A2.5). After the extensions to 9 and 11, winners are **still at the last permitted window (11)** in **11 of 12 tuning sets for B2 VH under the primary criterion, and 11 of 12 for M2 under the
+sensitivity criterion** (smaller counts elsewhere, listed in `results/grid_extension_log.md`). **The optimum median window is therefore unresolved for these variants.** Windows of 9 to 11 pixels are 90 to 110 m at 10 m pixels and **may blur narrow drains and small
+water bodies**; this is a limitation to be stated wherever those configurations are used, in particular for the Accra case study (A8.5).
+
+### A8.3 Guard-ceiling extension, and the stored mean VV
+
+- **Mechanism:** the guard is all-or-nothing per chip: for a given clustering, a ceiling c keeps the plain prediction if the predicted region's mean VV is below c and otherwise abstains. The cache therefore stores, per unit and per family (B2 VV, B2 VH, M1, M2),
+  **the predicted region's mean VV** (a second file per unit). The counts at **any** ceiling are then derived exactly: keep the plain counts, or, on abstention, TP = FP = 0, FN = TP + FN of the plain counts, TN = domain - FN. Later ceilings cost nothing.
+- **Exactness check (declared before running):** the derived counts must equal the stored counts for the three original ceilings (-18, -15, -12) for every unit and family; the run stops if any differs.
+- **The declared extension is executed:** M1g's winners at -18 in 3 of 12 tuning sets (primary criterion) trigger -18 to -21, decided per tuning set from its own data. Under the primary criterion the ceiling rule (step 3 dB, either edge, at most 2 steps in total
+  per tuning set and variant) is applied together with the median rule, for all guarded variants. For the sensitivity criterion the ceiling extension remains **not run** (declaration of A7.4 unchanged: the guard cannot win under that criterion), even though it is now free.
+
+### A8.4 Stage 2: how it runs
+
+- **After the extension, once the union is settled**, I report the final union and cost, and **start Stage 2 without waiting** unless the projected time exceeds **6 hours**, in which case I ask first. **The primary criterion runs first, the sensitivity criterion second**, in
+  the background, resumable, with a log file and no scheduled wake-ups.
+- **Units:** for each option in a method's union and each chip: M1 at **k = 2, `n_init` 3** (A6.3) and M2 at **`vv_vh`, k = 2, `n_init` 10** over the **15 further** (`n_segments`, `compactness`) configurations (the nominal one is done), each stored with the plain
+  counts and the predicted region's mean VV (so guarded variants at any ceiling are derived). Options shared between criteria are computed once.
+- **Logs** contain progress and timing only; **tuning-set metrics only** appear in any ranking output (A3.4). The held-out scoring script is separate and not run.
+- **Stage-2 grid edges:** if a stage-2 winner sits at the edge of `n_segments` or `compactness`, the rule of A2.5 applies (`n_segments` x2 or /2, `compactness` x5 or /5, at most 2 steps). These triggers are logged. **[my choice]** The extension compute is executed if its projected
+  cost is at most 3 hours; above that I report and ask.
+- Stage 3 (M2 `k` x features, the six kept combinations) and the final selection are **not** part of this step.
+
+### A8.5 Stage 4 (Accra): a labelled sensitivity variant, logged now
+
+When the frozen configuration is run on Accra, it is run **once as chosen and once more with a small median window** (window **3**; if the frozen window is already 3 or smaller, window 0), everything else identical. The second run is a **labelled sensitivity comparison**
+motivated by A8.2 (blur of narrow drains). It is not a second method, is not tuned, and nothing is selected from it. Every Accra output remains labelled **UNVALIDATED: no ground truth** unless validation polygons are supplied, and the Accra configuration
+itself (proposal: tune on all 446 chips pooled) still needs the project owner's approval before Stage 4.
+
+---
 `configs/config.yaml` sha256 history:
 
 - when this protocol was first written: `3e8b2fb240b85a7903b30f0a2a788d86b17f8ba9216eb5ea9d354e1321364991`
@@ -830,4 +875,5 @@ primary plus sensitivity, computing shared options once, about **4.0 h** (14 dis
 - after Amendment 5 declarations, checks not yet run: `1f1572513f168a93eef5d41099bdd26efd4eed50dac76eca0d53aae6ea1dff23`
 - after A5.5, M2 `n_init` 10 added: `ae1dbc6e84fc1b14f4409188e5e5bd5d74a28b8f1fe05607eeca9d8780b68b0b`
 - after Amendment 6 (Stage 1 ran with exactly this config, code commit `f569460`): `39fdf573736b2d40f05c6a0b562eb51fdd34cc07c96d2f0b5860e76158c2141a`
-- after Amendment 7 (current; the re-ranking and the median extensions ran with exactly this config, code commit `327ebd9`): `5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e`
+- after Amendment 7 (the re-ranking and the median extensions ran with exactly this config, code commit `327ebd9`): `5b949fb9c80bcdfe434d5f4a4681de4906c558d24f36e7f6985aaca1dbfe2c1e`
+- after Amendment 8, before any run under it (current): `0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc`

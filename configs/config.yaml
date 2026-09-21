@@ -4,7 +4,8 @@
 # Amendment 2 (2026-09-20) added: abstention_guard, m1 fit_subsample, search_plan, grid_extension,
 # compute, two-level bootstrap. Amendment 3 (2026-09-20) added: search_plan.selection and stage2_union,
 # evaluation.heldout_scoring, seed_sensitivity. Amendment 7 (2026-09-20) replaced the selection criterion (see the
-# protocol) and added sensitivity_selection_criterion. Original values are unchanged otherwise.
+# protocol) and added sensitivity_selection_criterion. Amendment 8 (2026-09-21) added the headline metric, stage2_run and the
+# Accra sensitivity variant. Original values are unchanged otherwise.
 
 seed: 42
 
@@ -117,6 +118,11 @@ search_plan:
   # method's stage-1 top-two preprocessing options; each option is computed once for all chips and
   # cached, and each tuning set still ranks only within its OWN top two.
   # Amendment 5 (A5.3): the union is capped. Applied per method variant (M1, M1g, M2, M2g).
+  # Amendment 8 (A8.4): how stage 2 is run.
+  stage2_run:
+    order: [primary, sensitivity]
+    start_automatically_unless_projected_hours_exceed: 6
+    ask_before_extension_compute_above_hours: 3
   stage2_union:
     top_per_tuning_set: 2
     max_options_in_union: 6
@@ -169,6 +175,9 @@ evaluation:
   secondary_metric: all_water
   selection_criterion: pooled_flood_only_iou_all_tuning_chips   # Amendment 7 (was mean_per_chip_iou)
   sensitivity_selection_criterion: mean_per_chip_iou             # the declared criterion, reported alongside
+  # Amendment 8 (A8.1): the headline held-out score, chosen before any held-out score exists.
+  headline_metric: pooled_flood_only_iou_all_evaluation_chips
+  always_report_with_headline: [mean_per_chip_iou, macro_average_over_events_with_event_level_bootstrap_ci, flood_free_false_positive_fraction]
   flood_fraction_bins: [0.05, 0.30]          # strata: none, <5%, 5-30%, >30%
   bootstrap:
     n_resamples: 1000
@@ -228,3 +237,10 @@ seed_sensitivity_full:
   n_init_tie_within_pp: 2
   tiny_cluster_fraction: 0.01
   rows_dir: data/seed_checks
+
+# Amendment 8 (A8.5): Stage 4 (Accra). The frozen configuration is run once as chosen, and once more with a small median window,
+# as a labelled sensitivity comparison (never a second method, never selected from).
+accra:
+  sensitivity_variant:
+    median_window: 3
+    if_frozen_median_window_at_or_below_this_use: 0
