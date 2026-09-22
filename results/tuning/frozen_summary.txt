@@ -1,5 +1,5 @@
 FROZEN CONFIGURATIONS BY TUNING SET AND CRITERION (tuning-set aggregates only; no held-out score exists)
-config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection e84fdbea7a8f; Stage 3 determinism check: (vv_vh, k=2) equals the Stage 2 counts exactly for all 18 distinct Stage 2 choices
+config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection 7756872fc56e; Stage 3 determinism check: (vv_vh, k=2) equals the Stage 2 counts exactly for all 19 distinct Stage 2 choices
 
 ===== PRIMARY criterion (pooled flood-only IoU over all tuning chips) =====
 
@@ -37,11 +37,12 @@ m1g  (tuning-set criterion 0.343 to 0.434; 3 distinct configuration(s) over 12 t
     4/12  clip narrow, median 7, k=2 (n_init 3), guard -15 dB
     2/12  clip narrow, median 3, k=2 (n_init 3), guard -15 dB   [Bolivia, official_valid]
 
-m2  (tuning-set criterion 0.185 to 0.247; 7 distinct configuration(s) over 12 tuning sets)
-    3/12  clip none, median 7, SLIC 1000/0.0004, vv_vh_std, k=3   [India, Pakistan, Somalia]
+m2  (tuning-set criterion 0.185 to 0.247; 8 distinct configuration(s) over 12 tuning sets)
     2/12  clip medium, median 7, SLIC 4000/0.2, vv_vh, k=4   [Bolivia, USA]
     2/12  clip wide, median 7, SLIC 4000/0.2, vv_vh, k=4   [Ghana, Mekong]
+    2/12  clip none, median 7, SLIC 1000/0.0004, vv_vh_std, k=3   [India, Somalia]
     2/12  clip narrow, median 11, SLIC 1000/0.2, vv_vh, k=4   [Nigeria, official_valid]
+    1/12  clip medium, median 7, SLIC 2000/8e-05, vv_vh, k=4   [Pakistan]
     1/12  clip narrow, median 7, SLIC 2000/0.2, vv_vh, k=4   [Paraguay]
     1/12  clip medium, median 7, SLIC 1000/0.0004, vv_vh_std, k=3   [Spain]
     1/12  clip none, median 7, SLIC 1000/0.01, vv_vh_std, k=3   [Sri-Lanka]

@@ -914,6 +914,31 @@ For each (criterion, tuning set) the nine selections are written, with every hyp
 - Unresolved (logged): primary M2 has 4 sets at the lowest compactness (0.0004) after the cap; in the frozen primary M2, 4 sets carry compactness 0.0004 and 1 carries 0.01 (see summary). The median optimum is unresolved at the cap of 11 (windows of 90 to 110 m may blur narrow drains): primary B2 VH uses median 11 in 11/12 sets and sensitivity M2 uses median 11 in 11/12 sets (the other uses 9).
 - Ranges of tuning-set criterion values across the 12 sets (pooled flood-only IoU, primary): B1 0.330 to 0.413; B2 VV 0.124 to 0.158; B2 VH 0.155 to 0.197; M1 0.176 to 0.221; M2 0.185 to 0.247; guarded B2g 0.338 to 0.442, M1g 0.343 to 0.434, M2g 0.335 to 0.440. On the tuning chips, then, the unguarded clustering and Otsu methods score below the fixed threshold, and the guard is what lifts them to the threshold's level; whether this holds on held-out events is untested.
 
+### A9.6 Owner-authorized compactness cap override for 4 tuning sets (2026-09-22; `results/tuning/stage2_ext_m2x3_plan.json`, `stage2_extension_round3.log`, `stage2_selection.json`, Stage 3 re-run, `frozen_summary.txt`; config sha256 unchanged; measured)
+
+After freezing (A9.5), the project owner asked for one further compactness step for the 4 tuning sets
+still at the compactness edge under primary M2 (unguarded): `loeo:India`, `loeo:Pakistan`,
+`loeo:Somalia`, `loeo:Spain`, all at 0.0004 with the general 2-step cap (A2.5, A9.2) already reached.
+This is a one-off, explicitly authorized exception to that cap, scoped to exactly these 4
+(criterion, tuning set, variant) triples; the cap itself (2 steps) is unchanged for everything else,
+and it was verified beforehand that no other triple was at a reached edge, so nothing else could be
+affected by it.
+
+- Cost was projected at 0.19 h (11.4 min, under 30 min) and run as declared: 880 units, 13.0 min,
+  0 errors (`grid_extension_log.md`).
+- Outcome: `loeo:Pakistan`'s primary M2 winner moved to `clip=medium,median=7`, SLIC 2000/0.00008
+  (pooled IoU improved from 0.168196 to 0.168282); `loeo:India`, `loeo:Somalia` and `loeo:Spain` kept
+  their 0.0004 choice (0.00008 scored lower for all three). No further step was run.
+- Stage 3 was re-run for the one new (option, `n_segments`, `compactness`) triple this created (440
+  units, 1.6 min, reusing the cached SLIC segmentation), and the frozen configurations were
+  regenerated. The determinism check now covers 19 distinct Stage 2 choices (was 18) and still passes.
+  A diff against the pre-override `frozen_summary.txt` confirms this changed **only**
+  `loeo:Pakistan`'s primary M2 entry; every other line is byte-identical.
+- **Still unresolved:** `loeo:Pakistan`'s primary M2 winner is again at the (now lower) compactness
+  edge; `loeo:India` and `loeo:Somalia` remain at the original edge (0.0004). The compactness optimum
+  for primary M2 is unresolved for 3 of 12 tuning sets even after this extra step; `loeo:Spain`'s
+  choice did not change in substance. No further cap increase is authorized.
+
 ---
 `configs/config.yaml` sha256 history:
 

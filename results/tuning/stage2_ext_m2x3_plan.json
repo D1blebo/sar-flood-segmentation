@@ -1,0 +1,52 @@
+{
+ "round": 3,
+ "kind": "m2x3",
+ "needed": {
+  "clip=none,median=7": [
+   [
+    200,
+    8e-05
+   ],
+   [
+    500,
+    8e-05
+   ],
+   [
+    1000,
+    8e-05
+   ],
+   [
+    2000,
+    8e-05
+   ],
+   [
+    4000,
+    8e-05
+   ]
+  ],
+  "clip=medium,median=7": [
+   [
+    200,
+    8e-05
+   ],
+   [
+    500,
+    8e-05
+   ],
+   [
+    1000,
+    8e-05
+   ],
+   [
+    2000,
+    8e-05
+   ],
+   [
+    4000,
+    8e-05
+   ]
+  ]
+ },
+ "cost_hours": 0.19,
+ "note": "Owner-authorized one-off cap override (cap normally 2 steps, A9.2): a 3rd compactness step for primary M2 (unguarded), scoped to loeo:India/Pakistan/Somalia/Spain only, all at compactness 0.0004 with the cap reached. Requested 2026-09-22."
+}

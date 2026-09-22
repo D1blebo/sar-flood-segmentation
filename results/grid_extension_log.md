@@ -47,3 +47,31 @@ Counts are (tuning set, variant) pairs whose winner sat at an edge of `n_segment
 
 **Compactness optimum UNRESOLVED for primary M2.** After the cap, 4 of 12 tuning sets still choose the lowest compactness in their extended grid (0.0004, e.g. `n1000_c0.0004`). Primary M2g and both sensitivity variants have no winner at an edge. A compactness that low means the superpixels follow intensity almost exclusively and are free to become irregular in shape; the true optimum may be lower still and was not searched. State this wherever the primary M2 configuration is used.
 
+
+## 2026-09-22, primary M2 compactness: one-off cap override, owner-authorized, scoped to 4 sets
+
+The project owner explicitly authorized a 3rd compactness step (cap normally 2, A2.5/A9.2) for exactly
+the 4 (tuning set, variant, criterion) triples that were still at the compactness edge after the cap:
+primary M2 (unguarded) at `loeo:India`, `loeo:Pakistan`, `loeo:Somalia`, `loeo:Spain` (all at 0.0004).
+Checked first that no other triple was at a reached edge, so nothing else could be affected.
+
+- New compactness value: 0.0004 / 5 = 0.00008. Needed configurations: only 2 distinct preprocessing
+  options are shared across the 4 sets (`clip=none,median=7`, `clip=medium,median=7`), each crossed
+  with its own current `n_segments` list -> 10 new configurations (440 chips each).
+- Projected 0.19 h (11.4 min), under the owner's 30-minute bar for this round -> **EXECUTED**
+  (`m2x3`, 880 units, 13.0 min, 0 errors).
+- Result: `loeo:Pakistan`'s winner moved to `n2000_c0.00008` (pooled IoU 0.168196 to 0.168282, a
+  0.00009 improvement) and is again at the new (lowest) compactness edge; `loeo:India`, `loeo:Somalia`
+  and `loeo:Spain` kept `n1000_c0.0004` (0.00008 scored lower for all three). No further step was run:
+  the owner authorized exactly one additional step, not a further cap raise.
+- **Compactness optimum for primary M2 is therefore still unresolved for `loeo:Pakistan`** (now at
+  0.00008), and remains unresolved for `loeo:India` and `loeo:Somalia` at 0.0004 from the earlier cap
+  (`loeo:Spain`'s frozen choice is unaffected in substance: 0.0004 still wins). State this wherever the
+  primary M2 configuration for these tuning sets is used.
+- Stage 3 was re-run for the one new (option, n_segments, compactness) triple this created
+  (`clip=medium,median=7`, 2000, 0.00008): 440 new units, 1.6 min, reusing the SLIC segmentation cached
+  during the `m2x3` round. The frozen configurations were regenerated; the diff against the previous
+  `frozen_summary.txt` confirms the **only** change is `loeo:Pakistan`'s primary M2 entry (now
+  `clip=medium,median=7`, SLIC 2000/0.00008, `vv_vh`, k=4) -- every other (criterion, tuning set,
+  variant) is byte-identical.
+

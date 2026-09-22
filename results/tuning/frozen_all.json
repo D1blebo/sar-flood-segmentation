@@ -1142,23 +1142,32 @@
     }
    },
    "m2": {
-    "tuning_set_pooled_flood_only_iou": 0.1938084829923135,
-    "tuning_set_mean_per_chip_flood_only_iou": 0.14178618464455492,
+    "tuning_set_pooled_flood_only_iou": 0.21759957488904585,
+    "tuning_set_mean_per_chip_flood_only_iou": 0.17013504223475148,
     "method": "M2 SLIC + k-means",
     "preprocessing": {
-     "clip": "none",
-     "clip_range_db": null,
+     "clip": "medium",
+     "clip_range_db": {
+      "vv": [
+       -30.0,
+       5.0
+      ],
+      "vh": [
+       -35.0,
+       -5.0
+      ]
+     },
      "median_window": 7
     },
-    "n_segments": 1000,
-    "compactness": 0.0004,
-    "features": "vv_vh_std",
-    "k": 3,
+    "n_segments": 2000,
+    "compactness": 8e-05,
+    "features": "vv_vh",
+    "k": 4,
     "n_init": 10,
     "seed": 42,
     "max_iter": 300,
     "slic_max_num_iter": 10,
-    "stage2_choice_tuning_set_pooled_iou": 0.16819587801441363,
+    "stage2_choice_tuning_set_pooled_iou": 0.16828232372354776,
     "stage3_ceiling_extensions_db": []
    },
    "m2g": {

@@ -1,5 +1,5 @@
 # Frozen configurations, primary criterion, tuning set loeo:Pakistan (412 tuning chips).
-# Tuning-set metrics only: no held-out chip was scored. config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection e84fdbea7a8f.
+# Tuning-set metrics only: no held-out chip was scored. config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection 7756872fc56e.
 criterion: primary
 tuning_set: loeo:Pakistan
 n_tuning_chips: 412
@@ -82,22 +82,28 @@ selections:
     abstention_guard:
       ceiling_db: -15.0
   m2:
-    tuning_set_pooled_flood_only_iou: 0.1938084829923135
-    tuning_set_mean_per_chip_flood_only_iou: 0.14178618464455492
+    tuning_set_pooled_flood_only_iou: 0.21759957488904585
+    tuning_set_mean_per_chip_flood_only_iou: 0.17013504223475148
     method: M2 SLIC + k-means
     preprocessing:
-      clip: none
-      clip_range_db: null
+      clip: medium
+      clip_range_db:
+        vv:
+        - -30.0
+        - 5.0
+        vh:
+        - -35.0
+        - -5.0
       median_window: 7
-    n_segments: 1000
-    compactness: 0.0004
-    features: vv_vh_std
-    k: 3
+    n_segments: 2000
+    compactness: 8.0e-05
+    features: vv_vh
+    k: 4
     n_init: 10
     seed: 42
     max_iter: 300
     slic_max_num_iter: 10
-    stage2_choice_tuning_set_pooled_iou: 0.16819587801441363
+    stage2_choice_tuning_set_pooled_iou: 0.16828232372354776
     stage3_ceiling_extensions_db: []
   m2g:
     tuning_set_pooled_flood_only_iou: 0.40494422406445485

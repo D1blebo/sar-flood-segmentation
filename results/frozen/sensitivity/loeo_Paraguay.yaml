@@ -1,5 +1,5 @@
 # Frozen configurations, sensitivity criterion, tuning set loeo:Paraguay (374 tuning chips).
-# Tuning-set metrics only: no held-out chip was scored. config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection e84fdbea7a8f.
+# Tuning-set metrics only: no held-out chip was scored. config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection 7756872fc56e.
 criterion: sensitivity
 tuning_set: loeo:Paraguay
 n_tuning_chips: 374
