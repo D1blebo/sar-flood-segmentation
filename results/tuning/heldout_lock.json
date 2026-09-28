@@ -1,0 +1,31 @@
+{
+ "frozen_sha256": "ff225d76e2ef45eb7e99e5a08c716253e88f2fe03fc40b1fb53ac44ed9b1c622",
+ "written_at": "2026-09-22 11:33:05",
+ "git_head": "d31e5ae3ec00a7eb8cec9f0ae8abe0e7acdfc7c0",
+ "frozen_files": [
+  "results/frozen/primary/loeo_Bolivia.yaml",
+  "results/frozen/primary/loeo_Ghana.yaml",
+  "results/frozen/primary/loeo_India.yaml",
+  "results/frozen/primary/loeo_Mekong.yaml",
+  "results/frozen/primary/loeo_Nigeria.yaml",
+  "results/frozen/primary/loeo_Pakistan.yaml",
+  "results/frozen/primary/loeo_Paraguay.yaml",
+  "results/frozen/primary/loeo_Somalia.yaml",
+  "results/frozen/primary/loeo_Spain.yaml",
+  "results/frozen/primary/loeo_Sri-Lanka.yaml",
+  "results/frozen/primary/loeo_USA.yaml",
+  "results/frozen/primary/official_valid.yaml",
+  "results/frozen/sensitivity/loeo_Bolivia.yaml",
+  "results/frozen/sensitivity/loeo_Ghana.yaml",
+  "results/frozen/sensitivity/loeo_India.yaml",
+  "results/frozen/sensitivity/loeo_Mekong.yaml",
+  "results/frozen/sensitivity/loeo_Nigeria.yaml",
+  "results/frozen/sensitivity/loeo_Pakistan.yaml",
+  "results/frozen/sensitivity/loeo_Paraguay.yaml",
+  "results/frozen/sensitivity/loeo_Somalia.yaml",
+  "results/frozen/sensitivity/loeo_Spain.yaml",
+  "results/frozen/sensitivity/loeo_Sri-Lanka.yaml",
+  "results/frozen/sensitivity/loeo_USA.yaml",
+  "results/frozen/sensitivity/official_valid.yaml"
+ ]
+}

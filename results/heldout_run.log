@@ -1,0 +1,22 @@
+HELD-OUT SCORING 2026-09-22 07:09:59; git HEAD d31e5ae3ec00; tracked files modified: none
+11 LOEO events, 440 eligible chips; bootstrap n_resamples=1000 seed=42 confidence=0.95
+  primary/b1
+  primary/b2_vv
+  primary/b2_vh
+  primary/b2g_vv
+  primary/b2g_vh
+  primary/m1
+  primary/m1g
+  primary/m2
+  primary/m2g
+  sensitivity/b1
+  sensitivity/b2_vv
+  sensitivity/b2_vh
+  sensitivity/b2g_vv
+  sensitivity/b2g_vh
+  sensitivity/m1
+  sensitivity/m1g
+  sensitivity/m2
+  sensitivity/m2g
+
+written: results/heldout_results.json, results/heldout_results.csv, results/tuning/heldout_lock.json (protocol A3.4: a second run is refused until this lock is deleted by hand and the deletion is logged)
