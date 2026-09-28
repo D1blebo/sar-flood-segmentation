@@ -939,6 +939,69 @@ affected by it.
   for primary M2 is unresolved for 3 of 12 tuning sets even after this extra step; `loeo:Spain`'s
   choice did not change in substance. No further cap increase is authorized.
 
+## Amendment 10 (2026-09-28, Stage 4/Accra, BEFORE any second-event acquisition list is looked at)
+
+### A10.1 Why: the chosen June 2026 event fails a same-day-coverage check
+
+The Sentinel-1 acquisition list for the Odaw AOI, 15 June to 13 July 2026 (measured, `COPERNICUS/S1_GRD`,
+`results/accra/`), has **no acquisition within 24 h after the assumed rain peak** (2026-06-29 06:00 UTC).
+The nearest post-peak image on the only usable relative orbit (147, ascending) is **2026-07-03
+18:17:23 UTC, +108.3 h** (about 4.5 days) after the peak; the preceding image on that orbit is
+2026-06-27 18:17:00 UTC, -35.7 h before it. A gap of this size means floodwater may already have
+receded by the time of the nearest image (CLAUDE.md's own >48 h flag). Rather than accept this and
+process it anyway, **a second-event search is added**: additional candidate Accra flood dates, to be
+supplied by the project owner, are screened against a fixed rule before any is chosen.
+
+### A10.2 Selection rule for the Accra event, fixed now, before any candidate is looked at
+
+A candidate date is accepted only if **both** hold:
+
+  a. At least one Sentinel-1 IW GRD acquisition over the Odaw AOI **within 24 h after** the reported
+     flood peak (on any orbit; same-orbit baselines are still required later, per CLAUDE.md section 6,
+     but are not part of this screening step).
+  b. An **independent reference** that flooding was occurring at that time: a Copernicus Emergency
+     Management Service (EMS) Rapid Mapping activation or a UNOSAT map covering the date and area, OR
+     a Dartmouth Flood Observatory record, OR a cloud-free Sentinel-2 scene within 3 days showing
+     visible surface water consistent with flooding (a supporting visual check, not ground truth).
+
+**The rule is explicitly not "whichever candidate's flood map looks best."** No method is run and no
+imagery is pulled for screening; only the acquisition list and the independent reference are checked.
+Nothing about the frozen pipeline is retuned by this search — it selects an INPUT DATE, not a
+configuration. The 29 June 2026 event is not discarded outright: if the project owner supplies no
+better-covered candidate, it remains available, carrying the +108.3 h caveat in every figure (A8.5,
+CLAUDE.md section 6).
+
+### A10.3 What I will report for each candidate the owner supplies
+
+For each candidate date: every Sentinel-1 IW GRD acquisition over the Odaw AOI from 3 days before to
+5 days after it (UTC time, satellite, orbit direction, relative orbit, hours from the reported peak),
+whether rule (a) is met, and what independent reference (if any) I could find for rule (b) and whether
+I could actually access it (declared honestly, as for the AOI's literature cross-check, A9.6-adjacent
+provenance in `results/accra/aoi_provenance.md`).
+
+I will also report **which frozen configuration is tuned on data closest in time to the candidate**,
+from the measured Sen1Floods11 event dates already in `results/data_inspection_report.md`:
+
+| Event | S1 date | Event | S1 date |
+|---|---|---|---|
+| Sri-Lanka | 2017-05-30 | Somalia | 2018-05-07 |
+| Pakistan | 2017-06-28 | Mekong | 2018-08-05 |
+| India | 2016-08-12 | Ghana | 2018-09-18 |
+| USA | 2019-05-22 | Nigeria | 2018-09-21 |
+| Bolivia | 2018-02-15 | Paraguay | 2018-10-31 |
+| Spain | 2019-09-17 | | |
+
+Method: for a candidate date, find the closest Sen1Floods11 event both by (i) absolute calendar
+distance and (ii) day-of-year distance (the latter as a rough seasonal/monsoon-timing proxy; Accra's
+rainy season and the benchmark events' seasons are not assumed comparable just because the calendar
+day is close — this is a proximity note, not a claim of domain similarity). Every LOEO fold's frozen
+configuration is tuned on the 10 events OTHER than its own held-out one, so the fold that EXCLUDES the
+closest event from its tuning data is the one held-out fold named after that event; every other fold's
+configuration is tuned WITH that event's data included. `official_valid`'s frozen configuration is
+tuned on the pooled official validation split (chips from all 11 events together, no single date).
+This is reported as context for reading the Accra result, not as a reason to pick a different frozen
+configuration -- the frozen configurations are not retuned or reselected by this comparison.
+
 ---
 `configs/config.yaml` sha256 history:
 
