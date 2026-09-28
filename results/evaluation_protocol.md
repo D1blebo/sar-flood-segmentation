@@ -1002,6 +1002,97 @@ tuned on the pooled official validation split (chips from all 11 events together
 This is reported as context for reading the Accra result, not as a reason to pick a different frozen
 configuration -- the frozen configurations are not retuned or reselected by this comparison.
 
+## Amendment 11 (2026-09-28, Stage 4/Accra, before any imagery is pulled or the method run)
+
+Checking the 8-9 June 2020 candidate (the only one passing rule (a) in the A10 screening) against a
+named, timestamped source, per the project owner's stricter instruction.
+
+### A11.1 Peak time: I could not pin it to a single instant from a named source
+
+Two named sources, both read directly (not search-engine summaries):
+
+- **FloodList** (`floodlist.com/africa/ghana-floods-accra-june-2020`): "Heavy rainfall began during the
+  late hours of 08 June, with wide areas of the capital flooded soon after." No clock time.
+- **MyJoyOnline** (`myjoyonline.com/one-dead-as-military-nadmo-move-to-rescue-accra-flood-victims/`,
+  published "9 June 2020 8:15am"): "torrential rain hit the capital from midnight on Monday to the
+  early hours of Tuesday" and "over five hours of flooding in Accra, Tuesday." (8 June 2020 was a
+  Monday, 9 June a Tuesday -- checked with Python's own calendar, not assumed.) No clock time.
+
+Neither source gives a single timestamped peak. **Per the owner's rule 2, this is stated plainly: the
+peak time cannot be pinned down to an instant from a named source.** What the two sources bound is a
+window, not a point: roughly **2020-06-08T22:00 UTC** (FloodList's "late hours of 08 June", the
+project's own earlier placeholder) to **approximately 2020-06-09T05:00-06:00 UTC** (MyJoyOnline's
+"early hours of Tuesday" plus "over five hours of flooding" measured back from the 08:15 publish time).
+Ghana is UTC+0, so local time = UTC throughout.
+
+- Offset from the window's earliest boundary (22:00, 8 June) to the S1 pass at **2020-06-09T18:18:05
+  UTC**: **+20.3 h**.
+- Offset from the window's latest boundary (~06:00, 9 June) to the same pass: **+12.3 h**.
+- Both boundary offsets are under 24 h, so every point in the sourced window would pass rule (a) -- but
+  this is a bounded-window argument, not a confirmed single peak instant, and is reported as exactly
+  that. **I am not declaring PASS or FAIL myself here**; the owner's rule anticipated this case
+  ("if the peak time cannot be pinned down ... say so and stop") and the call is left to the owner.
+
+### A11.2 Rule (b): cloud threshold, and AOI-clipped cloud fraction (not tile-wide)
+
+**Cloud-free threshold used, stated explicitly: AOI-mean cloud/cloud-shadow fraction below 20%**,
+computed from the Sentinel-2 Scene Classification Layer (`COPERNICUS/S2_SR_HARMONIZED`, band `SCL`,
+classes 3 = cloud shadow, 8 = cloud medium probability, 9 = cloud high probability, 10 = thin cirrus),
+reduced with `ee.Reducer.mean()` over the Odaw AOI polygon at 20 m, not the scene's whole-tile
+`CLOUDY_PIXEL_PERCENTAGE` metadata property (which measures a different, much larger area and materially
+disagreed with the AOI figure below).
+
+| Time (UTC) | Tile-wide cloud % (metadata) | AOI-clipped cloud fraction (measured) | Days from peak window |
+|---|---|---|---|
+| 2020-06-05T10:39:23 | 56.07% | 88.65% | -4 / -3 |
+| 2020-06-05T10:39:28 | 78.38% | 92.65% | -4 / -3 |
+| 2020-06-07T10:29:34 | 73.29% | 70.46% | -2 / -1 |
+| 2020-06-07T10:29:39 | 73.95% | 49.74% | -2 / -1 |
+| 2020-06-10T10:39:26 | 42.21% | 31.10% | +1 / +2 |
+| 2020-06-10T10:39:28 | 51.15% | 23.61% | +1 / +2 |
+| 2020-06-10T10:39:32 | 21.33% | 26.64% | +1 / +2 |
+| 2020-06-10T10:39:35 | 46.54% | **16.63%** | +1 / +2 |
+| 2020-06-12T10:29:30 | 99.74% | 100% | +3 / +4 |
+| 2020-06-12T10:29:35 | 98.65% | 100% | +3 / +4 |
+
+Only **one** scene, 2020-06-10T10:39:35 UTC, is below the 20% threshold over the AOI (16.63%), about
+1.3 days after the 9 June S1 pass. Every other scene in the 3-day window is well above 20% (as
+expected during a heavy-rain event). **Rule (b) is therefore met, marginally, by exactly one scene**,
+and only under the AOI-clipped measurement -- three of the ten scenes would have looked "cloud-free
+enough" under a naive 20% cut on the whole-tile metadata property instead, which is why the AOI-clipped
+figure was required.
+
+### A11.3 Same-relative-orbit Sentinel-1 passes (relative orbit 147, ascending; measured)
+
+| Time (UTC) | Satellite | Offset from the 9 June pass |
+|---|---|---|
+| 2020-06-03T18:17:25 | S1B | -144.0 h (-6 days) -- **pre-event control** |
+| 2020-06-09T18:18:05 | S1A | 0 h -- **post-event pass under review** |
+| 2020-06-15T18:17:25 | S1B | +144.0 h (+6 days) |
+
+A clean 6-day repeat cycle either side (both S1A and S1B operating this orbit in June 2020); no gap.
+
+### A11.4 Copernicus EMS and Dartmouth Flood Observatory, tried again by another route
+
+- **Copernicus EMS Rapid Mapping**: the JS-rendered activation-list page still could not be read, but a
+  working JSON API was found and successfully queried this time --
+  `https://rapidmapping.emergency.copernicus.eu/backend/dashboard-api/public-activations-info/`
+  (HTTP 200, 265 activations retrieved in full). **No Ghana entry appears in it.** However, **its own
+  earliest record is 2023-03-24T12:39:00 UTC** -- entirely after 8-9 June 2020. **This route does not
+  reach 2020 at all; its "no Ghana entry" result is not evidence either way for this candidate**, only
+  for candidates from 2023-03-24 onward.
+- **Dartmouth Flood Observatory**: the live site (`floodobservatory.colorado.edu`) refused the
+  connection outright on both HTTP and HTTPS from this environment (`curl`, `ECONNREFUSED`/timeout) --
+  a network-level failure, not a JS-rendering issue. An HDX-hosted mirror of the DFO master archive was
+  found and successfully queried via the HDX CKAN API (`data.humdata.org/api/3/action/package_show`,
+  HTTP 200): its one resource, `wlf_nhr_fl_dfomasterlist_20190418.zip`, is described in its own metadata
+  as covering **1985-2010 only**. **This route also does not reach 2020.**
+- **Conclusion: for the 8-9 June 2020 candidate, rule (b) could not be checked against either of the
+  first two named references (EMS, DFO) by any route tried; both accessible copies of those archives
+  stop short of 2020 on one side or the other.** Rule (b) above is therefore assessed only via the
+  fourth named route (a cloud-free Sentinel-2 scene within 3 days), which is met marginally by one
+  scene (A11.2).
+
 ---
 `configs/config.yaml` sha256 history:
 
