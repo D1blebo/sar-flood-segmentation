@@ -1,0 +1,94 @@
+# Frozen configuration, primary criterion, tuning set accra_pooled (440 chips: ALL eligible benchmark chips pooled).
+# Not one of the 12 LOEO/official-split tuning sets -- exists only for Stage 4 (Accra), which has no benchmark fold of its own (A12.1).
+# Tuning-set metrics only: benchmark data, no Accra chip involved. config sha256 0753b6a9570345c5a2673e16952519615a95c766af854a647b9d84de850ca2fc; git HEAD at selection 5ebb9ef9327d.
+criterion: primary
+tuning_set: accra_pooled
+n_tuning_chips: 440
+selections:
+  b1:
+    method: B1 fixed threshold on VV
+    preprocessing:
+      clip: none
+      clip_range_db: null
+      median_window: 7
+    threshold_db: -16.0
+    tuning_set_pooled_flood_only_iou: 0.38191554521737225
+    tuning_set_mean_per_chip_flood_only_iou: 0.22808746261638266
+  b2g_vh:
+    method: B2 Otsu on VH
+    preprocessing:
+      clip: narrow
+      clip_range_db: &id001
+        vv:
+        - -25.0
+        - 0.0
+        vh:
+        - -30.0
+        - -8.0
+      median_window: 9
+    tuning_set_pooled_flood_only_iou: 0.392571298222969
+    tuning_set_mean_per_chip_flood_only_iou: 0.16125459280462856
+    abstention_guard:
+      ceiling_db: -15.0
+  m1g:
+    method: M1 pixel k-means
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 9
+    k: 2
+    n_init: 3
+    seed: 42
+    max_iter: 300
+    tuning_set_pooled_flood_only_iou: 0.3992000612162764
+    tuning_set_mean_per_chip_flood_only_iou: 0.1732613279542487
+    abstention_guard:
+      ceiling_db: -15.0
+  m2g:
+    method: M2 SLIC + k-means
+    preprocessing:
+      clip: none
+      clip_range_db: null
+      median_window: 3
+    n_segments: 500
+    compactness: 0.05
+    features: vv_vh_std
+    k: 2
+    n_init: 10
+    seed: 42
+    max_iter: 300
+    slic_max_num_iter: 10
+    tuning_set_pooled_flood_only_iou: 0.390944551047533
+    tuning_set_mean_per_chip_flood_only_iou: 0.14534229388992495
+    stage2_choice_tuning_set_pooled_iou: 0.38826868289872196
+    abstention_guard:
+      ceiling_db: -15.0
+  m1:
+    method: M1 pixel k-means
+    preprocessing:
+      clip: narrow
+      clip_range_db: *id001
+      median_window: 9
+    k: 3
+    n_init: 10
+    seed: 42
+    max_iter: 300
+    tuning_set_pooled_flood_only_iou: 0.2007535455494317
+    tuning_set_mean_per_chip_flood_only_iou: 0.24673906349499186
+  m2:
+    method: M2 SLIC + k-means
+    preprocessing:
+      clip: none
+      clip_range_db: null
+      median_window: 7
+    n_segments: 1000
+    compactness: 0.01
+    features: vv_vh_std
+    k: 3
+    n_init: 10
+    seed: 42
+    max_iter: 300
+    slic_max_num_iter: 10
+    tuning_set_pooled_flood_only_iou: 0.2181501903068618
+    tuning_set_mean_per_chip_flood_only_iou: 0.17665686612977619
+    stage2_choice_tuning_set_pooled_iou: 0.16356313587725968

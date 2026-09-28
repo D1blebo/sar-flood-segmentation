@@ -1093,6 +1093,133 @@ A clean 6-day repeat cycle either side (both S1A and S1B operating this orbit in
   fourth named route (a cloud-free Sentinel-2 scene within 3 days), which is met marginally by one
   scene (A11.2).
 
+## Amendment 12 (2026-09-28, Stage 4/Accra, before any Accra imagery is pulled or the method run)
+
+### A12.1 Peak-time decision (owner's call, recorded)
+
+The owner accepts the reported window (about 22:00 UTC 8 June to 06:00 UTC 9 June 2020, A11.1) as the
+flood peak. Under the fixed rule (a) (fail if the peak is more than 24 h before the S1 pass), this
+**passes**: offsets from the window's two ends to the 2020-06-09T18:18:05 UTC pass are +12.3 h to
++20.3 h, both under 24 h. Recorded explicitly, per the owner's instruction: **this is a range from two
+named sources (FloodList, MyJoyOnline), not a confirmed single instant**, and **flood extent at the
+pass time (up to ~20 h after the peak) may already be lower than at the peak itself** -- this caveat is
+carried into every Accra figure and table, alongside the general recession/revisit-time limitation of
+CLAUDE.md section 6.
+
+**2020-06-09 is therefore the selected Accra event.**
+
+### A12.2 Rule (b) corrections
+
+- **Offset correction.** The 2020-06-10T10:39:35 UTC Sentinel-2 scene (16.63% AOI-clipped cloud
+  fraction, A11.2) is **+16.4 h after the 2020-06-09T18:18:05 UTC S1 pass** (recomputed exactly:
+  16.358 h), not "about 1.3 days after the pass" as A11.2 stated -- that was an error, now corrected.
+  Measured from the reported peak window instead: **+28.7 h (1.19 days) from the window's later end**
+  (06:00, 9 June) and **+36.7 h (1.53 days) from its earlier end** (22:00, 8 June). "1.3 days" was
+  apparently computed against the peak window, mislabelled as against the pass; both correct figures
+  are given here.
+- **Which Copernicus service.** The working API found and queried in A11.4 is **Rapid Mapping**
+  (`rapidmapping.emergency.copernicus.eu`, activation codes `EMSR###`), confirmed by its own returned
+  data (e.g. `EMSR932`, category `Wildfire`). **Risk and Recovery Mapping** (`riskandrecovery.
+  emergency.copernicus.eu`, activation codes `EMSN###`) is a **separate service and was not
+  successfully queried**: four plausible API paths were tried by pattern-matching the Rapid Mapping
+  API's URL structure (`/api/activations/`, `/backend/api/activations-info/`,
+  `/backend/dashboard-api/activations-info/`, `/api/activations-info/`), all returned HTTP 404, and no
+  further paths were guessed, per the project's rule against guessing URLs. **Risk and Recovery: not
+  checked.**
+- **Coverage confirmation.** The Rapid Mapping API's own earliest returned record is
+  **2023-03-24T12:39:00 UTC**; requesting all 265 currently-held activations in one page (`?limit=300`)
+  confirmed this directly (not inferred). **It does not go back before 2023.**
+- **Final labelling, exactly as instructed:**
+  - Copernicus EMS **Rapid Mapping**: **checked, out of range** (queried successfully; coverage starts
+    2023-03-24, after 8-9 June 2020).
+  - Copernicus EMS **Risk and Recovery Mapping**: **not checked** (no working endpoint found).
+  - Dartmouth Flood Observatory, live site: **not checked** (connection failed outright, both HTTP and
+    HTTPS).
+  - Dartmouth Flood Observatory, HDX-hosted 2019 mirror: **checked, out of range** (queried
+    successfully; the resource's own metadata states 1985-2010 coverage).
+  - None of these is reported as "no event" for 8-9 June 2020, because none of them actually reached
+    that date.
+
+### A12.3 Accra frozen configuration: the pooled-all-440-chips tuning had NOT been run -- run now, on benchmark data only
+
+**Checked first: no such selection existed anywhere in `results/` before this amendment** (grepped
+`results/`, `src/`, `scripts/`, `configs/` for any prior pooled-440-chip tuning artifact; none found).
+Protocol A8.5 had flagged this as still needing to happen. Declared now, before running:
+
+- **Method:** a 13th tuning set is added -- **`accra_pooled`, mask = every one of the 440 eligible
+  benchmark chips, primary criterion only** -- and run through the identical selection machinery as the
+  12 real tuning sets (`src/selection.py`, `src/ranking.py`: Stage-1 ranking with the same grid-edge
+  rule, Stage-2 (`n_segments`, `compactness`) selection with the same edge rule, Stage-3 (features, k)).
+  This is **benchmark data only**; no Accra chip is involved anywhere in this step.
+- **Preprocessing-option union:** for M1 and M2, "assigned options" are this set's own top-2
+  preprocessing options (from its own full Stage-1 ranking, extensions included), **filtered to the
+  ALREADY-FIXED union of 6 options** chosen earlier by the 12 real tuning sets (protocol A5.3's own
+  fallback rule for a set whose top choices fall outside the union). **The union itself is not
+  reopened or re-voted** -- `accra_pooled` only picks from what the 12 sets already explored.
+- **Variants selected:** B1, B2g VH, M1, M1g, M2, M2g (unguarded M1/M2 kept for the record though not
+  used as Accra methods). B2 VV, B2g VV, and the sensitivity criterion are not needed for Accra and are
+  skipped here.
+- **Script:** `scripts/05_accra_pooled_select.py` (new). Every configuration it needed was already
+  cached from the benchmark Stage 1-3 compute; **no new clustering was run, no cost/time question
+  arose.**
+
+**Result** (`results/frozen/primary/accra_pooled.yaml`; tuning-set pooled flood-only IoU on the 440
+benchmark chips only, measured):
+
+| Method | Preprocessing | Other hyperparameters | Guard | Tuning-set pooled IoU |
+|---|---|---|---|---|
+| B1 | clip none, median 7 | threshold -16 dB | -- | 0.3819 |
+| B2g VH | clip narrow, median 9 | -- | -15 dB | 0.3926 |
+| M1g | clip narrow, median 9 | k=2, n_init 3 | -15 dB | 0.3992 |
+| M2g | clip none, median 3 | SLIC 500/0.05, `vv_vh_std`, k=2, n_init 10 | -15 dB | 0.3909 |
+| M1 (record only) | clip narrow, median 9 | k=3, n_init 10 | -- | 0.2008 |
+| M2 (record only) | clip none, median 7 | SLIC 1000/0.01, `vv_vh_std`, k=3, n_init 10 | -- | 0.2182 |
+
+Every one of these four Accra-bound configurations matches the single most common choice across the 12
+individual LOEO/official-split frozen configs for its variant (`results/tuning/frozen_summary.txt`):
+B1 matches 7/12 sets, B2g VH matches 10/12 (its dominant choice), M1g matches 6/12, M2g matches exactly
+the largest primary-M2g group (4/12: `clip none, median 3, SLIC 500/0.05, vv_vh_std, k=2, guard -15
+dB`). This is a consistency check, not a validation -- it shows the pooled selection behaves the way a
+"vote of the 12" would suggest, nothing more.
+
+**No held-out score of any kind is implied or used here** -- this is a tuning-only number on data the
+selection was allowed to see, exactly like the other 12 tuning-set numbers in `frozen_summary.txt`.
+
+### A12.4 Fixed before any output (declared now; not yet run)
+
+- **(b) Permanent-water mask:** JRC Global Surface Water, `occurrence` band (`JRC/GSW1_4/GlobalSurfaceWater`
+  or the current JRC GSW collection), **threshold: occurrence >= 50%** is permanent water **[my choice]**,
+  a common convention in the literature but not verified against a specific citation for this project.
+  Applied to both the prediction and, where computed, the Sentinel-2 comparison map -- consistent with
+  how JRC is already applied in the benchmark (protocol section 1).
+- **(c) Sentinel-2 water definition:** **NDWI (McFeeters 1996) = (Green - NIR) / (Green + NIR)** using
+  Sentinel-2 bands B3 (green) and B8 (NIR), **threshold: NDWI > 0 is water** **[my choice]**, the
+  standard simple threshold from the original paper, not locally tuned (there is no label to tune it
+  against). Computed only on the cloud-free pixels of the chosen S2 scene (SCL classes excluding
+  3/8/9/10, A11.2's cloud mask), over the Odaw AOI. Pixels outside that cloud-free footprint or outside
+  the AOI are excluded from the S2 comparison, not treated as "not water."
+- **(d) Outputs (methodology only, not yet run):** for each of the three relative-orbit-147 images --
+  **3 June 2020 (pre-event control), 9 June 2020 (post-event pass under review), 15 June 2020 (next
+  pass)** (A11.3) -- run each frozen method (A12.5) and report: **flagged area in hectares**; the
+  **share of the flagged area inside the JRC permanent-water mask**; and, **inside the AOI only**,
+  **agreement with the NDWI Sentinel-2 map as IoU/precision/recall, reported as a weak reference, not
+  accuracy** (the S2 scene is 2020-06-10, itself 16.4 h after the pass under review, and is a different
+  sensor and physical measurement -- agreement is a cross-method comparison, per CLAUDE.md section 6
+  item 7). **The 3 June flagged area is reported explicitly as a false-alarm baseline**, since 3 June
+  predates the event by six days and any flagged area there is definitionally a false alarm under this
+  pipeline, not a detection.
+
+### A12.5 Methods and labelling for the Accra run
+
+- **Headline:** M2g (primary criterion, `accra_pooled` config, A12.3). **Labelled comparisons:** M1g,
+  B2g VH, B1, all from the same `accra_pooled` config. **Plus one labelled sensitivity run**: the same
+  configs with the median window forced to **3** (protocol A8.5/A5.5's small-window comparison for
+  narrow-drain blur; M2g's own frozen window is already 3, so its sensitivity run is identical to its
+  main run and is reported as such, not duplicated as if independent). No method is retuned; every
+  hyperparameter above is frozen exactly as chosen in A12.3.
+- **Every output is labelled `UNVALIDATED: no ground truth`** (CLAUDE.md hard rule, protocol A8.5),
+  including the S2 agreement numbers, which are explicitly agreement-not-accuracy per A12.4(d).
+
 ---
 `configs/config.yaml` sha256 history:
 
