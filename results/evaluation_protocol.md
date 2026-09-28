@@ -1220,6 +1220,42 @@ selection was allowed to see, exactly like the other 12 tuning-set numbers in `f
 - **Every output is labelled `UNVALIDATED: no ground truth`** (CLAUDE.md hard rule, protocol A8.5),
   including the S2 agreement numbers, which are explicitly agreement-not-accuracy per A12.4(d).
 
+## Amendment 13 (2026-09-28, Stage 4/Accra, confirmed before pulling any Accra image)
+
+### A13.1 Same Sentinel-1 processing as the benchmark -- checked, confirmed
+
+Sen1Floods11's own `S1Hand` chips are sourced from Google Earth Engine's `COPERNICUS/S1_GRD`
+collection (IW mode, GRD product), unit dB, per the dataset's own README (`github.com/cloudtostreet/
+Sen1Floods11`, read directly), which defers preprocessing detail to Google's own Sentinel-1
+documentation (`developers.google.com/earth-engine/guides/sentinel1`, also read directly): orbit-file
+application, thermal-noise removal, radiometric calibration, and terrain correction (SRTM-based) --
+the collection's standard pipeline. **No speckle filter is applied by that standard GEE pipeline**, in
+either case.
+
+The Accra images pulled here (`scripts/06_accra_run.py`) come from the **same** `COPERNICUS/S1_GRD`
+collection, selected by exact asset ID (A11.3), same dB unit, same standard GEE preprocessing. Nothing
+beyond the frozen configuration's own clip + median filter (identical code path, `src/preprocess.py`)
+is applied to either the benchmark or Accra imagery. **Confirmed: nothing differs.** (One difference in
+degree, not kind, worth stating: Sen1Floods11's own chips are a pre-cut, fixed 512x512 GEE export from
+the original authors; the Accra pull here is a fresh `getDownloadURL` export over the Odaw AOI,
+tiled and mosaicked locally because the full AOI exceeds Earth Engine's 50 MB single-request limit --
+the pixel values themselves come from the identical processing chain either way.)
+
+### A13.2 Valid-pixel coverage of the AOI, reported beside every hectare figure
+
+For each Sentinel-1 image, **`valid_fraction_of_aoi`** = (image-valid pixels AND inside the AOI
+polygon) / (pixels inside the AOI polygon), using the same `image_valid_mask` (`src/io.py`, both bands
+finite) as the benchmark. The AOI polygon is rasterized once at 10 m in EPSG:32630 (the same CRS and
+scale as every other Accra raster, so all layers are pixel-aligned) via a constant-1 image clipped to
+the polygon and unmasked to 0 outside it. This fraction is reported in the same table as flagged
+hectares for every image and method, not as a separate number elsewhere.
+
+### A13.3 Reporting rule, restated
+
+Pooled-tuning numbers (`accra_pooled`, A12.3) are **tuning-set numbers**, scored on the 440 benchmark
+chips the selection was allowed to see -- **never reported as a benchmark result or a held-out score**,
+exactly like the other 12 tuning-set numbers in `frozen_summary.txt`.
+
 ---
 `configs/config.yaml` sha256 history:
 
