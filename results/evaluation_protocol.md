@@ -1338,6 +1338,72 @@ None approaches the 2020-06-09 pass (+12.3 h to +20.3 h). **No candidate beats 2
 **No candidate, old or new, beats 2020-06-09 on rule (a). 2020-06-09 remains the selected event and
 nothing about the already-completed Accra run (Amendments 12-13, `results/accra/`) changes.**
 
+## Amendment 15 (2026-09-29, Accra: EXPLORATORY DIAGNOSTIC, not a frozen method, declared before running)
+
+**Every output of this amendment is labelled `EXPLORATORY DIAGNOSTIC, UNVALIDATED`** in its file and
+table headers -- distinct from the `UNVALIDATED` label used for the frozen-method outputs (A12-A13).
+This is not a new method, is not retuned, does not touch `accra_pooled.yaml` or any frozen
+configuration, and supports no conclusion about actual flooding.
+
+### A15.1 Rationale (owner's, recorded)
+
+Published SAR literature describes urban flooded pixels appearing **brighter**, not darker, because of
+double-bounce scattering between floodwater and adjacent building walls -- the opposite sign from the
+"darkest cluster = water" rule the whole frozen pipeline uses. Checked before writing this down:
+
+- **Mason, D.C., Dance, S.L., Cloke, H.L. (2021)**, "Floodwater detection in urban areas using
+  Sentinel-1 and WorldDEM data", *Journal of Applied Remote Sensing*, 15(3):032003,
+  doi:10.1117/1.JRS.15.032003 -- **confirmed real** (DOI resolves, abstract corroborated by an
+  independent Reading University repository page and a SPIE listing, both found and read via search).
+  The paper's own method "searches for increased SAR backscatter in the post-flood image due to double
+  scattering between water... and adjacent buildings." **I could not read the full text**: both the
+  Reading repository PDF (blocked by an anti-bot page) and the SPIE PDF (returned empty) refused access,
+  so no specific dB magnitude from this paper is used below.
+- **Chini et al.**: a real body of work confirmed via search (their urban flood approach, described
+  consistently across multiple independent sources, integrates histogram thresholding and region growing
+  to map double-bounce-producing objects, later combined with InSAR coherence). No single Chini et al.
+  paper was pinned down by DOI, so none is cited by year here.
+- **"Li & Yu review"**: **I could not confirm a specific paper matching this exact author pairing.**
+  Two 2024 SAR-urban-flood review papers turned up in search (Zhao, Li, Li, Matgen & Chini, "Urban
+  Flood Mapping Using Satellite Synthetic Aperture Radar Data: A Review..."; and a separate MDPI
+  *Remote Sensing* review, "Flood Detection with SAR: A Review of Techniques and Datasets"), but
+  neither is a clean match to "Li & Yu", so **this citation is not used** rather than guessed at.
+- **The qualitative mechanism itself (double-bounce brightening of flooded urban pixels) is
+  well-corroborated** across the sources above, independent of the citation-matching problems. That is
+  the only claim relied on here.
+
+### A15.2 Thresholds, fixed before any result is looked at
+
+**No specific dB magnitude could be extracted from the literature despite the attempts above**, so the
+three thresholds below are declared from general SAR change-detection convention and radiometric
+reasoning, not from a number quoted in a paper -- stated as such, not as a literature-sourced figure:
+
+- **+3 dB**: a conventional minimal-significance cut in SAR change detection, roughly the scale of
+  typical scene-to-scene radiometric/speckle fluctuation for GRD data; below this, a pixel's brightening
+  is not distinguishable from ordinary noise.
+- **+6 dB**: double the minimal threshold -- a harder-to-attribute-to-noise-alone signal.
+- **+10 dB**: an order-of-magnitude increase in linear backscatter power: a conservative
+  "unambiguously strong" cut, chosen because double-bounce returns are qualitatively described in the
+  literature as very bright, not because a specific paper reports this number.
+
+### A15.3 Method
+
+1. `delta_VV = VV(2020-06-09) - VV(2020-06-03)`, dB, pixel by pixel, from the **already-downloaded raw
+   VV rasters** (`data/accra/s1_*.tif`) -- no new imagery pulled, no clip/median filtering applied (a
+   deliberately simple, unfiltered difference, per the owner's instruction; not the frozen pipeline's
+   preprocessing).
+2. Domain: both images' `image_valid_mask` (finite VV and VH, same function as everywhere else,
+   `src/io.py`), AND NOT permanent water (JRC GSW occurrence >= 50%, same mask as A12.4(b)).
+3. Reported for the full Odaw AOI and separately for each of the three sub-AOI pieces (core, kaneshie,
+   darkuman_clipped): the distribution of `delta_VV` (min, max, mean, median, 5th/25th/75th/95th
+   percentiles); area (ha) above each of the three thresholds; and overlap with M2g's 9 June flagged
+   (darkened) pixels on the same domain, recomputed from the frozen `accra_pooled` M2g configuration
+   (deterministic, same seed, not retuned) since the prediction array itself was not saved earlier.
+4. **A brightness increase is reported as CONSISTENT WITH, not proof of, flooding** -- ordinary
+   day-to-day radar variation, soil moisture change, incidence-angle effects, or other surface change
+   could produce the same signature, and there is no ground truth to check against either reading. No
+   conclusion about actual flooding on 8-9 June is drawn from this diagnostic.
+
 ---
 `configs/config.yaml` sha256 history:
 
