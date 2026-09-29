@@ -1,0 +1,68 @@
+ACCRA RUN 2026-09-28 13:15:43
+*** Earth Engine *** Share your feedback by taking our Annual Developer Satisfaction Survey: https://google.qualtrics.com/jfe/form/SV_9oS0DRcPvElRMNw?source=python
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+  fetched s1_2020-06-03_pre.tif
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+  fetched s1_2020-06-09_event.tif
+ACCRA RUN 2026-09-29 04:59:07
+*** Earth Engine *** Share your feedback by taking our Annual Developer Satisfaction Survey: https://google.qualtrics.com/jfe/form/SV_9oS0DRcPvElRMNw?source=python
+  fetched s1_2020-06-03_pre.tif
+  fetched s1_2020-06-09_event.tif
+    tile 1/4 ok
+    tile 2/4 ok
+    tile 3/4 ok
+    tile 4/4 ok
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+Warning 1: TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+  fetched s1_2020-06-15_next.tif
+    tile 1/2 ok
+    tile 2/2 ok
+  fetched aoi_mask.tif
+    tile 1/2 ok
+    tile 2/2 ok
+  fetched jrc_occurrence.tif
+    tile 1/4 ok
+    tile 2/4 ok
+    tile 3/4 ok
+    tile 4/4 ok
+  fetched s2_scene.tif
+  2020-06-03_pre: shape (3462, 1480), AOI pixels 2604729
+  2020-06-03_pre: done
+  2020-06-09_event: shape (3462, 1480), AOI pixels 2604729
+  2020-06-09_event: done
+  2020-06-15_next: shape (3462, 1480), AOI pixels 2604729
+  2020-06-15_next: done
+
+written: results/accra/accra_tables.json, results/accra/accra_tables.csv
+  2020-06-03_pre       frozen   b1       valid_frac=1.000 flagged_ha=38.92 jrc_share=0.02158273381294964 s2_iou=0.012090748539600597 s2_prec=0.3510848126232742 s2_rec=0.012367122906968665
+  2020-06-03_pre       frozen   b2g_vh   valid_frac=1.000 flagged_ha=95.72 jrc_share=0.0177601337233598 s2_iou=0.027204783258594916 s2_prec=0.16325798349479728 s2_rec=0.03161258945320642
+  2020-06-03_pre       frozen   m1g      valid_frac=1.000 flagged_ha=81.33 jrc_share=0.02090249600393459 s2_iou=0.02572185096456941 s2_prec=0.21736814064997337 s2_rec=0.028347113180018063
+  2020-06-03_pre       frozen   m2g      valid_frac=1.000 flagged_ha=8.86 jrc_share=0.19187358916478556 s2_iou=0.030857917938284164 s2_prec=0.563816604708798 s2_rec=0.03161258945320642
+  2020-06-03_pre       median3  b1       valid_frac=1.000 flagged_ha=78.87 jrc_share=0.01204513756815012 s2_iou=0.022883993409409897 s2_prec=0.1582946390882229 s2_rec=0.026054331966928367
+  2020-06-03_pre       median3  b2g_vh   valid_frac=1.000 flagged_ha=0.00 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-03_pre       median3  m1g      valid_frac=1.000 flagged_ha=463.97 jrc_share=0.0031467551781365175 s2_iou=0.03503851980788447 s2_prec=0.06135350228594006 s2_rec=0.07552282359480303
+  2020-06-03_pre       median3  m2g      valid_frac=1.000 flagged_ha=8.86 jrc_share=0.19187358916478556 s2_iou=0.030857917938284164 s2_prec=0.563816604708798 s2_rec=0.03161258945320642
+  2020-06-09_event     frozen   b1       valid_frac=1.000 flagged_ha=35.08 jrc_share=0.03876852907639681 s2_iou=0.02132489509527413 s2_prec=0.6828193832599119 s2_rec=0.02153824775932745
+  2020-06-09_event     frozen   b2g_vh   valid_frac=1.000 flagged_ha=112.13 jrc_share=0.015160973869615626 s2_iou=0.027690440730321585 s2_prec=0.11845210004719207 s2_rec=0.03487806572639478
+  2020-06-09_event     frozen   m1g      valid_frac=1.000 flagged_ha=50.13 jrc_share=0.03371234789547178 s2_iou=0.025873655913978496 s2_prec=0.4415137614678899 s2_rec=0.026749114152713124
+  2020-06-09_event     frozen   m2g      valid_frac=1.000 flagged_ha=1.88 jrc_share=0.3723404255319149 s2_iou=0.009649427282193682 s2_prec=0.9205298013245033 s2_rec=0.009657472382408116
+  2020-06-09_event     median3  b1       valid_frac=1.000 flagged_ha=63.94 jrc_share=0.02048795746011886 s2_iou=0.029505277883759378 s2_prec=0.2582081246521981 s2_rec=0.0322378934204127
+  2020-06-09_event     median3  b2g_vh   valid_frac=1.000 flagged_ha=0.00 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     median3  m1g      valid_frac=1.000 flagged_ha=179.57 jrc_share=0.008687419947652725 s2_iou=0.03691242441973864 s2_prec=0.11015715948777649 s2_rec=0.05259501146390606
+  2020-06-09_event     median3  m2g      valid_frac=1.000 flagged_ha=1.88 jrc_share=0.3723404255319149 s2_iou=0.009649427282193682 s2_prec=0.9205298013245033 s2_rec=0.009657472382408116
+  2020-06-15_next      frozen   b1       valid_frac=1.000 flagged_ha=36.06 jrc_share=0.014975041597337771 s2_iou=0.00717458148274684 s2_prec=0.3025936599423631 s2_rec=0.007295212950739943
+  2020-06-15_next      frozen   b2g_vh   valid_frac=1.000 flagged_ha=101.12 jrc_share=0.016811708860759493 s2_iou=0.026454109628602784 s2_prec=0.13558318531675548 s2_rec=0.031821024108941845
+  2020-06-15_next      frozen   m1g      valid_frac=1.000 flagged_ha=59.83 jrc_share=0.02356677252214608 s2_iou=0.01889497002866823 s2_prec=0.23293172690763053 s2_rec=0.020148683387757937
+  2020-06-15_next      frozen   m2g      valid_frac=1.000 flagged_ha=0.00 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      median3  b1       valid_frac=1.000 flagged_ha=72.71 jrc_share=0.011140145784623847 s2_iou=0.019933349790175265 s2_prec=0.1513589503280225 s2_rec=0.022441464600847633
+  2020-06-15_next      median3  b2g_vh   valid_frac=1.000 flagged_ha=0.00 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      median3  m1g      valid_frac=1.000 flagged_ha=224.44 jrc_share=0.005970415255747639 s2_iou=0.036685558630991606 s2_prec=0.09073128327719222 s2_rec=0.05801431251302717
+  2020-06-15_next      median3  m2g      valid_frac=1.000 flagged_ha=0.00 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
