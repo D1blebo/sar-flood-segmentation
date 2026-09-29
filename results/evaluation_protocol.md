@@ -1256,6 +1256,88 @@ Pooled-tuning numbers (`accra_pooled`, A12.3) are **tuning-set numbers**, scored
 chips the selection was allowed to see -- **never reported as a benchmark result or a held-out score**,
 exactly like the other 12 tuning-set numbers in `frozen_summary.txt`.
 
+## Amendment 14 (2026-09-29, Stage 4/Accra, second-event search: 3 more candidates, no imagery pulled)
+
+Three more candidates, screened against the fixed rule of A10.2 (unchanged, not relaxed): (a) an S1
+pass over the Odaw AOI within 24 h after the reported peak; (b) an independent reference.
+
+### A14.1 Dates checked, and a source correction
+
+- **18 June 2018**: confirmed by FloodList (`floodlist.com/africa/ghana-floods-accra-june-2018`, read
+  directly): "Devastating floods have hit areas around Accra... after heavy rainfall from 18 June,
+  2018", no clock time. A second source was named by the owner, Ansah et al. (2020), *Advances in
+  Meteorology*, DOI 10.1155/2020/4230627 (a real, verifiable journal article -- confirmed to exist via
+  its DOI and by three independent citation-index pages). **I could not read the paper itself**: Wiley
+  and ResearchGate both returned HTTP 403, Semantic Scholar returned no extractable content, a NOAA-
+  hosted PDF was corrupted on extraction, and ProQuest served only metadata. Every claim below sourced
+  to Ansah et al. is therefore a **search-engine synthesis of the paper, not text I read directly**,
+  and is labelled as such.
+- **28 June 2018**: per that same search synthesis (repeated consistently across three separate
+  queries), **the second June-2018 episode Ansah et al. analyse is in Kumasi, not Accra** ("first
+  episodes occurring in Accra on June 18th and Kumasi on June 28th"). Kumasi is a different city,
+  roughly 200 km inland, in a different river basin from the Odaw. **This candidate may not be an
+  Accra/Odaw event at all** -- checked below against the Odaw AOI exactly as asked, but the location
+  mismatch is a reason on its own to doubt its relevance, independent of what the AOI check finds. The
+  "Accra coordinates 5.6N, 0.17W" the owner quoted from the same source were likewise not independently
+  confirmed by me (same access failure).
+- **10 October 2019**: the owner's source (FloodList, "early on 10 October") does exist, but **that
+  exact quote is dated 10 October 2020, not 2019** (`floodlist.com/africa/ghana-flash-floods-cause-
+  traffic-chaos-in-accra`, read directly: "Media reported a heavy downpour lasting several hours,
+  early on 10 October, causing floods..." -- the article's own date is 2020). No separately-confirmed
+  "10 October 2019" Accra article was found. **Checked below at the literal 2019 date requested**; 2020
+  would be a different, not-yet-screened candidate if the owner meant that year instead.
+
+### A14.2 Sentinel-1: all three fail rule (a)
+
+| Candidate (peak used, UTC) | Nearest S1 pass after peak (relative orbit 147, ascending) | Offset |
+|---|---|---|
+| 2018-06-18T12:00 (hour unconfirmed) | 2018-06-20T18:17:53 | +54.3 h -- **FAIL** |
+| 2018-06-28T12:00 (hour unconfirmed; Kumasi per A14.1) | 2018-07-02T18:17:53 | +102.3 h -- **FAIL** |
+| 2019-10-10T06:00 ("early", per the 2020 quote applied literally to 2019) | 2019-10-13T18:18:04 | +84.3 h -- **FAIL** |
+
+None approaches the 2020-06-09 pass (+12.3 h to +20.3 h). **No candidate beats 2020-06-09 on rule
+(a); 2020-06-09 remains the selected event.**
+
+### A14.3 Rule (b): Sentinel-2 (AOI-clipped), EMS, DFO
+
+- **Sentinel-2.** No `S2_SR_HARMONIZED` (L2A) scenes exist for the June 2018 dates -- Sentinel-2 L2A
+  processing did not yet cover this region that early; **L1C** (`COPERNICUS/S2_HARMONIZED`) scenes exist
+  instead, matched to **`COPERNICUS/S2_CLOUD_PROBABILITY`** for an AOI-clipped cloud fraction (L1C has
+  no SCL band; probability > 50% = cloud, same spirit as the 20% cloud-free threshold of A12.2, method
+  necessarily different because SCL does not exist pre-L2A-coverage here). **Despite tile-wide metadata
+  cloud percentages as low as 11-24% for several of these scenes, every one of them is 80-100% cloudy
+  over the AOI itself** -- another confirmation that the tile-wide figure is the wrong number to read,
+  as already found in A11.2/A12.2. For 10 October 2019 (which does have L2A/SCL), the four scenes
+  within 3 days are 75.8-90.8% AOI-cloudy. **Rule (b) via Sentinel-2: fails for all three candidates.**
+- **Copernicus EMS Rapid Mapping**: **checked, out of range** for all three (its own earliest record is
+  2023-03-24, per A12.2; all three candidates predate it).
+- **Copernicus EMS Risk and Recovery Mapping**: **not checked** (no working API endpoint found, per
+  A12.2; not retried, since no new attempt was made this round).
+- **Dartmouth Flood Observatory**, live site: **not checked** (connection failure persists; not
+  retried this round). HDX-hosted mirror: **checked, out of range** (covers 1985-2010; all three
+  candidates are after 2010, the opposite side of the same mirror's boundary that made 2020 also out
+  of range in A12.2).
+
+### A14.4 Full ranking, all 12 candidates plus the selected event
+
+| Candidate | Rule (a) | Best rule (b) evidence found |
+|---|---|---|
+| **2020-06-09 (selected, A12.1)** | **PASS** (+12.3 to +20.3 h) | S2 cloud-free at 16.63% (A12.2) |
+| 2025-05-18 | FAIL (+49.3 h) | S2 cloud-free at 11.4% (A10) |
+| 2018-06-18 | FAIL (+54.3 h) | S2 80-100% cloudy over the AOI (A14.3) -- fails |
+| 2019-04-14 | FAIL (+54.3 h) | S2 23.3% cloud, borderline (A10) |
+| 2019-04-07 | FAIL (+70.3 h) | S2 cloud-free at 18.7% (A10) |
+| 2019-10-28 | FAIL (+75.3 h) | S2 cloud-free at 5.2% (A10) |
+| 2019-10-10 | FAIL (+84.3 h) | S2 75.8% cloud, fails (A14.3) |
+| 2018-06-28 (Kumasi, per A14.1) | FAIL (+102.3 h) | S2 80-100% cloudy over the AOI (A14.3) -- fails |
+| 2019-05-30 | FAIL (+102.3 h) | S2 all >80% cloud -- fails (A10) |
+| 2023-03-07 | FAIL, badly (no pass in window) | S2 23-29% cloud, borderline (A10) |
+| 2016-06-09 | FAIL, badly (24-day S1 gap) | S2 all >97% cloud -- fails (A10) |
+| 2015-06-03 | FAIL, badly (no pass in window) | S2 did not exist yet (A10) |
+
+**No candidate, old or new, beats 2020-06-09 on rule (a). 2020-06-09 remains the selected event and
+nothing about the already-completed Accra run (Amendments 12-13, `results/accra/`) changes.**
+
 ---
 `configs/config.yaml` sha256 history:
 
