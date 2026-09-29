@@ -90,7 +90,9 @@ criterion): B1 clip=none, median=7, threshold -16 dB (7/12 sets); B2g VH clip=na
 `results/figures/heldout_example_Mekong_16233_m2g.png`: M2g's frozen `loeo:Mekong` configuration on
 chip `Mekong_16233` (a genuinely held-out event; independently re-verified that this chip's fold
 excludes it from its own tuning data). IoU 0.9241, precision 0.9865, recall 0.9360 -- the single
-highest-IoU chip among 543 held-out chips with at least 5% flood-only truth. Labelled on the figure as
+highest-IoU chip among 543 held-out chips with at least 5% flood-only truth. Location confirmed from
+the chip's own GeoTIFF bounds (not the "Mekong" event name): center 12.1653 N, 105.8086 E, reverse-
+geocoded to Dambae district, Tbong Khmum province, **Cambodia**. Labelled on the figure as
 a best-case illustration, not a representative result; the representative numbers are section 2 above.
 
 ### 2.4 Gaps against the original brief (measured is measured; these were not run)

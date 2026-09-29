@@ -196,7 +196,10 @@ pixels, flood-only 7,643,377, JRC removes 3,062,228.
 The 446 hand-labelled chips come from **11 events**. The event metadata GeoJSON lists **12**
 events: it also lists Colombia (`val_chip: 0`, i.e. no hand-labelled chips), which is therefore
 not in our data. The chip files call one event "Mekong"; the metadata calls the matching event
-"Cambodia" (**assumed** to be the same event: both have 30 hand-labelled chips).
+"Cambodia". This is **confirmed, not assumed**: chip `Mekong_16233`'s own GeoTIFF bounds (read
+directly, not from either metadata source) center on 12.1653 N, 105.8086 E, which reverse-geocodes
+(OpenStreetMap/Nominatim) to Dambae district, Tbong Khmum province, Cambodia -- independent evidence
+beyond the matching 30-chip count that the two labels name the same event.
 
 **Measured cross-check:** the metadata `val_chip` values over the 12 events sum to 446 and equal
 my per-event counts below for all 11 events. (`train_chip` is not interpreted here; its 12 values
