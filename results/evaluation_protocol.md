@@ -1404,6 +1404,21 @@ reasoning, not from a number quoted in a paper -- stated as such, not as a liter
    could produce the same signature, and there is no ground truth to check against either reading. No
    conclusion about actual flooding on 8-9 June is drawn from this diagnostic.
 
+## Amendment 16 (2026-09-29, citation correction, exploratory literature search)
+
+### A16.1 The "Li & Yu review" cited in Amendment 15 is identified
+
+Found while checking the UrbanSARFloods dataset's own GitHub README (`jie666-6/UrbanSARFloods`,
+read directly): it cites, as further reading, **Zhao, J., Li, M., Li, Y., Matgen, P., Chini, M. (2024),
+"Urban Flood Mapping Using Satellite Synthetic Aperture Radar Data: A review of characteristics,
+approaches, and datasets", *IEEE Geoscience and Remote Sensing Magazine*, pp. 2-34,
+doi:10.1109/MGRS.2024.3496075.** This matches the "Li & Yu" reference from A15.1 far better than
+either 2024 review found there (it has both a Li and a Yu among its five authors). **A15.1 is
+corrected accordingly**: this is very likely the paper the project owner meant, though the exact
+match was found via the UrbanSARFloods README's own citation list, not by independently re-deriving
+it from the original search. Nothing in Amendment 15's diagnostic (thresholds, computed numbers,
+labelling) depended on this citation being resolved, so no other part of A15 changes.
+
 ---
 `configs/config.yaml` sha256 history:
 
