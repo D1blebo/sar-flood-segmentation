@@ -1,0 +1,58 @@
+ACCRA SUB-AOI RUN 2026-09-29 06:17:03
+  piece core: 84258 pixels (842.58 ha)
+  piece kaneshie: 22070 pixels (220.70 ha)
+  piece darkuman_clipped: 42979 pixels (429.79 ha)
+  piece pooled: 149307 pixels (1493.07 ha)
+  2020-06-03_pre: done
+  2020-06-09_event: done
+  2020-06-15_next: done
+
+written: results/accra/accra_subaoi_tables.json, results/accra/accra_subaoi_tables.csv
+  2020-06-03_pre       b1       core             valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-03_pre       b1       kaneshie         valid_frac=1.000 flagged_ha=0.010 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-03_pre       b1       darkuman_clipped valid_frac=1.000 flagged_ha=0.140 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-03_pre       b1       pooled           valid_frac=1.000 flagged_ha=0.150 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-03_pre       b2g_vh   core             valid_frac=1.000 flagged_ha=0.710 jrc_share=0.0 s2_iou=0.0054105665181413114 s2_prec=0.23943661971830985 s2_rec=0.005505181347150259
+  2020-06-03_pre       b2g_vh   kaneshie         valid_frac=1.000 flagged_ha=0.050 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-03_pre       b2g_vh   darkuman_clipped valid_frac=1.000 flagged_ha=1.120 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-03_pre       b2g_vh   pooled           valid_frac=1.000 flagged_ha=1.880 jrc_share=0.0 s2_iou=0.0041871921182266006 s2_prec=0.09042553191489362 s2_rec=0.004371303677037799
+  2020-06-03_pre       m1g      core             valid_frac=1.000 flagged_ha=0.390 jrc_share=0.0 s2_iou=0.00064 s2_prec=0.05128205128205128 s2_rec=0.0006476683937823834
+  2020-06-03_pre       m1g      kaneshie         valid_frac=1.000 flagged_ha=0.100 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-03_pre       m1g      darkuman_clipped valid_frac=1.000 flagged_ha=1.130 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-03_pre       m1g      pooled           valid_frac=1.000 flagged_ha=1.620 jrc_share=0.0 s2_iou=0.0004939491232403062 s2_prec=0.012345679012345678 s2_rec=0.0005142710208279763
+  2020-06-03_pre       m2g      core             valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-03_pre       m2g      kaneshie         valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-03_pre       m2g      darkuman_clipped valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-03_pre       m2g      pooled           valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     b1       core             valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     b1       kaneshie         valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     b1       darkuman_clipped valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     b1       pooled           valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     b2g_vh   core             valid_frac=1.000 flagged_ha=0.520 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-09_event     b2g_vh   kaneshie         valid_frac=1.000 flagged_ha=0.140 jrc_share=0.0 s2_iou=0.009174311926605505 s2_prec=0.14285714285714285 s2_rec=0.009708737864077669
+  2020-06-09_event     b2g_vh   darkuman_clipped valid_frac=1.000 flagged_ha=2.210 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-09_event     b2g_vh   pooled           valid_frac=1.000 flagged_ha=2.870 jrc_share=0.0 s2_iou=0.0004791566842357451 s2_prec=0.006968641114982578 s2_rec=0.0005142710208279763
+  2020-06-09_event     m1g      core             valid_frac=1.000 flagged_ha=0.120 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-09_event     m1g      kaneshie         valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     m1g      darkuman_clipped valid_frac=1.000 flagged_ha=0.320 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-09_event     m1g      pooled           valid_frac=1.000 flagged_ha=0.440 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-09_event     m2g      core             valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     m2g      kaneshie         valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     m2g      darkuman_clipped valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-09_event     m2g      pooled           valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      b1       core             valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      b1       kaneshie         valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      b1       darkuman_clipped valid_frac=1.000 flagged_ha=0.490 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-15_next      b1       pooled           valid_frac=1.000 flagged_ha=0.490 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-15_next      b2g_vh   core             valid_frac=1.000 flagged_ha=1.110 jrc_share=0.0 s2_iou=0.0021929824561403508 s2_prec=0.06306306306306306 s2_rec=0.0022668393782383418
+  2020-06-15_next      b2g_vh   kaneshie         valid_frac=1.000 flagged_ha=0.170 jrc_share=0.0 s2_iou=0.00904977375565611 s2_prec=0.11764705882352941 s2_rec=0.009708737864077669
+  2020-06-15_next      b2g_vh   darkuman_clipped valid_frac=1.000 flagged_ha=2.550 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-15_next      b2g_vh   pooled           valid_frac=1.000 flagged_ha=3.830 jrc_share=0.0 s2_iou=0.00211118930330753 s2_prec=0.02349869451697128 s2_rec=0.0023142195937258937
+  2020-06-15_next      m1g      core             valid_frac=1.000 flagged_ha=0.230 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-15_next      m1g      kaneshie         valid_frac=1.000 flagged_ha=0.070 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-15_next      m1g      darkuman_clipped valid_frac=1.000 flagged_ha=1.040 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-15_next      m1g      pooled           valid_frac=1.000 flagged_ha=1.340 jrc_share=0.0 s2_iou=0.0 s2_prec=0.0 s2_rec=0.0
+  2020-06-15_next      m2g      core             valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      m2g      kaneshie         valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      m2g      darkuman_clipped valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
+  2020-06-15_next      m2g      pooled           valid_frac=1.000 flagged_ha=0.000 jrc_share=nan s2_iou=0.0 s2_prec=nan s2_rec=0.0
