@@ -1846,6 +1846,35 @@ or fewer neighbours).
 - **Interpretation limit:** the 1.25 is a trial-and-error value with no source, as the page itself says. It is a second
   unsourced threshold next to -3 dB, not independent evidence for either.
 
+### A19-R3 (2026-10-19, **POST-HOC**, written before the rainfall was computed; owner-requested)
+
+**Why this is post-hoc.** The Step 2 outputs were already seen. The full-AOI median dVV per pair (also a post-hoc,
+not pre-declared diagnostic, `results/accra/accra_cd_POSTHOC_median_dvv.json`) shows scene-wide level shifts
+between dates (28 May about 1.5-2 dB brighter than its neighbours). The owner asked whether rain before each pass is
+related. This check is chosen after seeing that, so it is labelled **POST-HOC** in this heading, in the output
+filename and in the table header. The owner also decided: **no offset-corrected CD is run** (declined, not deferred), and
+nothing in A19.3-A19.5 is changed by this check.
+
+**What is computed (fixed here, before running).**
+- **Dataset:** NASA GPM IMERG V07, Earth Engine `NASA/GPM_L3/IMERG_V07`, band `precipitation` (mm/hr), 30-minute
+  slices, 0.1 degree (about 11.1 km). Availability checked 2026-10-19: 1,296 slices for 20 May-15 Jun 2020 (= 27 days x 48).
+  CHIRPS (`UCSB-CHG/CHIRPS/DAILY`) is used only if IMERG turns out unusable; it was not needed for availability.
+- **Area:** Odaw AOI polygon (`results/accra/odaw_aoi.geojson` via `scripts/06_accra_run.py`'s `aoi_geometry()`), Earth Engine
+  `reduceRegion`, mean reducer, scale 11,132 m, CRS EPSG:4326. Also reported: maximum over the IMERG pixels that touch the AOI.
+  IMERG pixels are far larger than the sub-areas, so **no sub-area value is computed**.
+- **Accumulation:** sum over slices of `precipitation` x 0.5 h, in mm.
+- **Table A, daily:** UTC calendar day, 20 May to 15 June 2020, 48 slices per day.
+- **Table B, rain in the 24 h before each pass:** passes 22 May 18:17:24, 28 May 18:18:04, 3 June 18:17:25, 9 June 18:18:05,
+  15 June 18:17:25 (UTC, from A19.2). Window = the 48 slices starting from (pass time floored to the half hour) minus 24 h up to
+  (floored pass time) minus 30 min, i.e. 18:00 UTC the previous day to 18:00 UTC on the pass day, ending 17-18 minutes
+  before the pass. The number of slices actually found is reported; if it is below 48 that is reported, not filled.
+- **No thresholds.** "No rain" means the area-mean accumulation is exactly 0.00 mm and the maximum pixel is exactly 0.00 mm;
+  anything above is "rain", with its number. No wetness class, no cut-off, no link to dVV is drawn.
+- **Output:** `results/accra_POSTHOC_rainfall.csv` (both tables, every row labelled `POST-HOC, UNVALIDATED`).
+- **Limits (stated now):** IMERG is a satellite-gauge estimate at about 11 km; it can miss or smear convective cells over a
+  basin about 10 km wide, so "no rain" here does not mean no rain on the ground. Table only: no interpretation beyond
+  rain / no rain before each pass.
+
 ---
 `configs/config.yaml` sha256 history:
 
