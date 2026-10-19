@@ -1916,6 +1916,46 @@ flood result, no change to A19.3-A19.7.
 - Limit: this lists what Earth Engine has ingested. A scene missing here is not shown to be missing from the Sentinel-1 archive,
   and I will not switch to the Copernicus Data Space Ecosystem without asking (CLAUDE.md section 6).
 
+**R4 results (recorded 2026-10-19 after the run; measured).** R4.1: all 288 slices found, none missing; the six largest slices are
+10 June 15:30-18:00 UTC (9.33, 9.22, 8.80, 6.97, 6.59, 6.42 mm per 30 min), about 21 h after the 9 June 18:18 pass. R4.2: Earth Engine
+lists exactly one scene in the window, the 9 June 18:18:05 orbit-147 pass itself; no other orbit or pass direction. Outputs:
+`results/accra_POSTHOC_rainfall_halfhourly_7_12_june.{csv,png}`, `results/accra_POSTHOC_s1_acquisitions_9_12_june.csv`,
+`scripts/13_accra_POSTHOC_rain_halfhourly_and_s1_list.py` (commit `de15712`).
+
+### A19-R5 (2026-10-19, Step 4 point checks: geocoding decisions and interpretation limit; written before Step 4 was run)
+
+Fills in A19.7 where it said "ask the owner". Nothing in A19.7's buffers, quantities, controls, seed or percentile rule is changed.
+
+**R5.1 Geocoding rule (owner's, applied to all four sites).** Headline centroid = the OSM object whose type matches the landmark named in
+the report; if the report names only a neighbourhood, the OSM `place=*` node. Every other geocoding candidate is run as a labelled
+`alternative centroid` sensitivity row in the same CSV (50 m and 100 m), never as the headline. Fallback, **not used**: "where the named
+landmark is mapped only as several road segments, use the centroid of all matching segments". **General rule applied to all four sites;
+segment-centroid fallback not needed, since the Circle has a named landmark object.**
+
+**R5.2 Sites.** OSM Nominatim, queried 2026-10-19 (`format=jsonv2`, usage-policy compliant, 1 request/1.5 s). Coordinates as returned (lat, lon).
+
+| Site | Headline centroid | Alternative-centroid rows |
+|---|---|---|
+| Odawna | way 664056985 Odawna Market, `amenity=marketplace` (5.5653020, -0.2172281) | way 126879329 Odawna Close, residential (5.5587104, -0.2160583); way 1488444430 Odawna Close, service (5.5594046, -0.2170041) |
+| Kwame Nkrumah Circle | node 1133566054 Kwame Nkrumah Interchange, `historic=monument` (5.5695876, -0.2153479) | ways 11664610 (5.5692221, -0.2152750), 510252753 (5.5697463, -0.2150897), 510252751 (5.5699063, -0.2155186), 510252749 (5.5694954, -0.2157619); and the arithmetic mean of those four points (about 5.56959, -0.21541; computed, not geocoded) |
+| Taifa | node 9703337660 Taifa, `place=suburb` (5.6566514, -0.2500244) | node 5008220723 bus stop (5.6583888, -0.2528530); way 628294317 Accra Nsawam Highway (5.6474190, -0.2488051); way 1517822465 Charismatic Baptist Church (5.6541196, -0.2555847) |
+| Lapaz | node 5566513301 Lapaz, `place=suburb` (5.6073648, -0.2486900) | none (single match) |
+
+Inside the AOI: all candidates (checked on `aoi_mask.tif`). Inside a sub-area: Odawna and Circle candidates are in `core`; Taifa and Lapaz
+candidates are in no sub-area. Nominatim returned no object named "Korle Lagoon" (R4.0), unrelated to these sites. Spacing change to A19.7: controls
+must be at least 100 m from every site centroid used (headline and alternative), not only the four headline points.
+
+**R5.3 Details fixed here.** Method flags (B1, B2g VH, M1g, M2g) are the frozen `accra_pooled` predictions on the **9 June image only**,
+recomputed with `scripts/06_accra_run.py`'s whole-raster procedure (frozen sensitivity, M2g n_segments 500 whole raster, not the tiled run);
+CD and guarded CD flags are the event pair 3 -> 9 June of A19.3. Medians of filtered VV are reported for 3, 9 and 15 June as A19.7 says. Valid
+pixels: finite VV and VH in all three scenes and not JRC water. A control must additionally have its whole 100 m buffer inside the AOI.
+
+**R5.4 Interpretation limit (owner's).** The point checks are interpreted **only as a test of the 8-9 June overnight storm**. IMERG places the
+heaviest rain at 15:30-18:00 UTC on 10 June, after the 9 June pass (R4.1). **15 June values are not evidence about 9 June** and are not used to
+support or contradict any 9 June statement; they are reported only because A19.7 asks for them. A site "standing out" (percentile below 5 or above 95
+on 9 June VV or dVV) is a descriptive screen and not validation; not standing out is not evidence of no flooding, since the pass is later than the
+reported storm and the buffers are 50-100 m against ~10 m pixels and speckle.
+
 ---
 `configs/config.yaml` sha256 history:
 
