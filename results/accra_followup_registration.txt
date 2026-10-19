@@ -43,3 +43,7 @@ evaluation_protocol.md sha256 at that commit: 364c334365e5a62afe554f6f528d4eccac
 Revision R4 (A19-R4, POST-HOC half-hourly rain and S1 acquisition list rules), written before either check was run:
 r4_commit: 933c8321db0c764db415598ae04f0b64898e5f12
 evaluation_protocol.md sha256 at that commit: f2d784fbc711d2577cf86d6bc75e869b949e2aa2f125a4cfbc082517664e4b73
+
+Revision R5 (A19-R5, Step 4 geocoding rule, sites, interpretation limit), written before Step 4 was run:
+r5_commit: 65d511ddbf1d739a57aedcf12302d5406bb4af0f
+evaluation_protocol.md sha256 at that commit: 0e5de3e8534868dc45002192af6120b809b2208670e5f063abe4fc8c1c69ffa7
