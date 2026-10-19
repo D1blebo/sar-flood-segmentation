@@ -1639,6 +1639,10 @@ value is A15.2's, declared before A15 ran; the -3 dB value is its mirror and is 
 event pair is not blind (the unfiltered version was seen); the filtered CD numbers below were not seen.
 Commit of these files: the same commit as this amendment.
 
+**[Added 2026-10-19 by A19-R2.2, original text above unchanged]** The A15 file ALSO contains part of the
+event-pair decrease result: its stored 5th percentiles are below -3 dB, so a lower bound on the raw
+event-pair decrease fraction was already visible. Details and quotes in A19-R2.2.
+
 ### A19.2 Scenes (measured: GEE `COPERNICUS/S1_GRD` catalogue query, 2026-10-19; IW, VV+VH, relative orbit 147, ascending)
 
 | Date (UTC) | Sat | Scene ID |
@@ -1751,6 +1755,96 @@ The commit hash of this amendment and the sha256 of this file at that commit can
 itself. They are recorded in `results/accra_followup_registration.txt`, committed immediately afterwards without
 touching this file, together with the pre-run sha256 of every `results/frozen/**/*.yaml`, `configs/config.yaml`
 and `results/tuning/heldout_lock.json`.
+
+### A19-R2 (2026-10-19, revision 2 of Amendment 19; written before any check was run)
+
+Named "R2" rather than "A19.2" because section A19.2 above is already the scene table. Five owner-requested
+changes. Nothing was run to produce them; they come from reading files and pages.
+
+**A19-R2.1 Frozen M2g preprocessing and guard, quoted from the file.** `results/frozen/primary/accra_pooled.yaml`,
+block `m2g` (line 47):
+
+| Setting | Value | File line |
+|---|---|---|
+| `clip` | `none` | 50 |
+| `clip_range_db` | `null` | 51 |
+| `median_window` | `3` | 52 |
+| `abstention_guard.ceiling_db` | `-15.0` | 64-65 |
+
+`scripts/06_accra_run.py:148-151` (`build_method`) reads `clip_range_db` and `median_window` from this block and
+line 184 calls `preprocess(vv_raw, vh_raw, clip, median)`. A19.3 says: no clip, median window 3, NaN-aware
+`src.preprocess.preprocess`, guard -15.0 dB. **These match the file exactly; no change to A19.3 was needed.**
+One difference remains and cannot be removed: in the frozen pipeline the ceiling is tested on a predicted
+cluster's mean VV (`src.cluster_rule.apply_abstention_ceiling`); the owner's CD guard is per pixel
+(`VV_event < -15 dB`). Same value, different use. It stays disclosed (A19.3), because making it cluster-based would
+need a clustering step the CD rule does not have.
+
+**A19-R2.2 What the earlier 9 v 3 June diagnostic file already contains.**
+`results/accra/exploratory_delta_vv_diagnostic.json` (A15; raw dB, unfiltered, JRC water excluded). It holds
+**no below -3 dB count or fraction**: its `thresholds` keys are only `>3dB`, `>6dB`, `>10dB` (brightening), and a
+text search of the file for `-3dB`, `<-3` and `below` finds nothing. It does hold:
+- **brightening counts, event pair, raw:** `>3dB` = 355,340 px = 3553.4 ha (full AOI), 12,157 px = 121.57 ha (core),
+  2,916 px = 29.16 ha (kaneshie), 6,083 px = 60.83 ha (darkuman_clipped); the `>6dB` and `>10dB` values in A15/RESULTS 3.7;
+- **the full distribution** (min, p05, p25, median, mean, p75, p95, max), with `p05` = -3.73 (full AOI), -3.49 (core),
+  -3.42 (kaneshie), -3.21 dB (darkuman_clipped). A 5th percentile below -3 dB means at least 5% of valid pixels in each
+  area had a raw dB decrease larger than 3 dB, i.e. a lower bound on the raw event-pair decrease (about 1,300 ha
+  or more in the full AOI: 5% of 2,604,559 px, estimate by arithmetic from a stored percentile);
+- the overlap with M2g's flagged pixels.
+
+So **part of the event-pair result was already seen**: the brightening hectares at +3 dB (raw), and a lower bound
+on the decrease fraction at -3 dB (raw). Not seen: the filtered (median-3) CD hectares, the guarded CD hectares, and
+any control-pair number. The 3 v 15 June file has the same structure (p05 = -3.99 full AOI; -3.89, -3.75, -3.74 for the
+sub-areas); that pair is neither the event nor the control pair. Both files are labelled raw; this amendment's CD
+inputs are filtered, so the numbers will differ.
+
+**A19-R2.3 Amendments 17 and 18: dates inside them, and what they govern.** Both are headed 2026-10-03.
+- **Amendment 17** (line 1422, header 2026-10-03): checks the UNOSAT product FL20231018GHA (Akosombo Dam spillage flood,
+  23 Oct 2023 Sentinel-1 scene) as a possible labelled reference for Accra against rule A10.2, and rejects it: rule (a)
+  fails (the one orbit-147 pass over the Odaw AOI is +66.3 h to +138.3 h after the onset window, A17.2) and, separately,
+  the product's geometry does not reach the Odaw AOI (A17.3); it also closes a bounded search for other Ghana
+  flood-extent products (A17.6). Dates inside: 11, 14, 16, 23, 25 October 2023,
+  1 December 2023, 2023-10-05/16/20 (S1 search window and the one orbit-147 pass), 2020-06-09 (comparison event).
+- **Amendment 18** (line 1546, header 2026-10-03): extends that labelled-data search to Kumasi, Tamale,
+  Sekondi-Takoradi, Cape Coast and Tema, and re-checks UrbanSARFloods for any Ghana event; finds none; "no pipeline
+  change". Dates inside: 28 June 2018 (a Kumasi storm in a tangential reference set aside), and the header date.
+
+Neither sets a rule used by Amendment 19 or by the checks here; they are background to why no labelled Accra data exist.
+**Both were first committed on 19 October 2026 in `d2b2985`** (verified with `git log -S` on each heading), together
+with Amendment 19; the 2026-10-03 dates are the dates written in the text, not commit dates. Until that commit the text
+sat uncommitted in the working tree, so their timestamps are not independently verifiable from git history.
+
+**A19-R2.4 Sea-mask fallback (supersedes the "stop and report" clause in A19.6(b), nothing else there).** If the OSM
+`natural=coastline` Overpass query fails (error, timeout, empty result, or no unambiguous sea polygon can be built),
+category (b) "sea" is defined as ESA WorldCover v100 (2020) class 80, permanent water bodies, and nothing else. No
+other substitute (no JRC ocean class, no hand-drawn polygon, no distance rule). Whichever source is used is stated in
+the output table. If the fallback is used, (a) JRC and (b) WorldCover-80 will overlap heavily; the order of A19.6
+(JRC first) still applies, so (b) then holds only the WorldCover-80 pixels not already in (a).
+
+**A19-R2.5 UN-SPIDER ratio rule, as a labelled sensitivity variant (headline unchanged: -3 dB, assumption).**
+Reference: UN-SPIDER Knowledge Portal (UN Office for Outer Space Affairs), "Step-by-Step: Recommended Practice: Flood
+Mapping and Damage Assessment Using Sentinel-1 SAR Data in Google Earth Engine",
+https://un-spider.org/advisory-support/recommended-practices/recommended-practice-google-earth-engine-flood-mapping/step-by-step
+(page read 2026-10-19; no date or version shown on the page). What the page says, quoted: "the after-flood mosaic is
+divided by the before-flood mosaic"; "The predefined threshold of 1.25 is applied assigning 1 to all values greater than
+1.25 and 0 to all values less than 1.25"; "The threshold of 1.25 has been selected through trial and error"; preprocessing
+includes "Conversion of the backscatter coefficient (σ°) into decibels (dB)"; "'VH' is widely suggested for flood mapping"
+but users can choose VH or VV; smoothing of 50 m circles; masks for permanent water, slope above 5% and connected pixels (eight
+or fewer neighbours).
+- **Rule (labelled `UN-SPIDER ratio 1.25 sensitivity`):** `ratio = V_dB(second date) / V_dB(first date)` per pixel, flood
+  if `ratio > 1.25`, with V the median-3 filtered backscatter in dB, for **VH** (the page's suggested polarization) and,
+  separately, **VV** (to match the headline rule). Same pairs, areas, JRC exclusion, domain and event-minus-control reporting
+  as A19.3-A19.5, including the same-satellite pairs. No guard.
+- **Reading I could not verify:** the page does not state whether the division uses dB or linear values; the script file
+  it links (`/sites/default/files/Code_GEE_flood_mapping.txt`) returned HTTP 403 to both the fetch tool and curl, so I
+  could not read it. I adopt the literal sequence on the page (convert to dB, then divide), i.e. the dB values are divided.
+  My reasoning that this is the intended reading (estimate, unverified): dB values are negative, so a post-event value more
+  negative than the pre-event one gives a ratio above 1 (darkening, the open-water flood direction), whereas a linear
+  after/before ratio above 1.25 would flag brightening. **No linear-ratio version is run and no other reading is substituted.**
+- **Deviations from the UN-SPIDER pipeline (stated, not hidden):** the median-3 filter replaces its 50 m focal smoothing; its
+  slope and connectivity masks are not applied; the JRC >= 50% mask replaces its permanent-water mask. This is the ratio
+  rule only, not a reproduction of the UN-SPIDER workflow, and the CSV label says so.
+- **Interpretation limit:** the 1.25 is a trial-and-error value with no source, as the page itself says. It is a second
+  unsourced threshold next to -3 dB, not independent evidence for either.
 
 ---
 `configs/config.yaml` sha256 history:
