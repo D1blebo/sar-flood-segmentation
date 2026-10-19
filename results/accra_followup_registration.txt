@@ -39,3 +39,7 @@ evaluation_protocol.md sha256 at that commit: eba507f4a406b7734334e528f46a43c715
 Revision R3 (A19-R3, POST-HOC rainfall rules), written before the rainfall was computed:
 r3_commit: ee49938d18499e51899cfe6d170439cb77c05435
 evaluation_protocol.md sha256 at that commit: 364c334365e5a62afe554f6f528d4eccacbf2e9a49b48a4ac679d7af11e7fff7
+
+Revision R4 (A19-R4, POST-HOC half-hourly rain and S1 acquisition list rules), written before either check was run:
+r4_commit: 933c8321db0c764db415598ae04f0b64898e5f12
+evaluation_protocol.md sha256 at that commit: f2d784fbc711d2577cf86d6bc75e869b949e2aa2f125a4cfbc082517664e4b73

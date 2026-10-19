@@ -1,0 +1,11 @@
+label,item,pixels,share_of_accepted,hectares,pixels_inside_AOI,pixels_outside_AOI
+UNVALIDATED: no ground truth,(a) JRC permanent water,139449,0.9622016601461425,1394.49,70,139379
+UNVALIDATED: no ground truth,"(b) sea = WorldCover v100 class 80, not in (a) [FALLBACK per A19-R2.4]",1412,0.009742836048493379,14.120000000000001,69,1343
+UNVALIDATED: no ground truth,(c) Korle Lagoon: not computed (Nominatim/Overpass unavailable); bounded above by category (d) = 2.8%,not computed,not computed,not computed,not computed,not computed
+UNVALIDATED: no ground truth,(d) none of the above,4066,0.02805550380536408,40.660000000000004,49,4017
+UNVALIDATED: no ground truth,total accepted,144927,1.0,1449.27,188,144739
+UNVALIDATED: no ground truth,independent: in JRC (overlaps allowed),139449,0.9622016601461425,1394.49,70,139379
+UNVALIDATED: no ground truth,independent: in WorldCover class 80 (overlaps allowed),139766,0.9643889682391825,1397.66,139,139627
+UNVALIDATED: no ground truth,independent: in both JRC and WorldCover 80,138354,0.9546461321906891,1383.54,70,138284
+UNVALIDATED: no ground truth,inside AOI (all categories),188,0.0012972047996577588,1.8800000000000001,188,0
+UNVALIDATED: no ground truth,outside AOI (all categories),144739,0.9987027952003422,1447.39,0,144739

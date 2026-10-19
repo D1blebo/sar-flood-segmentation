@@ -4,3 +4,6 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 .claude/
+
+# explicit entry (already covered by data/ above); SHA-256 recorded in results/accra_followup_data_hashes.txt
+data/accra/worldcover_v100.tif

@@ -1,0 +1,3 @@
+SHA-256 of Amendment 19 data files that are not committed (data/ is git-ignored). Recorded 2026-10-19.
+ESA WorldCover v100 (2020), Earth Engine ESA/WorldCover/v100, band Map, EPSG:32630, 10 m, Odaw AOI bounds (scripts/12a_fetch_worldcover.py):
+fd81f8f41973e765e8394d57d69c1f4d79650e6a6858cde7c051f18cf8bf240d  data/accra/worldcover_v100.tif
