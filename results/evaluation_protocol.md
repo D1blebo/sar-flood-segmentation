@@ -1875,6 +1875,47 @@ nothing in A19.3-A19.5 is changed by this check.
   basin about 10 km wide, so "no rain" here does not mean no rain on the ground. Table only: no interpretation beyond
   rain / no rain before each pass.
 
+### A19-R4 (2026-10-19, **POST-HOC**, written before either check below was run; owner-requested)
+
+**R4.0 Record of Step 3 category (c), owner's decision (option 2).** Step 3 was run (`scripts/12_accra_coastal_control.py`,
+`results/accra_coastal_control.csv`) with these facts, all measured: the frozen M2g recomputation accepted 144,927 pixels on
+9 June (equal to the declared count); (a) JRC permanent water 139,449 px (96.2%); (b) WorldCover v100 class 80 not in (a), the
+A19-R2.4 fallback because the OSM coastline query failed (Overpass HTTP 502 "at capacity" on two attempts, one earlier HTTP 000 on
+a status ping; no mirror tried), 1,412 px (1.0%); (d) none of these 4,066 px (2.8%); the land-cover breakdown (needs (d) > 50%)
+was not triggered. **(c) Korle Lagoon is recorded as "not computed (Nominatim/Overpass unavailable); bounded above by category
+(d) = 2.8%".** Nominatim returned 0 matches for "Korle Lagoon", "Korle Lagoon, Accra, Ghana", "Korle Lagoon Accra" and "Korle
+Lagoon, Greater Accra Region"; "Korle, Accra" returned four administrative boundaries (Korle-Klottey, Korle Bu, Korle Gonno,
+Korle Dudor), none a water body. **No statement is made about where the lagoon lies relative to (a) JRC water or (b).**
+ESA WorldCover v100 is stored at `data/accra/worldcover_v100.tif` (git-ignored); its SHA-256 is recorded in
+`results/accra_followup_data_hashes.txt`.
+
+**Why both checks are post-hoc.** The A19-R3 daily table (already seen) shows 76.8 mm (area mean, UTC day) on 10 June 2020
+against 4.5 mm on 9 June. These two checks are chosen after seeing that. Descriptive only: no thresholds, no link to dVV or to any
+flood result, no change to A19.3-A19.7.
+
+**R4.1 Half-hourly rain around the 9 June pass.**
+- Dataset and reducer as A19-R3: IMERG V07 `NASA/GPM_L3/IMERG_V07`, band `precipitation` (mm/hr), `reduceRegion` mean over the Odaw
+  AOI polygon at scale 11,132 m, CRS EPSG:4326; also the maximum over the touched IMERG pixels. The pixel-count column of
+  A19-R3 is dropped (it was unreliable).
+- Slices: every 30-minute slice with start time from 2020-06-07 00:00 UTC to 2020-06-12 23:30 UTC inclusive = 288 slices. Value
+  per slice = `precipitation` x 0.5 h, in mm per slice. Missing slices are reported, not filled.
+- Outputs: table `results/accra_POSTHOC_rainfall_halfhourly_7_12_june.csv` and one bar chart (one bar per slice, mm per 30 min,
+  UTC on the x axis) `results/accra_POSTHOC_rainfall_halfhourly_7_12_june.png`, with a vertical mark at the 9 June 18:18:05 UTC
+  Sentinel-1 pass (orbit 147). Title and table header: `POST-HOC, UNVALIDATED`. No threshold lines, no shading, no classes.
+- Limit: about 11 km pixels over a basin about 10 km wide; it can smear or miss convective cells.
+
+**R4.2 Sentinel-1 acquisitions after the 9 June pass.**
+- Source: Earth Engine `COPERNICUS/S1_GRD`. Filter: footprint intersects the Odaw AOI polygon, scene start time from
+  2020-06-09 18:18:00 UTC to 2020-06-12 23:59:59 UTC. **No filter** on instrument mode, polarisation, orbit pass or relative orbit, so
+  ascending and descending and all relative orbits are listed. The 9 June 18:18:05 orbit-147 pass itself starts inside the window and is
+  listed and marked.
+- Per scene: scene ID, start time UTC, platform, instrument mode, polarisations, orbit pass, relative orbit, hours after the
+  9 June 18:18:05 UTC pass, and the fraction of the AOI area inside the image footprint (`image.geometry()` intersection / AOI area).
+  The footprint includes any no-data border, so this is footprint coverage, not valid-pixel coverage.
+- Output: `results/accra_POSTHOC_s1_acquisitions_9_12_june.csv`, labelled `POST-HOC, UNVALIDATED`.
+- Limit: this lists what Earth Engine has ingested. A scene missing here is not shown to be missing from the Sentinel-1 archive,
+  and I will not switch to the Copernicus Data Space Ecosystem without asking (CLAUDE.md section 6).
+
 ---
 `configs/config.yaml` sha256 history:
 
