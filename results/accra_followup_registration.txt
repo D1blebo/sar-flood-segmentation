@@ -35,3 +35,7 @@ Revision R2 (A19-R2), written before any Amendment 19 check was run:
 r2_commit: 806fcf1696982fdb364a9b83cad8a114f59c12b2
 evaluation_protocol.md sha256 at that commit: eba507f4a406b7734334e528f46a43c7156d72e4aaf6a745e583ae566f35cb9e
 (supersedes the sha256 line above; the d2b2985 line records the original Amendment 19 text)
+
+Revision R3 (A19-R3, POST-HOC rainfall rules), written before the rainfall was computed:
+r3_commit: ee49938d18499e51899cfe6d170439cb77c05435
+evaluation_protocol.md sha256 at that commit: 364c334365e5a62afe554f6f528d4eccacbf2e9a49b48a4ac679d7af11e7fff7
