@@ -1419,6 +1419,339 @@ match was found via the UrbanSARFloods README's own citation list, not by indepe
 it from the original search. Nothing in Amendment 15's diagnostic (thresholds, computed numbers,
 labelling) depended on this citation being resolved, so no other part of A15 changes.
 
+## Amendment 17 (2026-10-03, Stage 4/Accra, fourth candidate checked and rejected; bounded search for
+further Ghana flood-extent products closed)
+
+### A17.1 Candidate: UNOSAT FL20231018GHA
+
+Supplied by the project owner, found via HDX. UNOSAT code `FL20231018GHA`, "Satellite detected water
+extent over Greater Accra & Volta Region, Ghana as of 23 October 2023" (`unosat.org/products/4078`),
+derived from a Sentinel-1 scene acquired **23 October 2023, 18:10 local time** (Ghana is UTC+0),
+published 25 October 2023 (v1). Analysed area ~4,300 km2, flood water extent ~53 km2, ~12,000 people
+potentially exposed (read directly from the product's own A3 PDF map,
+`unosat_filesystem/3705/UNOSAT_A3_Natural_Landscape_FL20231018GHA_GreaterAccra_VoltaRegion_GHA_23Oct2023.pdf`).
+
+Checked against the existing rule (A10.2), unchanged: (a) an S1 pass over the Odaw AOI within 24 h
+after the reported peak; (b) an independent reference. Both fail, independently of each other.
+
+### A17.2 Rule (a): the trigger is a dam spillage, not a storm, and the nearest Odaw-AOI pass misses by days
+
+This event is the 2023 Akosombo Dam controlled spillage flood (confirmed: Wikipedia
+`2023_Akosombo_dam_spillage_flood`, cross-checked against the ECHO Daily Flash of 16 October 2023 via
+search, and NADMO figures via search), not a single-storm event like every earlier candidate. There is
+no instantaneous "peak": the spillway discharge was increased sharply around **11 October 2023**
+("early hours of Wednesday"), NADMO recorded "excess water released" on **14 October 2023**, and
+flooding was reported in south-eastern Ghana "since 13 October"; the dam emergency and flooding were
+still active weeks later (ECHO Daily Flash, 1 December 2023). The onset window used here is
+**11-14 October 2023**, stated as a window, not a confirmed instant, same convention as A11.1.
+
+S1 IW GRD acquisitions over **our own Odaw AOI** (measured, `COPERNICUS/S1_GRD`, GEE, filtered to
+`results/accra/odaw_aoi.geojson`, IW mode, 2023-10-05 to 2023-10-20): **exactly one** -
+**2023-10-16T18:18:28 UTC, S1A, ascending, relative orbit 147** (the same orbit as the 2020 benchmark
+images). Offset from the onset window to this pass: **+66.3 h** (from 14 Oct 00:00 UTC) to **+138.3 h**
+(from 11 Oct 00:00 UTC). Both exceed 24 h by a wide margin. **Rule (a): FAILS**, not a borderline case
+like 2020-06-09 was. (The UNOSAT product's own 23 October acquisition does not appear in this
+Odaw-AOI-filtered list at all, consistent with A17.3 below: it does not cover the Odaw AOI.)
+
+### A17.3 Geography: the product's own geometry does not reach the Odaw AOI (independently disqualifying)
+
+Per CLAUDE.md's rule against trusting a summary page, the actual geospatial file was fetched, not just
+the product webpage: `FL20231018GHA_SHP.zip` from its HDX resource page
+(`data.humdata.org/dataset/542ca4e7-8156-4eda-b85b-ea6d403a8312`, resource
+`bf38abad-da72-4f78-9f88-ae48d1a13dec`), 2.52 MB, verified as a valid zip containing three polygon
+shapefile layers (AnalysisExtent, FloodExtent, WaterExtent), each in **WGS 84 (EPSG:4326)**, the same
+CRS as `results/accra/odaw_aoi.geojson` -- confirmed by reading each layer's `.prj` file directly, not
+assumed. Extents, measured with `ogrinfo`:
+
+| Layer | Bounds (minx, miny) - (maxx, maxy), degrees |
+|---|---|
+| AnalysisExtent | (0.186171, 5.766479) - (1.200317, 6.212241) |
+| FloodExtent | (0.201964, 5.766614) - (1.183822, 6.211376) |
+| WaterExtent | (0.201964, 5.766466) - (1.199000, 6.211376) |
+
+Our Odaw AOI (`results/accra/odaw_aoi.geojson`, already in use since A10): **lon -0.283950 to -0.150000,
+lat 5.529166 to 5.841666**.
+
+**No longitude overlap at all**: the Odaw AOI's easternmost point (-0.150 deg) sits **about 0.336 deg
+(~37 km) west** of the UNOSAT product's westernmost point (0.186 deg), at this latitude. This is
+independent of, and additional to, the rule (a) failure above -- even a perfectly-timed acquisition of
+this product could not inform the Odaw AOI, because the product's own analysis footprint never reaches
+it.
+
+This matches the product's own district table (read directly from the PDF): Ningo/Prampram and Shai
+Osudoku (Greater Accra Region) plus Ho West, Adaklu, Ada East, Ada West, Akatsi North, Akatsi South,
+Anloga, Central Tongu, Keta Municipal, Ketu North, Ketu South, North Tongu, South Tongu (Volta Region)
+-- all along the Lower Volta River floodplain and the coast east of the Volta estuary. "Accra" appears
+only as a locator label on the inset map, not as an analysed or flooded district. This is independently
+consistent with the event itself (A17.2): the Akosombo spillage is a Volta River phenomenon: Wikipedia's
+own article names North/Central/South Tongu (Volta Region) and Asuogyaman (Eastern Region) as affected,
+never the Odaw catchment, which is a separate, independent drainage system through central Accra into
+the Korle Lagoon, roughly 40-80 km west of the Volta estuary.
+
+### A17.4 Verdict: rejected, on two independent grounds
+
+**FL20231018GHA is rejected.** It fails rule (a) by 66-138 h (A17.2), and independently its own
+analysed geometry has zero spatial overlap with the Odaw AOI (A17.3) -- either finding alone would be
+disqualifying. **2020-06-09 remains the selected event; nothing about the completed Accra run
+(Amendments 12-13, `results/accra/`) changes.** No method was run, nothing was retuned, and
+`accra_pooled.yaml` and every frozen configuration are untouched.
+
+### A17.5 UNOSAT's own methodological caveat (for the limitations/discussion chapter, independent of this rejection)
+
+The product's own PDF map carries this note, read directly, quoted exactly: *"Important note: Flood
+analysis from radar images may underestimate the presence of standing waters in built-up areas and
+densely vegetated areas due to the backscattering properties of the radar signal."* This is an
+independent, UN-institutional (UNOSAT) corroboration of the same urban double-bounce/layover concern
+already in CLAUDE.md section 6 and RESULTS.md's Limitations section (3.7/section 4), citable in the
+discussion chapter on its own merits regardless of this dataset's rejection as an Accra candidate.
+
+### A17.6 Bounded search: no other usable Ghana flood-extent product found on HDX or UNOSAT
+
+Per the project owner's instruction, a single bounded search, then stop. Three independent HDX CKAN API
+queries (`data.humdata.org/api/3/action/package_search`, each returned in full, not guessed):
+
+1. `fq=groups:gha AND vocab_Topics:flooding` -> 5 results. Only one is an actual satellite-derived
+   flood-extent/water-extent geospatial product: FL20231018GHA itself. The other four are non-extent
+   datasets (Ghana GLIDE disaster-event list, Ghana IDMC displacement updates, a regional West/Central
+   Africa surface-water area-tables product with no Ghana-specific flood event, Ghana risk-assessment
+   indicators).
+2. `fq=organization:unosat AND q=Ghana` -> **exactly 1 result**, the same dataset. This searches
+   UNOSAT's entire HDX catalogue (not just items tagged to the Ghana group) for any mention of "Ghana",
+   so it is the strongest single check that no other UNOSAT product on HDX references Ghana at all.
+3. `fq=groups:gha AND q=satellite` -> 22 Ghana-tagged datasets that mention "satellite"; the same one
+   flood-extent product among them, the rest being population density, active-fire detection, rainfall,
+   soil-moisture, NDVI, road-surface and settlement-layer products -- none are flood-extent products.
+
+**Not reachable:** UNOSAT's dedicated flood portal, `floods.unosat.org`, failed outright from this
+environment (`getaddrinfo ENOTFOUND`, a DNS-level failure, not a "no results" page) -- stated honestly
+as an access gap rather than substituted with a guessed URL, the same standard applied to the Dartmouth
+Flood Observatory live site in A11.4. A general web search for `unosat.org` Ghana flood products
+surfaced only the already-known FL20231018GHA event and an unrelated 2022 GEO SDG award mention for
+UNOSAT's Accra Emergency Mapping service (a programme recognition, not a specific flood-extent product
+page); no further Ghana flood-extent product was identified.
+
+**Conclusion: no other usable UNOSAT/HDX Ghana flood-extent product exists, as far as this search could
+determine.** Per instruction, this line of search stops here. The one unexhausted route
+(`floods.unosat.org`) is noted as an access gap, not ruled out, and is not pursued further unless asked.
+
+### A17.7 Noted for later, not yet read: a possibly relevant literature reference
+
+The project owner named a paper, *"Flood Risk Mapping and its Effects on Livelihood in Ghana using
+Sentinel-1 Data: A Case Study of Accra"*, confirmed to exist (ResearchGate publication 351067234):
+a Sentinel-1 before/after-mosaic ratio change-detection method over the Greater Accra Metropolitan Area
+(2015-2019), combined with a DEM and the JRC Global Surface Water layer -- methodologically adjacent to
+this project's own inputs. **Not yet read in full; not integrated anywhere.** Flagged for the
+literature-review chapter regardless of the FL20231018GHA outcome, per the owner's instruction.
+
+## Amendment 18 (2026-10-03, labelled-data search: five more Ghanaian cities, plus UrbanSARFloods,
+checked for existing SAR flood-extent data; no pipeline change)
+
+Extends CLAUDE.md section 1's instruction ("check whether any Ghana event is included... tell me") and
+A17.6's method to five more Ghanaian cities the project owner named, plus a direct re-check of
+UrbanSARFloods (first raised in RESULTS.md 3.8) for any Ghana event specifically. **Absence is shown,
+not assumed**: every query actually run is reported below, including the ones that returned noise.
+
+### A18.1 HDX: Kumasi, Tamale, Sekondi-Takoradi, Cape Coast, Tema
+
+Same CKAN API as A17.6 (`data.humdata.org/api/3/action/package_search`), each query run in full:
+
+| City | Query | Result |
+|---|---|---|
+| Kumasi | `q="Kumasi"`, `fq=organization:unosat` | 0 results |
+| Kumasi | `q="Kumasi flood"`, any organisation | 0 results |
+| Tamale | `q="Tamale"`, `fq=organization:unosat` | 1 result, **false positive**: `densite-des-foyers-d-incendies...algerie...2017` (an Algeria wildfire-density dataset; no genuine Tamale/Ghana connection beyond an incidental text match) |
+| Tamale | `q="Tamale flood"`, any organisation | same 1 false positive, nothing else |
+| Sekondi-Takoradi | `q="Sekondi-Takoradi"`, `fq=organization:unosat` | 0 results |
+| Sekondi-Takoradi | `q="Sekondi-Takoradi flood"`, any organisation | 0 results |
+| Cape Coast | `q="Cape Coast"`, `fq=organization:unosat` | 0 results |
+| Cape Coast | `q="Cape Coast flood"`, any organisation | 22 results, **all false positives** (fuzzy matches on "coast" and "flood" separately: Vietnam, Ivory Coast, Somalia cyclone records; none is a Cape Coast, Ghana product) |
+| Tema | `q="Tema"`, `fq=organization:unosat` | 0 results |
+| Tema | `q="Tema flood"`, any organisation | 0 results |
+
+**No genuine labelled or satellite-derived flood-extent product exists on HDX for any of the five
+cities.** The only city-specific result found anywhere (UNOSAT org, any query) across this whole
+project's HDX searches remains FL20231018GHA (A17.1), which does not name any of these five cities in
+its own district table (A17.3) and does not reach them either (all five cities sit well outside its
+measured 0.186-1.200 degrees E extent, same disqualifying gap as the Odaw AOI).
+
+### A18.2 A tangential academic reference found for Kumasi, checked and set aside
+
+A web search for UNOSAT/Kumasi surfaced an unrelated but relevant paper: Agyekum, Amekudzi, Stein,
+Aryee, Atiah, Adefisan & Danuor (2023), "Verification of satellite and model products against a dense
+rain gauge network for a severe flooding event in Kumasi, Ghana", *Meteorological Applications* 30(5),
+DOI 10.1002/met.2150. **Full text could not be read**: the Wiley page returned HTTP 403, and an
+open-access copy at `centaur.reading.ac.uk` returned an error page, not the PDF. From its own title and
+every independent summary found, it verifies **satellite rainfall-estimation products** (e.g.
+IMERG-class products) against a dense rain-gauge network for a **28 June 2018** Kumasi storm -- **not**
+a Sentinel-1 or any other SAR-derived flood-extent/water-mask product. **Not a usable labelled dataset
+for this project**, and not pursued further (403/error-page access failures on two independent hosts,
+reported honestly rather than guessed around). Its date, independently, corroborates protocol A14.1's
+own finding (via a different, unrelated source: Ansah et al. 2020) that the 28 June 2018 Ghana flood
+episode was a **Kumasi** event, already screened and rejected as an Accra candidate on rule (a) alone
+(A14.2: +102.3 h).
+
+### A18.3 UrbanSARFloods: confirmed, no Ghana event
+
+Re-checked directly against its own GitHub README (`github.com/jie666-6/UrbanSARFloods`, read directly,
+same source already cited in RESULTS.md 3.8). Its full location list: Houston USA (2 events), Lumberton
+USA, Sainte-Marthe-sur-le-Lac Canada, Coraki Australia, Sydney Australia (2 events), Port Macquarie
+Australia, Iwaki/Koriyama Japan, Weihui China, Zhuozhou China, Langfang China, Aqqala Iran, NovaKakhovka
+Ukraine, Beledweyne Somalia (2 events), Jubba Somalia, Beira Mozambique, Lokoja Nigeria. **No Ghana,
+Accra, Kumasi, or any other West African event beyond Lokoja, Nigeria.** This directly answers the
+project owner's question: UrbanSARFloods has no Ghana event at all, confirmed from its own stated
+contents, not inferred from its absence in a search result.
+
+### A18.4 Conclusion
+
+**No labelled or satellite-derived Sentinel-1 flood-extent data was found for Kumasi, Tamale,
+Sekondi-Takoradi, Cape Coast, Tema, or any other Ghanaian city, on HDX, through UNOSAT, or in
+UrbanSARFloods.** Combined with A17 (Accra/Odaw: one candidate found and rejected on two independent
+grounds) and the original benchmark inspection (`data_inspection_report.md` section 6: Sen1Floods11's
+own Ghana event is ~300 km north of Accra, in a different catchment entirely), **the project's
+conclusion stands unrevised: no usable labelled Sentinel-1 flood dataset exists for any Ghanaian urban
+area, and the Accra case study remains, and must remain, an unvalidated demonstration.** No method was
+run, nothing was retuned, and no frozen configuration was touched.
+
+## Amendment 19 (2026-10-19, Accra follow-up checks: change-detection baseline, coastal positive control, point checks; declared BEFORE any of these checks is run)
+
+**Every output of this amendment is labelled `UNVALIDATED: no ground truth`** (file headers, figure titles,
+table headers). Nothing here is a new frozen method, nothing is retuned, and nothing supports a claim
+about actual flooding. `accra_pooled.yaml`, the benchmark frozen configs and `heldout_lock.json` are not
+touched (their sha256 are recorded in `results/accra_followup_registration.txt`, see A19.9). Source of the
+task: `CLAUDE_CODE_PROMPT_accra_checks.md` plus three additions by the owner (A19.4 sensitivity pairs,
+A19.5 event-minus-control reporting, A19.1 disclosure).
+
+### A19.1 Exploratory runs already done and SEEN before this amendment (disclosure)
+
+1. **Tiled M2g** (`scripts/08_accra_m2g_tiled.py`, `results/accra/accra_m2g_tiled_tables.{json,csv}`): frozen M2g
+   run per 512x512 tile (`tiled_512`) and on the whole raster with n_segments scaled to 9773
+   (`whole_scaled`). Catchment flagged area seen: tiled 9.24 / 1.00 / 9.23 ha (3 / 9 / 15 June);
+   whole_scaled 44.85 / 45.02 / 45.43 ha; all three sub-areas 0 ha in every run. Nothing retuned.
+2. **3 June vs 15 June brightening diagnostic** (`scripts/09_accra_delta_vv_3v15.py`,
+   `results/accra/exploratory_delta_vv_3v15_diagnostic.json`): `VV(15 Jun) - VV(3 Jun)`, raw dB, no filter,
+   JRC water excluded, same definition and the same +3/+6/+10 dB thresholds as A15. Seen: catchment
+   2658.5 / 252.9 / 13.7 ha above +3 / +6 / +10 dB (9 v 3 June, A15: 3553.4 / 405.1 / 23.6 ha).
+3. **A15's 9 June vs 3 June diagnostic** (raw, unfiltered) was also already seen.
+
+**The +/-3 dB thresholds of this amendment were not changed after seeing any of these results.** The +3 dB
+value is A15.2's, declared before A15 ran; the -3 dB value is its mirror and is the owner's value in
+`CLAUDE_CODE_PROMPT_accra_checks.md`. Consequence for interpretation: the brightening answer for the
+event pair is not blind (the unfiltered version was seen); the filtered CD numbers below were not seen.
+Commit of these files: the same commit as this amendment.
+
+### A19.2 Scenes (measured: GEE `COPERNICUS/S1_GRD` catalogue query, 2026-10-19; IW, VV+VH, relative orbit 147, ascending)
+
+| Date (UTC) | Sat | Scene ID |
+|---|---|---|
+| 2020-05-22 18:17:24 | S1B | `S1B_IW_GRDH_1SDV_20200522T181724_20200522T181749_021698_0292FB_9ACA` |
+| 2020-05-28 18:18:04 | S1A | `S1A_IW_GRDH_1SDV_20200528T181804_20200528T181833_032769_03CBB7_64D8` |
+| 2020-06-03 18:17:25 | S1B | `S1B_IW_GRDH_1SDV_20200603T181725_20200603T181750_021873_02983B_F419` |
+| 2020-06-09 18:18:05 | S1A | `S1A_IW_GRDH_1SDV_20200609T181805_20200609T181834_032944_03D0DF_47E9` |
+| 2020-06-15 18:17:25 | S1B | `S1B_IW_GRDH_1SDV_20200615T181725_20200615T181750_022048_029D7F_634F` |
+
+3, 9 and 15 June are the scenes already in `data/accra/`. 22 and 28 May are fetched with
+`scripts/06_accra_run.py`'s own `download()` (same AOI bounds, EPSG:32630, 10 m, VV+VH), nodata 0.0 -> NaN
+exactly as in 06.
+
+### A19.3 Step 2 rules: change-detection (CD) baseline
+
+- **Preprocessing:** `src.preprocess.preprocess` with the frozen M2g setting (`accra_pooled.yaml` `m2g`):
+  no clip, median window 3, NaN-aware. Applied to each scene separately, then differenced.
+- `dVV = VV_filtered(second date) - VV_filtered(first date)`, dB.
+- **CD rule:** flood if `dVV < -3.0 dB` (strict). **Guarded CD rule:** CD rule AND
+  `VV_filtered(second date) < -15.0 dB` (the frozen guard ceiling, `abstention_guard.ceiling_db`). Note: in the
+  frozen pipeline the ceiling is tested on a predicted cluster's mean VV; here it is applied per pixel. That
+  is a change of use, not of value, and is stated as such.
+- **Brightening rule (double-bounce question):** `dVV > +3.0 dB`, applied to every pair below, same filter, no tuning.
+- **Domain for every count:** valid (finite VV and VH) in both scenes of the pair, AND NOT JRC permanent
+  water (`jrc_occurrence.tif` >= 50, same mask as before), AND inside the area. Area = pixels x 0.01 ha.
+- **Source for -3 dB: NOT CONFIRMED. ASSUMPTION.** Searched 2026-10-19. Found: ALTIS (Vinaykumar & Kamasani,
+  arXiv 2603.13803, 2026) states "inundation typically produces a BCR decrease of 3-8 dB", attributed to a
+  reference it numbers [15] ("Li et al."), which I did not read; ALTIS itself uses mean - 2 sd, not -3 dB.
+  UN-SPIDER's GEE recommended practice uses an after/before ratio > 1.25 (about 1 dB), "selected through
+  trial and error", no source. Not read or not usable: the MDPI 15(5):1200 intercomparison (HTTP 403),
+  Long et al. 2014 (PDF unreadable by the tool). **-3 dB is therefore kept as pre-declared and logged as an
+  assumption, not a literature-sourced value.**
+- **Pairs (headline):** event = 3 June -> 9 June; control = 28 May -> 3 June (no flood reported between);
+  recession = 9 June -> 15 June (`dVV = VV(15 Jun) - VV(9 Jun)`; no control pair for it).
+- **Areas:** full Odaw AOI (`aoi_mask.tif`), `core`, `kaneshie`, `darkuman_clipped`, and `pooled` (union of the
+  three sub-areas), same masks as `scripts/07_accra_subaoi_run.py`.
+- **Outputs:** `results/accra_cd_baseline.csv` (hectares per pair, rule, area; plus the event-minus-control
+  columns of A19.5); one map figure of the event-pair CD result with the AOI and sub-AOIs outlined.
+
+### A19.4 Same-satellite sensitivity pairs (pre-declared sensitivity; headline pairs unchanged)
+
+Headline pairs mix S1A and S1B, which could add a satellite offset. Sensitivity, same rules and same
+outputs, rows labelled `same-satellite sensitivity`:
+- event: 28 May (S1A) -> 9 June (S1A)
+- control: 22 May (S1B) -> 3 June (S1B) (a 22 May orbit-147 scene exists; ID in A19.2)
+
+Both sensitivity pairs span 12 days (headline pairs span 6). Nothing here replaces a headline number.
+
+### A19.5 Event vs control reporting
+
+For every area, every rule (CD, guarded CD, brightening) and both pair sets (headline; same-satellite
+sensitivity), report `event_ha`, `control_ha` and **`event_minus_control_ha`**, never raw hectares alone. Also
+report hectares as a fraction of the area's valid domain (so areas of different size are comparable). No
+significance test is declared: with one event and one control pair there is no sampling distribution.
+
+### A19.6 Step 3 rules: coastal positive control
+
+- Population: pixels accepted by the frozen M2g on 9 June, recomputed with `scripts/06_accra_run.py`'s exact
+  whole-raster procedure (`m2g`, n_segments 500, median 3, guard -15 dB; seed 42), no AOI restriction. The
+  count must equal 144,927 (`exploratory_delta_vv_diagnostic.json`, `m2g_9june_flagged_pixels_whole_raster`); if it
+  does not, stop and report, do not continue.
+- Categories, applied in this order so shares sum to 100%: (a) JRC permanent water (occurrence >= 50);
+  (b) sea, not in (a): the sea side of the OSM `natural=coastline` (land on the left of the way), built from a
+  fresh Overpass query; if no unambiguous sea polygon can be built, stop and report; (c) Korle Lagoon, not in
+  (a)/(b): the OSM polygon named "Korle Lagoon" (several matches -> list them and ask the owner); (d) none.
+  Also report each category's independent (overlapping) share, and the inside-AOI vs outside-AOI split.
+- If (d) > 50% of the pixels: land cover from ESA WorldCover v100 (2020, `ESA/WorldCover/v100`, 10 m), class shares.
+- Output: one figure of where the pixels are, plus a table.
+
+### A19.7 Step 4 rules: point checks
+
+- **Sites (only these):** Odawna (strong: FloodList 10 Jun 2020, The Watchers 11 Jun 2020); Kwame Nkrumah Circle
+  (moderate: "areas around", same two); Taifa (weak: one resident, The Watchers 11 Jun 2020); Lapaz (weak: a
+  2026 retrospective dating the 2020 rains to 10-19 June, ModernGhana 3 Jul 2026). Source quality as stated by the owner;
+  I have not re-read these articles.
+- **Geocoding:** OSM Nominatim, neighbourhood/landmark centroid, record OSM object ID and coordinates.
+  Several matches -> list all and ask the owner; I do not choose. Record whether each point lies inside the AOI and
+  which sub-area.
+- **Buffer:** circle of radius 50 m (headline) in EPSG:32630; a pixel is included if its centre is within the
+  radius. Sensitivity (pre-declared, not headline): 100 m.
+- **Quantities per buffer** (valid = finite VV and VH in the 3, 9 and 15 June scenes and not JRC water):
+  number of valid pixels; median VV_filtered on 3, 9 and 15 June (median-3 filter, as A19.3); median dVV, event
+  pair 3 -> 9 June; fraction of valid pixels flagged by B1, B2g (VH), M1g and M2g (frozen `accra_pooled`,
+  recomputed from `scripts/06_accra_run.py`'s whole-raster procedure, frozen sensitivity, since the prediction
+  arrays were not saved; M2g is the 06 n_segments=500 run, not the tiled run); fraction flagged by the CD rule
+  and by the guarded CD rule (event pair).
+- **Controls:** 200 random points, numpy `default_rng(20200609)`. Candidate pixel centres: inside the AOI with the
+  whole 100 m buffer inside the AOI, ESA WorldCover v100 class 50 (built-up) at the centre pixel, valid in
+  all three scenes, not JRC water. Draw candidates in random order and accept one if it is >= 100 m from every
+  site and every already-accepted control, until 200. If fewer than 200 can be accepted, stop and report.
+  Same quantities computed for each control.
+- **Percentile rank:** for each site, its mid-rank percentile among the 200 controls
+  (`100 * (n_below + 0.5 * n_equal) / 200`) for 9 June VV_filtered and for dVV (3 -> 9 June), at 50 m and at 100 m.
+- **"Stands out":** percentile < 5 or > 95, either direction. This is a descriptive screen, not validation. With
+  4 sites, roughly 0.4 are expected beyond those cuts by chance alone (estimate).
+- **Outputs:** `results/accra_point_checks.csv` (all sites, all controls, both buffers); one figure, histogram of
+  control dVV with the sites marked.
+
+### A19.8 Reporting commitments
+
+All sites, all pairs, all numbers are reported, including null and awkward ones. A site is never dropped for its
+result. Summaries say which numbers are measured and which are estimates/assumptions. If any rule above turns out
+unusable, I stop and tell the owner; I do not fix it silently. Handing back: `results/accra_followup_summary.md`,
+README commands, test suite run, and a hash comparison of the frozen configs and the held-out lock file.
+
+### A19.9 Registration
+
+The commit hash of this amendment and the sha256 of this file at that commit cannot be written inside the file
+itself. They are recorded in `results/accra_followup_registration.txt`, committed immediately afterwards without
+touching this file, together with the pre-run sha256 of every `results/frozen/**/*.yaml`, `configs/config.yaml`
+and `results/tuning/heldout_lock.json`.
+
 ---
 `configs/config.yaml` sha256 history:
 
