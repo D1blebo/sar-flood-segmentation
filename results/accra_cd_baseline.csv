@@ -1,0 +1,176 @@
+label,pair_set,role,first_date,second_date,rule,rule_description,area,domain_pixels,flagged_pixels,flagged_ha,flagged_fraction_of_domain,event_minus_control_ha,event_minus_control_fraction
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),full_Odaw_AOI,2604559,99411,994.11,0.038168073750681014,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),core,84258,2808,28.080000000000002,0.03332621234778894,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),kaneshie,22070,611,6.11,0.027684639782510196,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),darkuman_clipped,42979,932,9.32,0.02168500895786314,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),pooled,149307,4351,43.51,0.029141299470219078,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,full_Odaw_AOI,2604559,2291,22.91,0.0008796114812526804,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,core,84258,42,0.42,0.0004984689881079541,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,kaneshie,22070,9,0.09,0.0004077933846850929,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,darkuman_clipped,42979,5,0.05,0.00011633588496707694,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,pooled,149307,56,0.56,0.00037506613889502836,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,brighten,brightening: dVV > +3 dB,full_Odaw_AOI,2604559,202114,2021.14,0.07760008508158195,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,brighten,brightening: dVV > +3 dB,core,84258,7658,76.58,0.09088751216501698,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,brighten,brightening: dVV > +3 dB,kaneshie,22070,1677,16.77,0.07598550067965563,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,brighten,brightening: dVV > +3 dB,darkuman_clipped,42979,3635,36.35,0.08457618837106494,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,brighten,brightening: dVV > +3 dB,pooled,149307,12970,129.7,0.08686799681193783,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",full_Odaw_AOI,2604559,108043,1080.43,0.041482262448268595,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",core,84258,3967,39.67,0.047081582757720335,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",kaneshie,22070,945,9.450000000000001,0.042818305391934756,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",darkuman_clipped,42979,1543,15.43,0.03590125410083995,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",pooled,149307,6455,64.55,0.043233070117275146,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",full_Odaw_AOI,2604559,328951,3289.51,0.12629815642494566,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",core,84258,13073,130.73,0.15515440670322106,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",kaneshie,22070,2716,27.16,0.12306298142274581,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",darkuman_clipped,42979,5096,50.96,0.11856953395844483,,
+UNVALIDATED: no ground truth,headline,event,2020-06-03,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",pooled,149307,20885,208.85,0.1398795769789762,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),full_Odaw_AOI,2604559,633785,6337.85,0.2433367798540943,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),core,84258,17856,178.56,0.2119205298013245,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),kaneshie,22070,5399,53.99,0.2446307204349796,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),darkuman_clipped,42979,7853,78.53,0.18271714092929106,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),pooled,149307,31108,311.08,0.20834924015618825,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,full_Odaw_AOI,2604559,7769,77.69,0.002982846616260181,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,core,84258,138,1.3800000000000001,0.0016378266752118493,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,kaneshie,22070,61,0.61,0.0027639329406434075,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,darkuman_clipped,42979,76,0.76,0.0017683054514995695,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,pooled,149307,275,2.75,0.0018418426463595143,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,brighten,brightening: dVV > +3 dB,full_Odaw_AOI,2604559,50992,509.92,0.019577978460077118,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,brighten,brightening: dVV > +3 dB,core,84258,2899,28.990000000000002,0.0344062284886895,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,brighten,brightening: dVV > +3 dB,kaneshie,22070,502,5.0200000000000005,0.02274580879021296,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,brighten,brightening: dVV > +3 dB,darkuman_clipped,42979,1125,11.25,0.02617557411759231,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,brighten,brightening: dVV > +3 dB,pooled,149307,4526,45.26,0.03031338115426604,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",full_Odaw_AOI,2604559,412801,4128.01,0.15849170627349965,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",core,84258,8547,85.47,0.10143843907996866,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",kaneshie,22070,2621,26.21,0.11875849569551428,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",darkuman_clipped,42979,4034,40.34,0.09385979199143768,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",pooled,149307,15202,152.02,0.10181706149075395,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",full_Odaw_AOI,2604559,1102733,11027.33,0.4233856864060288,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",core,84258,33024,330.24,0.39193904436373994,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",kaneshie,22070,9817,98.17,0.4448119619392841,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",darkuman_clipped,42979,16780,167.8,0.39042322994951023,,
+UNVALIDATED: no ground truth,headline,control,2020-05-28,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",pooled,149307,59621,596.21,0.39931818334036584,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd,CD: dVV < -3 dB (assumed threshold),full_Odaw_AOI,2604559,199714,1997.14,0.07667862390523693,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd,CD: dVV < -3 dB (assumed threshold),core,84258,8003,80.03,0.09498207885304659,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd,CD: dVV < -3 dB (assumed threshold),kaneshie,22070,1633,16.330000000000002,0.07399184413230629,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd,CD: dVV < -3 dB (assumed threshold),darkuman_clipped,42979,3715,37.15,0.08643756253053816,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd,CD: dVV < -3 dB (assumed threshold),pooled,149307,13351,133.51,0.08941978607834863,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,full_Odaw_AOI,2604559,3407,34.07,0.001308090928253113,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,core,84258,98,0.98,0.0011630943055852263,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,kaneshie,22070,18,0.18,0.0008155867693701858,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,darkuman_clipped,42979,110,1.1,0.002559389469275693,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,pooled,149307,226,2.2600000000000002,0.0015136597748263644,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,brighten,brightening: dVV > +3 dB,full_Odaw_AOI,2604559,97078,970.78,0.0372723366988423,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,brighten,brightening: dVV > +3 dB,core,84258,2734,27.34,0.03244795746397968,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,brighten,brightening: dVV > +3 dB,kaneshie,22070,589,5.89,0.026687811508835525,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,brighten,brightening: dVV > +3 dB,darkuman_clipped,42979,920,9.200000000000001,0.021405802833942156,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,brighten,brightening: dVV > +3 dB,pooled,149307,4243,42.43,0.028417957630921524,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",full_Odaw_AOI,2604559,149425,1494.25,0.05737055678139754,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",core,84258,5482,54.82,0.06506207125732869,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",kaneshie,22070,1161,11.61,0.052605346624376985,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",darkuman_clipped,42979,2525,25.25,0.05874962190837386,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",pooled,149307,9168,91.68,0.06140368502481464,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",full_Odaw_AOI,2604559,559139,5591.39,0.21467703361682342,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",core,84258,23743,237.43,0.2817892663011227,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",kaneshie,22070,5148,51.480000000000004,0.23325781603987314,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",darkuman_clipped,42979,11144,111.44,0.2592894204146211,,
+UNVALIDATED: no ground truth,headline,recession,2020-06-09,2020-06-15,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",pooled,149307,40035,400.35,0.26813880126182965,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),full_Odaw_AOI,2604559,500420,5004.2,0.19213233411107217,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),core,84258,12566,125.66,0.1491371739182036,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),kaneshie,22070,3823,38.230000000000004,0.17322156773901223,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),darkuman_clipped,42979,4572,45.72,0.10637753321389516,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd,CD: dVV < -3 dB (assumed threshold),pooled,149307,20961,209.61,0.14038859531033374,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,full_Odaw_AOI,2604559,5217,52.17,0.0020030262320799796,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,core,84258,61,0.61,0.0007239668636806001,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,kaneshie,22070,21,0.21,0.0009515178975985501,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,darkuman_clipped,42979,11,0.11,0.0002559389469275693,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,pooled,149307,93,0.93,0.0006228776949506721,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,brighten,brightening: dVV > +3 dB,full_Odaw_AOI,2604559,66221,662.21,0.02542503356614306,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,brighten,brightening: dVV > +3 dB,core,84258,3859,38.59,0.045799805359728454,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,brighten,brightening: dVV > +3 dB,kaneshie,22070,547,5.47,0.024784775713638425,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,brighten,brightening: dVV > +3 dB,darkuman_clipped,42979,1550,15.5,0.036064124339793856,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,brighten,brightening: dVV > +3 dB,pooled,149307,5956,59.56,0.03989096291533552,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",full_Odaw_AOI,2604559,375879,3758.79,0.1443157939597452,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",core,84258,7240,72.4,0.08592655890241876,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",kaneshie,22070,2435,24.35,0.11033076574535569,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",darkuman_clipped,42979,3431,34.31,0.0798296842644082,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",pooled,149307,13106,131.06,0.08777887172068288,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",full_Odaw_AOI,2604559,961356,9613.56,0.3691050961026416,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",core,84258,27619,276.19,0.32779083291794253,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",kaneshie,22070,8226,82.26,0.3727231536021749,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",darkuman_clipped,42979,13025,130.25,0.30305498033923545,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,event,2020-05-28,2020-06-09,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",pooled,149307,48870,488.7,0.3273121822821435,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),full_Odaw_AOI,2604559,75813,758.13,0.029107806734268642,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),core,84258,3253,32.53,0.03860760995988512,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),kaneshie,22070,795,7.95,0.036021748980516535,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),darkuman_clipped,42979,1197,11.97,0.027850810861118222,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd,CD: dVV < -3 dB (assumed threshold),pooled,149307,5245,52.45,0.03512896247329328,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,full_Odaw_AOI,2604559,2434,24.34,0.0009345152096765709,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,core,84258,40,0.4,0.000474732369626623,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,kaneshie,22070,18,0.18,0.0008155867693701858,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,darkuman_clipped,42979,22,0.22,0.0005118778938551386,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,pooled,149307,80,0.8,0.0005358087698500405,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,brighten,brightening: dVV > +3 dB,full_Odaw_AOI,2604559,318089,3180.89,0.12212777671767082,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,brighten,brightening: dVV > +3 dB,core,84258,8507,85.07000000000001,0.10096370671034205,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,brighten,brightening: dVV > +3 dB,kaneshie,22070,2109,21.09,0.0955595831445401,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,brighten,brightening: dVV > +3 dB,darkuman_clipped,42979,3709,37.09,0.08629795946857768,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,brighten,brightening: dVV > +3 dB,pooled,149307,14325,143.25,0.09594325785127288,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",full_Odaw_AOI,2604559,77583,775.83,0.02978738435182309,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",core,84258,3402,34.02,0.04037598803674428,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",kaneshie,22070,931,9.31,0.042183960126869056,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",darkuman_clipped,42979,1274,12.74,0.029642383489611207,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",pooled,149307,5607,56.07,0.037553497156864714,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",full_Odaw_AOI,2604559,247093,2470.93,0.09486941935275799,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",core,84258,12609,126.09,0.14964751121555223,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",kaneshie,22070,2700,27.0,0.12233801540552787,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",darkuman_clipped,42979,5059,50.59,0.11770864840968845,,
+UNVALIDATED: no ground truth,same-satellite sensitivity,control,2020-05-22,2020-06-03,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",pooled,149307,20368,203.68,0.13641691280382032,,
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),full_Odaw_AOI,,,,,-5343.740000000001,-0.20516870610341328
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),core,,,,,-150.48,-0.17859431745353557
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),kaneshie,,,,,-47.88,-0.2169460806524694
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),darkuman_clipped,,,,,-69.21000000000001,-0.1610321319714279
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),pooled,,,,,-267.57,-0.17920794068596918
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,full_Odaw_AOI,,,,,-54.78,-0.0021032351350075006
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,core,,,,,-0.9600000000000002,-0.0011393576871038952
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,kaneshie,,,,,-0.52,-0.0023561395559583147
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,darkuman_clipped,,,,,-0.71,-0.0016519695665324925
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,pooled,,,,,-2.19,-0.001466776507464486
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,full_Odaw_AOI,,,,,1511.22,0.05802210662150483
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,core,,,,,47.589999999999996,0.05648128367632747
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,kaneshie,,,,,11.75,0.05323969188944268
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,darkuman_clipped,,,,,25.1,0.05840061425347263
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,pooled,,,,,84.44,0.05655461565767178
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",full_Odaw_AOI,,,,,-3047.58,-0.11700944382523105
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",core,,,,,-45.8,-0.05435685632224833
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",kaneshie,,,,,-16.759999999999998,-0.07594019030357951
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",darkuman_clipped,,,,,-24.910000000000004,-0.05795853789059773
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",pooled,,,,,-87.47000000000001,-0.058583991373478805
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",full_Odaw_AOI,,,,,-7737.82,-0.2970875299810831
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",core,,,,,-199.51000000000002,-0.23678463766051888
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",kaneshie,,,,,-71.01,-0.3217489805165383
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",darkuman_clipped,,,,,-116.84,-0.2718536959910654
+UNVALIDATED: no ground truth,headline,event_minus_control,2020-06-03 -> 2020-06-09 minus 2020-05-28 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",pooled,,,,,-387.36,-0.2594386063613896
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),full_Odaw_AOI,,,,,4246.07,0.16302452737680354
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),core,,,,,93.13,0.11052956395831849
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),kaneshie,,,,,30.280000000000005,0.13719981875849568
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),darkuman_clipped,,,,,33.75,0.07852672235277694
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd,CD: dVV < -3 dB (assumed threshold),pooled,,,,,157.16000000000003,0.10525963283704046
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,full_Odaw_AOI,,,,,27.830000000000002,0.0010685110224034086
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,core,,,,,0.20999999999999996,0.00024923449405397707
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,kaneshie,,,,,0.03,0.00013593112822836428
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,darkuman_clipped,,,,,-0.11,-0.0002559389469275693
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,cd_guarded,guarded CD: dVV < -3 dB and VV_event < -15 dB,pooled,,,,,0.13,8.706892510063156e-05
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,full_Odaw_AOI,,,,,-2518.68,-0.09670274315152776
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,core,,,,,-46.480000000000004,-0.055163901350613595
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,kaneshie,,,,,-15.620000000000001,-0.07077480743090168
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,darkuman_clipped,,,,,-21.590000000000003,-0.05023383512878383
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,brighten,brightening: dVV > +3 dB,pooled,,,,,-83.69,-0.05605229493593736
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",full_Odaw_AOI,,,,,2982.96,0.1145284096079221
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",core,,,,,38.38,0.04555057086567448
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",kaneshie,,,,,15.040000000000001,0.06814680561848663
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",darkuman_clipped,,,,,21.57,0.050187300774796995
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vh,"UN-SPIDER ratio 1.25 sensitivity, VH (ratio rule only)",pooled,,,,,74.99000000000001,0.05022537456381817
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",full_Odaw_AOI,,,,,7142.629999999999,0.2742356767498836
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",core,,,,,150.1,0.1781433217023903
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",kaneshie,,,,,55.260000000000005,0.25038513819664704
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",darkuman_clipped,,,,,79.66,0.185346331929547
+UNVALIDATED: no ground truth,same-satellite sensitivity,event_minus_control,2020-05-28 -> 2020-06-09 minus 2020-05-22 -> 2020-06-03,,unspider_vv,"UN-SPIDER ratio 1.25 sensitivity, VV (ratio rule only)",pooled,,,,,285.02,0.19089526947832317

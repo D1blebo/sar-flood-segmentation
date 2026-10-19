@@ -1,0 +1,502 @@
+{
+ "headline|event|cd|full_Odaw_AOI": [
+  994.11,
+  0.038168073750681014
+ ],
+ "headline|event|cd|core": [
+  28.080000000000002,
+  0.03332621234778894
+ ],
+ "headline|event|cd|kaneshie": [
+  6.11,
+  0.027684639782510196
+ ],
+ "headline|event|cd|darkuman_clipped": [
+  9.32,
+  0.02168500895786314
+ ],
+ "headline|event|cd|pooled": [
+  43.51,
+  0.029141299470219078
+ ],
+ "headline|event|cd_guarded|full_Odaw_AOI": [
+  22.91,
+  0.0008796114812526804
+ ],
+ "headline|event|cd_guarded|core": [
+  0.42,
+  0.0004984689881079541
+ ],
+ "headline|event|cd_guarded|kaneshie": [
+  0.09,
+  0.0004077933846850929
+ ],
+ "headline|event|cd_guarded|darkuman_clipped": [
+  0.05,
+  0.00011633588496707694
+ ],
+ "headline|event|cd_guarded|pooled": [
+  0.56,
+  0.00037506613889502836
+ ],
+ "headline|event|brighten|full_Odaw_AOI": [
+  2021.14,
+  0.07760008508158195
+ ],
+ "headline|event|brighten|core": [
+  76.58,
+  0.09088751216501698
+ ],
+ "headline|event|brighten|kaneshie": [
+  16.77,
+  0.07598550067965563
+ ],
+ "headline|event|brighten|darkuman_clipped": [
+  36.35,
+  0.08457618837106494
+ ],
+ "headline|event|brighten|pooled": [
+  129.7,
+  0.08686799681193783
+ ],
+ "headline|event|unspider_vh|full_Odaw_AOI": [
+  1080.43,
+  0.041482262448268595
+ ],
+ "headline|event|unspider_vh|core": [
+  39.67,
+  0.047081582757720335
+ ],
+ "headline|event|unspider_vh|kaneshie": [
+  9.450000000000001,
+  0.042818305391934756
+ ],
+ "headline|event|unspider_vh|darkuman_clipped": [
+  15.43,
+  0.03590125410083995
+ ],
+ "headline|event|unspider_vh|pooled": [
+  64.55,
+  0.043233070117275146
+ ],
+ "headline|event|unspider_vv|full_Odaw_AOI": [
+  3289.51,
+  0.12629815642494566
+ ],
+ "headline|event|unspider_vv|core": [
+  130.73,
+  0.15515440670322106
+ ],
+ "headline|event|unspider_vv|kaneshie": [
+  27.16,
+  0.12306298142274581
+ ],
+ "headline|event|unspider_vv|darkuman_clipped": [
+  50.96,
+  0.11856953395844483
+ ],
+ "headline|event|unspider_vv|pooled": [
+  208.85,
+  0.1398795769789762
+ ],
+ "headline|control|cd|full_Odaw_AOI": [
+  6337.85,
+  0.2433367798540943
+ ],
+ "headline|control|cd|core": [
+  178.56,
+  0.2119205298013245
+ ],
+ "headline|control|cd|kaneshie": [
+  53.99,
+  0.2446307204349796
+ ],
+ "headline|control|cd|darkuman_clipped": [
+  78.53,
+  0.18271714092929106
+ ],
+ "headline|control|cd|pooled": [
+  311.08,
+  0.20834924015618825
+ ],
+ "headline|control|cd_guarded|full_Odaw_AOI": [
+  77.69,
+  0.002982846616260181
+ ],
+ "headline|control|cd_guarded|core": [
+  1.3800000000000001,
+  0.0016378266752118493
+ ],
+ "headline|control|cd_guarded|kaneshie": [
+  0.61,
+  0.0027639329406434075
+ ],
+ "headline|control|cd_guarded|darkuman_clipped": [
+  0.76,
+  0.0017683054514995695
+ ],
+ "headline|control|cd_guarded|pooled": [
+  2.75,
+  0.0018418426463595143
+ ],
+ "headline|control|brighten|full_Odaw_AOI": [
+  509.92,
+  0.019577978460077118
+ ],
+ "headline|control|brighten|core": [
+  28.990000000000002,
+  0.0344062284886895
+ ],
+ "headline|control|brighten|kaneshie": [
+  5.0200000000000005,
+  0.02274580879021296
+ ],
+ "headline|control|brighten|darkuman_clipped": [
+  11.25,
+  0.02617557411759231
+ ],
+ "headline|control|brighten|pooled": [
+  45.26,
+  0.03031338115426604
+ ],
+ "headline|control|unspider_vh|full_Odaw_AOI": [
+  4128.01,
+  0.15849170627349965
+ ],
+ "headline|control|unspider_vh|core": [
+  85.47,
+  0.10143843907996866
+ ],
+ "headline|control|unspider_vh|kaneshie": [
+  26.21,
+  0.11875849569551428
+ ],
+ "headline|control|unspider_vh|darkuman_clipped": [
+  40.34,
+  0.09385979199143768
+ ],
+ "headline|control|unspider_vh|pooled": [
+  152.02,
+  0.10181706149075395
+ ],
+ "headline|control|unspider_vv|full_Odaw_AOI": [
+  11027.33,
+  0.4233856864060288
+ ],
+ "headline|control|unspider_vv|core": [
+  330.24,
+  0.39193904436373994
+ ],
+ "headline|control|unspider_vv|kaneshie": [
+  98.17,
+  0.4448119619392841
+ ],
+ "headline|control|unspider_vv|darkuman_clipped": [
+  167.8,
+  0.39042322994951023
+ ],
+ "headline|control|unspider_vv|pooled": [
+  596.21,
+  0.39931818334036584
+ ],
+ "headline|recession|cd|full_Odaw_AOI": [
+  1997.14,
+  0.07667862390523693
+ ],
+ "headline|recession|cd|core": [
+  80.03,
+  0.09498207885304659
+ ],
+ "headline|recession|cd|kaneshie": [
+  16.330000000000002,
+  0.07399184413230629
+ ],
+ "headline|recession|cd|darkuman_clipped": [
+  37.15,
+  0.08643756253053816
+ ],
+ "headline|recession|cd|pooled": [
+  133.51,
+  0.08941978607834863
+ ],
+ "headline|recession|cd_guarded|full_Odaw_AOI": [
+  34.07,
+  0.001308090928253113
+ ],
+ "headline|recession|cd_guarded|core": [
+  0.98,
+  0.0011630943055852263
+ ],
+ "headline|recession|cd_guarded|kaneshie": [
+  0.18,
+  0.0008155867693701858
+ ],
+ "headline|recession|cd_guarded|darkuman_clipped": [
+  1.1,
+  0.002559389469275693
+ ],
+ "headline|recession|cd_guarded|pooled": [
+  2.2600000000000002,
+  0.0015136597748263644
+ ],
+ "headline|recession|brighten|full_Odaw_AOI": [
+  970.78,
+  0.0372723366988423
+ ],
+ "headline|recession|brighten|core": [
+  27.34,
+  0.03244795746397968
+ ],
+ "headline|recession|brighten|kaneshie": [
+  5.89,
+  0.026687811508835525
+ ],
+ "headline|recession|brighten|darkuman_clipped": [
+  9.200000000000001,
+  0.021405802833942156
+ ],
+ "headline|recession|brighten|pooled": [
+  42.43,
+  0.028417957630921524
+ ],
+ "headline|recession|unspider_vh|full_Odaw_AOI": [
+  1494.25,
+  0.05737055678139754
+ ],
+ "headline|recession|unspider_vh|core": [
+  54.82,
+  0.06506207125732869
+ ],
+ "headline|recession|unspider_vh|kaneshie": [
+  11.61,
+  0.052605346624376985
+ ],
+ "headline|recession|unspider_vh|darkuman_clipped": [
+  25.25,
+  0.05874962190837386
+ ],
+ "headline|recession|unspider_vh|pooled": [
+  91.68,
+  0.06140368502481464
+ ],
+ "headline|recession|unspider_vv|full_Odaw_AOI": [
+  5591.39,
+  0.21467703361682342
+ ],
+ "headline|recession|unspider_vv|core": [
+  237.43,
+  0.2817892663011227
+ ],
+ "headline|recession|unspider_vv|kaneshie": [
+  51.480000000000004,
+  0.23325781603987314
+ ],
+ "headline|recession|unspider_vv|darkuman_clipped": [
+  111.44,
+  0.2592894204146211
+ ],
+ "headline|recession|unspider_vv|pooled": [
+  400.35,
+  0.26813880126182965
+ ],
+ "same-satellite sensitivity|event|cd|full_Odaw_AOI": [
+  5004.2,
+  0.19213233411107217
+ ],
+ "same-satellite sensitivity|event|cd|core": [
+  125.66,
+  0.1491371739182036
+ ],
+ "same-satellite sensitivity|event|cd|kaneshie": [
+  38.230000000000004,
+  0.17322156773901223
+ ],
+ "same-satellite sensitivity|event|cd|darkuman_clipped": [
+  45.72,
+  0.10637753321389516
+ ],
+ "same-satellite sensitivity|event|cd|pooled": [
+  209.61,
+  0.14038859531033374
+ ],
+ "same-satellite sensitivity|event|cd_guarded|full_Odaw_AOI": [
+  52.17,
+  0.0020030262320799796
+ ],
+ "same-satellite sensitivity|event|cd_guarded|core": [
+  0.61,
+  0.0007239668636806001
+ ],
+ "same-satellite sensitivity|event|cd_guarded|kaneshie": [
+  0.21,
+  0.0009515178975985501
+ ],
+ "same-satellite sensitivity|event|cd_guarded|darkuman_clipped": [
+  0.11,
+  0.0002559389469275693
+ ],
+ "same-satellite sensitivity|event|cd_guarded|pooled": [
+  0.93,
+  0.0006228776949506721
+ ],
+ "same-satellite sensitivity|event|brighten|full_Odaw_AOI": [
+  662.21,
+  0.02542503356614306
+ ],
+ "same-satellite sensitivity|event|brighten|core": [
+  38.59,
+  0.045799805359728454
+ ],
+ "same-satellite sensitivity|event|brighten|kaneshie": [
+  5.47,
+  0.024784775713638425
+ ],
+ "same-satellite sensitivity|event|brighten|darkuman_clipped": [
+  15.5,
+  0.036064124339793856
+ ],
+ "same-satellite sensitivity|event|brighten|pooled": [
+  59.56,
+  0.03989096291533552
+ ],
+ "same-satellite sensitivity|event|unspider_vh|full_Odaw_AOI": [
+  3758.79,
+  0.1443157939597452
+ ],
+ "same-satellite sensitivity|event|unspider_vh|core": [
+  72.4,
+  0.08592655890241876
+ ],
+ "same-satellite sensitivity|event|unspider_vh|kaneshie": [
+  24.35,
+  0.11033076574535569
+ ],
+ "same-satellite sensitivity|event|unspider_vh|darkuman_clipped": [
+  34.31,
+  0.0798296842644082
+ ],
+ "same-satellite sensitivity|event|unspider_vh|pooled": [
+  131.06,
+  0.08777887172068288
+ ],
+ "same-satellite sensitivity|event|unspider_vv|full_Odaw_AOI": [
+  9613.56,
+  0.3691050961026416
+ ],
+ "same-satellite sensitivity|event|unspider_vv|core": [
+  276.19,
+  0.32779083291794253
+ ],
+ "same-satellite sensitivity|event|unspider_vv|kaneshie": [
+  82.26,
+  0.3727231536021749
+ ],
+ "same-satellite sensitivity|event|unspider_vv|darkuman_clipped": [
+  130.25,
+  0.30305498033923545
+ ],
+ "same-satellite sensitivity|event|unspider_vv|pooled": [
+  488.7,
+  0.3273121822821435
+ ],
+ "same-satellite sensitivity|control|cd|full_Odaw_AOI": [
+  758.13,
+  0.029107806734268642
+ ],
+ "same-satellite sensitivity|control|cd|core": [
+  32.53,
+  0.03860760995988512
+ ],
+ "same-satellite sensitivity|control|cd|kaneshie": [
+  7.95,
+  0.036021748980516535
+ ],
+ "same-satellite sensitivity|control|cd|darkuman_clipped": [
+  11.97,
+  0.027850810861118222
+ ],
+ "same-satellite sensitivity|control|cd|pooled": [
+  52.45,
+  0.03512896247329328
+ ],
+ "same-satellite sensitivity|control|cd_guarded|full_Odaw_AOI": [
+  24.34,
+  0.0009345152096765709
+ ],
+ "same-satellite sensitivity|control|cd_guarded|core": [
+  0.4,
+  0.000474732369626623
+ ],
+ "same-satellite sensitivity|control|cd_guarded|kaneshie": [
+  0.18,
+  0.0008155867693701858
+ ],
+ "same-satellite sensitivity|control|cd_guarded|darkuman_clipped": [
+  0.22,
+  0.0005118778938551386
+ ],
+ "same-satellite sensitivity|control|cd_guarded|pooled": [
+  0.8,
+  0.0005358087698500405
+ ],
+ "same-satellite sensitivity|control|brighten|full_Odaw_AOI": [
+  3180.89,
+  0.12212777671767082
+ ],
+ "same-satellite sensitivity|control|brighten|core": [
+  85.07000000000001,
+  0.10096370671034205
+ ],
+ "same-satellite sensitivity|control|brighten|kaneshie": [
+  21.09,
+  0.0955595831445401
+ ],
+ "same-satellite sensitivity|control|brighten|darkuman_clipped": [
+  37.09,
+  0.08629795946857768
+ ],
+ "same-satellite sensitivity|control|brighten|pooled": [
+  143.25,
+  0.09594325785127288
+ ],
+ "same-satellite sensitivity|control|unspider_vh|full_Odaw_AOI": [
+  775.83,
+  0.02978738435182309
+ ],
+ "same-satellite sensitivity|control|unspider_vh|core": [
+  34.02,
+  0.04037598803674428
+ ],
+ "same-satellite sensitivity|control|unspider_vh|kaneshie": [
+  9.31,
+  0.042183960126869056
+ ],
+ "same-satellite sensitivity|control|unspider_vh|darkuman_clipped": [
+  12.74,
+  0.029642383489611207
+ ],
+ "same-satellite sensitivity|control|unspider_vh|pooled": [
+  56.07,
+  0.037553497156864714
+ ],
+ "same-satellite sensitivity|control|unspider_vv|full_Odaw_AOI": [
+  2470.93,
+  0.09486941935275799
+ ],
+ "same-satellite sensitivity|control|unspider_vv|core": [
+  126.09,
+  0.14964751121555223
+ ],
+ "same-satellite sensitivity|control|unspider_vv|kaneshie": [
+  27.0,
+  0.12233801540552787
+ ],
+ "same-satellite sensitivity|control|unspider_vv|darkuman_clipped": [
+  50.59,
+  0.11770864840968845
+ ],
+ "same-satellite sensitivity|control|unspider_vv|pooled": [
+  203.68,
+  0.13641691280382032
+ ]
+}

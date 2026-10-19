@@ -1,0 +1,25 @@
+{
+ "label": "POST-HOC DIAGNOSTIC, NOT PRE-DECLARED, UNVALIDATED",
+ "full_AOI_domain": {
+  "headline|event|2020-06-03->2020-06-09": {
+   "median_dVV_dB": 0.34642505645751953,
+   "mean_dVV_dB": 0.35458114743232727
+  },
+  "headline|control|2020-05-28->2020-06-03": {
+   "median_dVV_dB": -1.4644012451171875,
+   "mean_dVV_dB": -1.5618479251861572
+  },
+  "headline|recession|2020-06-09->2020-06-15": {
+   "median_dVV_dB": -0.3383827209472656,
+   "mean_dVV_dB": -0.3527117073535919
+  },
+  "same-satellite sensitivity|event|2020-05-28->2020-06-09": {
+   "median_dVV_dB": -1.0962259769439697,
+   "mean_dVV_dB": -1.2072666883468628
+  },
+  "same-satellite sensitivity|control|2020-05-22->2020-06-03": {
+   "median_dVV_dB": 0.6908302307128906,
+   "mean_dVV_dB": 0.7288914918899536
+  }
+ }
+}
