@@ -30,3 +30,8 @@ f1eef4eff2ad460c1b260736a9aaf760248a13b4930d4e87e8d0a44a479fb475  results/frozen
 3d43e18fa574a7b68dbd5580e419e9a0c360f3acaea413e03ca8f7938bf17a22  results/frozen/sensitivity/loeo_Sri-Lanka.yaml
 946b016a3b9452e7d352c7f9295b510c9a4c36706bc851ca7bc26d7d420acda1  results/frozen/sensitivity/loeo_USA.yaml
 8b8fa0a86c9db6aae745945ed1c9b971378de8a8b92340e19be036e748791066  results/frozen/sensitivity/official_valid.yaml
+
+Revision R2 (A19-R2), written before any Amendment 19 check was run:
+r2_commit: 806fcf1696982fdb364a9b83cad8a114f59c12b2
+evaluation_protocol.md sha256 at that commit: eba507f4a406b7734334e528f46a43c7156d72e4aaf6a745e583ae566f35cb9e
+(supersedes the sha256 line above; the d2b2985 line records the original Amendment 19 text)
