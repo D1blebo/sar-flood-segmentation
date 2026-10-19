@@ -1,0 +1,2 @@
+label,scene_id,start_utc,platform,mode,polarisations,pass,relative_orbit,hours_after_9jun_1818_pass,aoi_fraction_in_footprint,note
+"POST-HOC, UNVALIDATED",S1A_IW_GRDH_1SDV_20200609T181805_20200609T181834_032944_03D0DF_47E9,2020-06-09T18:18:05+00:00,A,IW,VV+VH,ASCENDING,147,0.0,1,the 9 June orbit-147 pass used in the study
