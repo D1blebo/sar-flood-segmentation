@@ -2096,6 +2096,54 @@ Tags: **[M]** measured by a query or code run; **[A]** assumed or a rule chosen 
 `scripts/17_accra_POSTHOC_dfo_and_kotoka.py`; `results/accra_POSTHOC_dfo_candidate_overlap.csv`; `results/accra_POSTHOC_kotoka_rainfall.csv`; a short summary
 `results/accra_POSTHOC_dfo_kotoka_summary.md`. Every output is labelled `POST-HOC, UNVALIDATED`. Commit hash and protocol SHA-256 are appended to `results/accra_followup_registration.txt`. After the summary I stop.
 
+**A21 results (recorded 2026-10-20 after the run; measured; summary `results/accra_POSTHOC_dfo_kotoka_summary.md`, commit `51799c8`).** DFO: six ranked candidates overlap a Ghana row (2018-06-18, 2018-06-28, 2019-10-28, 2023-03-07,
+2023-10 UNOSAT window, 2015-06-03); the selected 2020-06-09 event and 2020-10-10 have none; 2025-05-18 and 2026-06-29 are beyond the table's range (ends 2024-03-07); no verdict changed. Kotoka: station ISD 654720-99999; GSOD has all 15 rows for
+1-15 June 2020, but **8 June has PRCP 0.00 with flag I**, so the A21.2 stop rule fired and neither the ISD pull nor the IMERG comparison was run.
+
+## Amendment 22 (2026-10-20, **POST-HOC**, Kotoka ISD precipitation reports 7 to 11 June 2020; the owner's option (b) with changes; written BEFORE the pull; no imagery, no method)
+
+Tags: **[M]** measured; **[A]** rule or assumption; **[E]** estimate or reasoning. POST-HOC and descriptive only: chosen after A21's stop rule fired on 8 June (GSOD flag I). No rule is changed. Nothing here is validation.
+
+### A22.1 What is pulled
+
+- NOAA ISD for **654720-99999 (KOTOKA INTL)**, year 2020, NCEI's documented layouts, one attempt each: first `https://www.ncei.noaa.gov/data/global-hourly/access/2020/65472099999.csv`; if that fails, the same ISD data in
+  `https://www.ncei.noaa.gov/pub/data/noaa/2020/654720-99999-2020.gz`. The file used is stated in the output. Observation times are UTC as ISD gives them.
+- Window: observation times **2020-06-07 00:00:00 to 2020-06-11 23:59:59 UTC**. Every record in it is kept, whatever the report type (synoptic, hourly METAR and so on).
+- **Precipitation groups reported:** every non-empty group among `AA1`-`AA4` (liquid-precipitation accumulation: period in hours, depth, condition code, quality code), `AO1`-`AO4` (the sub-hourly version, period in minutes),
+  `AP1`-`AP4`, `AH1`-`AH6`, `AI1`-`AI6`. **Each group is given exactly as it appears (the raw string)**, with its observation time, report type and source flag. Decoding is limited to the unit conversion for `AA`: period in hours and
+  depth = the stored value / 10 in mm; `9999` is shown as missing; `AO`, `AP`, `AH`, `AI` are given raw and not decoded unless the same simple layout applies and is read from NOAA's ISD format document at run time. **Quality and condition codes are
+  shown verbatim**; their meanings are quoted from NOAA's ISD format document only if I can retrieve and read it at run time, otherwise left as codes with "meaning not read".
+- **No merging, no inference, no infilling.** No amount is added to another, split, or apportioned in the table.
+
+### A22.2 Which observation each GSOD daily total corresponds to
+
+For 8, 9, 10 and 11 June, the GSOD `PRCP` (A21.2 file) is matched to ISD reports by this rule fixed now: among `AA` groups whose observation time falls on that UTC date, those whose depth in inches (mm / 25.4, rounded to 0.01)
+equals the GSOD value; **only if exactly one `AA` group matches** is it named as the source, with its observation time and its accumulation window `[observation time - period, observation time]` UTC. If none or more than one matches, or GSOD flags the day `I`
+(no precipitation data), I say "not determinable" and name whatever `AA` groups exist that day, without guessing. The GSOD flag and NOAA's definition are quoted beside it.
+
+### A22.3 The table, with three markers
+
+One table in time order of all reports in the window, with marker rows inserted at their times: **(1)** the reported storm window **2020-06-08 22:00 to 2020-06-09 06:00 UTC** (A12.1), **(2)** the Sentinel-1 pass **2020-06-09 18:18:05 UTC**,
+**(3)** the IMERG heaviest rain **2020-06-10 15:30 to 18:00 UTC** (A19-R4). A report is also tagged with whether its accumulation window overlaps each marker.
+
+### A22.4 The only interpretation allowed: rain at the gauge before the pass, between the pass and 10 June 12:00, and after 10 June 12:00
+
+Segments: **(i) before the pass:** 2020-06-07 00:00 to 2020-06-09 18:18:05; **(ii) pass to 10 June 12:00:** 2020-06-09 18:18:05 to 2020-06-10 12:00; **(iii) after 10 June 12:00:** 2020-06-10 12:00 to 2020-06-12 00:00 (end of the pulled period). Because
+the reports are accumulations over their own windows and I may not split them:
+- a segment's amount is stated **only** from reports whose whole accumulation window lies inside the segment, taking the shortest-period `AA` groups available, provided those windows are **contiguous and non-overlapping across the whole segment**; then the amount is their sum **as given** (a sum of reported
+  values, not an inference about unreported time);
+- a report whose window **straddles** a segment boundary (the pass at 18:18:05, or 10 June 12:00) is **shown separately as straddling** and counted in neither neighbouring segment;
+- if the windows do not tile a segment (gaps, missing groups, overlapping periods that cannot be separated), that segment is reported as **"not determinable from the reports as given"**, with the gaps listed, and not filled.
+No other statement about the gauge is made: no comparison with IMERG or with the reports of flooding, no statement about the 8-9 June storm beyond which reports overlap its window.
+
+### A22.5 Stop rule
+
+If the ISD file cannot be retrieved, or has **no record at all** in 2020-06-07 to 2020-06-11, or has **no precipitation group** of the types listed in A22.1 anywhere in the window, I say "hourly or synoptic records are missing" and **stop** without a table. Partial gaps are reported, not a stop.
+
+### A22.6 Outputs
+
+`scripts/18_accra_POSTHOC_kotoka_isd.py`; `results/accra_POSTHOC_kotoka_isd_7_11_june.csv`; summary `results/accra_POSTHOC_kotoka_isd_summary.md`. Every output labelled `POST-HOC, UNVALIDATED`. Commit hash and protocol SHA-256 appended to `results/accra_followup_registration.txt`. After the summary I stop.
+
 ---
 `configs/config.yaml` sha256 history:
 
