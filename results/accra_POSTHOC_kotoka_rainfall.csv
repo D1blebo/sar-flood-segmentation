@@ -1,0 +1,16 @@
+label,date_gmt_day,gsod_prcp_inches,gsod_prcp_mm,gsod_flag,flag_meaning_per_noaa_readme,frshtt,tag,status
+"POST-HOC, UNVALIDATED",2020-06-01,0.00,0.0,G,1 report of 24-hour precipitation amount,000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-02,0.59,14.99,E,1 report of 12-hour precipitation amount,010010,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-03,0.00,0.0,I,station did not report any precipitation data for the day and did not report any occurrences of precipitation in its hourly observations; still possible that precipitation occurred but was not reported (NOAA GSOD readme),000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-04,0.00,0.0,I,station did not report any precipitation data for the day and did not report any occurrences of precipitation in its hourly observations; still possible that precipitation occurred but was not reported (NOAA GSOD readme),000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-05,0.00,0.0,I,station did not report any precipitation data for the day and did not report any occurrences of precipitation in its hourly observations; still possible that precipitation occurred but was not reported (NOAA GSOD readme),000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-06,0.00,0.0,I,station did not report any precipitation data for the day and did not report any occurrences of precipitation in its hourly observations; still possible that precipitation occurred but was not reported (NOAA GSOD readme),000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-07,0.00,0.0,G,1 report of 24-hour precipitation amount,010000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-08,0.00,0.0,I,station did not report any precipitation data for the day and did not report any occurrences of precipitation in its hourly observations; still possible that precipitation occurred but was not reported (NOAA GSOD readme),000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-09,1.02,25.91,G,1 report of 24-hour precipitation amount,010010,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-10,0.04,1.02,G,1 report of 24-hour precipitation amount,010010,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-11,0.63,16.0,G,1 report of 24-hour precipitation amount,000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-12,0.00,0.0,G,1 report of 24-hour precipitation amount,010010,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-13,1.26,32.0,G,1 report of 24-hour precipitation amount,010000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-14,0.79,20.07,G,1 report of 24-hour precipitation amount,000000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I
+"POST-HOC, UNVALIDATED",2020-06-15,0.00,0.0,G,1 report of 24-hour precipitation amount,010000,[M],STOPPED per A21.2: 2020-06-08: PRCP 0.00 flag I

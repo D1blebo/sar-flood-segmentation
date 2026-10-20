@@ -1,0 +1,16 @@
+label,candidate,window_start,window_end,match_kind,status,dfo_﹟,dfo_Glide ﹟,dfo_Start Date,dfo_End Date,dfo_Country,dfo_Area (km²),dfo_Source,dfo_Main Cause,dfo_Fatalities,dfo_Displaced,dfo_Severity,dfo_Flood impact index
+"POST-HOC, UNVALIDATED",2020-06-09 (selected; reported peak window 8-9 Jun),2020-06-08,2020-06-09,none,no overlapping Ghana row,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2025-05-18,2025-05-18,2025-05-18,none,beyond the table's range,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2018-06-18,2018-06-18,2018-06-18,primary overlap,OVERLAP,4631,,2018-06-18,2018-06-19,Ghana • Côte d’Ivoire,"58,480",FloodList,Torrential rain,21,115,1.0,5.1
+"POST-HOC, UNVALIDATED",2019-04-14,2019-04-14,2019-04-14,none,no overlapping Ghana row,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2023-10 UNOSAT FL20231018GHA (onset window 11-14 Oct),2023-10-11,2023-10-14,primary overlap,OVERLAP,5476,FL-2023-000215-GHA,2023-09-15,2023-10-24,Ghana,"5,412",News,Dam/Levy break or release,0,"26,000",1.0,5.3
+"POST-HOC, UNVALIDATED",2019-04-07,2019-04-07,2019-04-07,none,no overlapping Ghana row,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2019-10-28,2019-10-28,2019-10-28,primary overlap,OVERLAP,4819,,2019-10-25,2019-10-30,Ghana,"7,286",FloodList,Heavy rain,0,0,1.0,4.6
+"POST-HOC, UNVALIDATED",2019-10-10,2019-10-10,2019-10-10,none,no overlapping Ghana row,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2020-10-10,2020-10-10,2020-10-10,none,no overlapping Ghana row,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2018-06-28,2018-06-28,2018-06-28,primary overlap,OVERLAP,4638,,2018-06-28,2018-07-02,Ghana,"23,281",FloodList,Heavy rain,5,500,1.5,5.2
+"POST-HOC, UNVALIDATED",2019-05-30,2019-05-30,2019-05-30,none,no overlapping Ghana row,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2026-06-29,2026-06-29,2026-06-29,none,beyond the table's range,,,,,,,,,,,,
+"POST-HOC, UNVALIDATED",2023-03-07,2023-03-07,2023-03-07,primary overlap,OVERLAP,5380,,2023-03-07,2023-03-07,Ghana,"4,067",FloodList,Heavy rain,3,0,1.0,3.6
+"POST-HOC, UNVALIDATED",2016-06-09,2016-06-09,2016-06-09,sensitivity +/-3 d only,no overlapping Ghana row,4361,,2016-06-12,2016-06-21,Ghana,"74,506",News,Heavy rain,5,0,1.0,5.9
+"POST-HOC, UNVALIDATED",2015-06-03,2015-06-03,2015-06-03,primary overlap,OVERLAP,4260,FL-2015-000065-GHA,2015-06-02,2015-06-15,Ghana • Togo,"266,950",News,Torrential rain,150,"5,300",1.5,6.7
