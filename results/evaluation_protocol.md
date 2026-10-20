@@ -1956,6 +1956,73 @@ support or contradict any 9 June statement; they are reported only because A19.7
 on 9 June VV or dVV) is a descriptive screen and not validation; not standing out is not evidence of no flooding, since the pass is later than the
 reported storm and the buffers are 50-100 m against ~10 m pixels and speckle.
 
+## Amendment 20 (2026-10-20, Stage 4/Accra, screening of one more candidate, "10 October 2020"; written BEFORE anything is queried; no imagery pulled, no method run)
+
+Tags used in every output of this amendment: **[M]** measured by a query or code run; **[A]** assumed or a rule chosen by the owner or me;
+**[E]** estimate or reasoning. This is a screening step only. It selects nothing and changes no frozen configuration.
+
+### A20.1 Why
+
+A14.1 screened "10 October **2019**" at the date the owner supplied, but the FloodList article it traced the quote to
+(`floodlist.com/africa/ghana-flash-floods-cause-traffic-chaos-in-accra`, "early on 10 October") is dated **2020**. The 2020 date has never been
+screened. To my knowledge from this session and from the protocol, no Sentinel-1 or Sentinel-2 acquisition list for October 2020 has been looked at
+before this amendment.
+
+### A20.2 Rule: A10.2, unchanged and not relaxed
+
+A candidate is accepted only if **both** hold:
+- **(a)** at least one Sentinel-1 IW GRD acquisition over the Odaw AOI **within 24 h after** the reported peak, on **any** orbit (same-orbit
+  baselines are not part of screening). Fixed reading: PASS if some scene's start time `t` satisfies `peak < t <= peak + 24 h`.
+- **(b)** an independent reference: a Copernicus EMS Rapid Mapping activation or a UNOSAT map, OR a Dartmouth Flood Observatory record, OR a
+  Sentinel-2 scene within 3 days whose **AOI-clipped** cloud fraction is below 20%, as in A11.2: `COPERNICUS/S2_SR_HARMONIZED`, band `SCL`,
+  classes 3, 8, 9, 10, `ee.Reducer.mean()` over the Odaw AOI polygon at 20 m, never the tile-wide `CLOUDY_PIXEL_PERCENTAGE`. Fixed reading of "within 3 days":
+  scene time within +/- 3 days (72 h) of the assumed peak, both sides, with the offset reported for every scene. As in A12.2/A14.3, the cloud criterion
+  is only a **necessary** condition: no imagery is pulled, so the "visible surface water consistent with flooding" visual check is **not** done.
+
+### A20.3 Assumed peak time and the verdict convention
+
+- **Assumed peak: 2020-10-10T06:00 UTC [A]** ("early on 10 October"; the same convention A14.2 used for 2019-10-10). Ghana is UTC+0, so local time equals UTC.
+  It is used **only if** the article gives no clock time. The article is read directly and any sentence giving the date or time of the rain or flooding is quoted,
+  with its own publication date and year. If a **second named source with a clock time** is found, it is quoted too; **I do not choose between sources**: rule (a)
+  is reported for each peak.
+- **Bounding window:** rule (a) is also reported for the peak at each end of 2020-10-10T00:00 and 2020-10-10T12:00 UTC.
+- **Verdict convention, fixed now:** the headline PASS or FAIL for rule (a) is the one at the **assumed peak (06:00 UTC)**. Verdicts at the window ends and at
+  any quoted clock time are shown beside it; if any disagree with the headline, that is stated plainly and the headline is **not** re-chosen.
+
+### A20.4 Step 2: Sentinel-1 query (catalogue only)
+
+`COPERNICUS/S1_GRD`, `instrumentMode = IW`, footprint intersecting the Odaw AOI (`aoi_geometry()` of `scripts/06_accra_run.py`), scene start from
+2020-10-07 00:00 to 2020-10-15 23:59:59 UTC, **all relative orbits, ascending and descending**, no polarisation filter (polarisations are reported).
+Per scene: scene ID, UTC time, satellite, pass direction, relative orbit, fraction of the AOI area inside the footprint (footprint, not valid pixels; as A19-R4.2), and
+hours from the assumed peak and from the 00:00 and 12:00 ends of the window. Earth Engine's catalogue only: a scene missing there is not shown to be missing from the archive.
+
+### A20.5 Step 3: rule (b), only as far as A11.2, A12.2 and A14.3 went
+
+- **Sentinel-2:** `S2_SR_HARMONIZED` scenes within +/- 3 days of the assumed peak, each with its AOI-clipped SCL cloud fraction (classes 3, 8, 9, 10) as in A20.2; threshold 20%.
+- **Copernicus EMS Rapid Mapping:** one attempt at the API endpoint already used in A11.4, no URL guessing. Label **"checked, out of range"** only if it answers and its earliest record
+  is after the candidate; otherwise **"not checked"**.
+- **EMS Risk and Recovery Mapping:** **not checked** (no working endpoint found, A12.2; not retried).
+- **DFO:** live site one connection attempt, **"not checked"** if it fails; the HDX-hosted mirror (`data.humdata.org` CKAN `package_show`) one query, **"checked, out of range"** if
+  its own metadata coverage ends before 2020.
+- **UNOSAT:** not re-queried in this step. Prior result, not re-run: A17.6 and A18 found no usable Ghana flood-extent product on HDX or UNOSAT for Accra other than the rejected 2023 product.
+- **No archive that does not reach 2020 is ever reported as "no event".**
+
+### A20.6 Step 4: decision rule, fixed before Step 2
+
+- **FAILS rule (a):** record 2020-10-10 as the **15th candidate** in the A14.4-style ranking and **stop**.
+- **PASSES rule (a) AND rule (b) (A10.2 needs both):** record it as a **second qualifying candidate** and **stop**.
+- **PASSES (a) but not (b):** record "passes (a), fails (b): not qualifying" and **stop**. (This case is not spelled out in the owner's wording; it follows from A10.2, which accepts only if both hold.)
+- In every case: **the frozen pipeline is not run on it, no imagery is pulled, and the 9 June 2020 event is not replaced.** Whether to run it is the owner's decision, logged as a separate
+  amendment, because the Accra results for 9 June are already known.
+
+### A20.7 Counting and outputs
+
+The 15th-candidate count is my count of distinct dates screened so far [M, from this protocol]: 2026-06-29 (A10.1); the eight A10 dates (2025-05-18, 2019-04-14, 2019-04-07, 2019-10-28, 2019-05-30,
+2023-03-07, 2016-06-09, 2015-06-03); the selected 2020-06-09 (A11, A12); the three A14 dates (2018-06-18, 2018-06-28, 2019-10-10); and the 2023 UNOSAT product (A17) = 14. A14.4's own table omits
+2026-06-29 and the A17 product; the updated ranking below includes them. Outputs: `results/accra/candidate_2020_10_10_screening.csv`, a short summary
+`results/accra/candidate_2020_10_10_screening_summary.md`, and the updated ranking table in this protocol after the run. Registration: the commit hash and protocol SHA-256 are appended to
+`results/accra_followup_registration.txt`.
+
 ---
 `configs/config.yaml` sha256 history:
 
