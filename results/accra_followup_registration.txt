@@ -68,3 +68,7 @@ evaluation_protocol.md sha256 now: dfba2f86eaa1cdc9e0bc00996f88c421a5ca9824d5d8c
 Amendment 22 (POST-HOC Kotoka ISD precipitation reports), written before the pull; also records the A21 results text:
 a22_commit: 17ae32b26b29a456f34eecbfab85a0ae5912a696
 evaluation_protocol.md sha256 at that commit: 459861b528f5f7313ce6f8620be3c5deb27ed665b8790e5b893571755fc924e5
+
+Amendment 22 results (POST-HOC; protocol text unchanged since the a22_commit above):
+a22_results_commit: bc062d2088484675b918596dd715f156075324f9
+evaluation_protocol.md sha256 now: 459861b528f5f7313ce6f8620be3c5deb27ed665b8790e5b893571755fc924e5
