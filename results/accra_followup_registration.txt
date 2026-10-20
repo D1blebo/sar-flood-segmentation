@@ -47,3 +47,7 @@ evaluation_protocol.md sha256 at that commit: f2d784fbc711d2577cf86d6bc75e869b94
 Revision R5 (A19-R5, Step 4 geocoding rule, sites, interpretation limit), written before Step 4 was run:
 r5_commit: 65d511ddbf1d739a57aedcf12302d5406bb4af0f
 evaluation_protocol.md sha256 at that commit: 0e5de3e8534868dc45002192af6120b809b2208670e5f063abe4fc8c1c69ffa7
+
+Amendment 20 (10 October 2020 candidate screening rules), written before anything was queried:
+a20_commit: 2c2f431edbfde40619d01c307e10b52110961eb6
+evaluation_protocol.md sha256 at that commit: f911700a4414cc0cc5c8322f1e8edd00559a8e43f6014e71980a72291799bd01
