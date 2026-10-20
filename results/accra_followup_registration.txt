@@ -56,3 +56,7 @@ Amendment 20 results (A20.8, recorded after the queries; decision: 15th candidat
 a20_results_commit: 20d9a30030bf53d58720c1b8e77174062586f5ca
 evaluation_protocol.md sha256 at that commit: 28359164f993c55241d33953816507f9938a99342c7adb8901ce94714f6814f6
 (the a20_commit line above records the pre-query rules text)
+
+Amendment 21 (POST-HOC DFO overlap and Kotoka gauge lookups), written before either was run:
+a21_commit: 76418479d8eba88a2a3ee0e22cf6f5c81516868b
+evaluation_protocol.md sha256 at that commit: dfba2f86eaa1cdc9e0bc00996f88c421a5ca9824d5d8c0172b06b8cdc45b58a0
