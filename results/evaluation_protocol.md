@@ -2057,6 +2057,45 @@ The 15th-candidate count is my count of distinct dates screened so far [M, from 
 
 Numbering is by rule (a) offset, not by screening order. A14.4's table omitted 2026-06-29 and the 2023 UNOSAT product; they are included here. **No candidate beats 2020-06-09 on rule (a); it remains the selected event.**
 
+## Amendment 21 (2026-10-20, **POST-HOC** lookups: DFO overlap with every ranked candidate; Kotoka gauge rainfall; written BEFORE either lookup is run; no imagery, no method)
+
+Tags: **[M]** measured by a query or code run; **[A]** assumed or a rule chosen by the owner or me; **[E]** estimate or reasoning. Both lookups are **POST-HOC**: chosen after seeing A20
+(the DFO live table only became reachable during A20) and after the IMERG-versus-reports question of A19-R3/R4. Descriptive only. **No rule is changed and no rule (a) verdict is changed**
+(those depend only on Sentinel-1 acquisition times). Nothing here validates anything.
+
+### A21.1 Lookup 1: DFO live FloodRecords table against every candidate in the A20.8 ranking
+
+- **Source:** the DFO live site's own `FloodRecords` page, `https://floodobservatory.colorado.edu/wiki/FloodRecords` (the link on its main page, as used in A20), one fetch. Table columns as the page
+  gives them: `#`, Glide `#`, Start Date, End Date, Country, Area (km2), Source, Main Cause, Fatalities, Displaced, Severity, Flood impact index. A Ghana row = any row whose Country cell contains "Ghana" (substring, so
+  multi-country rows count). The page states its own coverage (A20.8: 1985-01-01 to 2024-03-07 at the last fetch); the range is re-read at run time.
+- **Candidate dates, fixed now from the A20.8 ranking** (date or window used): 2020-06-09 -> **2020-06-08 to 2020-06-09** (the reported peak window of A12.1, 22:00 UTC 8 June to 06:00 UTC 9 June, as whole days);
+  2025-05-18; 2018-06-18; 2019-04-14; the 2023 UNOSAT candidate FL20231018GHA -> **2023-10-11 to 2023-10-14** (the onset window of A17.2); 2019-04-07; 2019-10-28; 2019-10-10; 2020-10-10; 2018-06-28; 2019-05-30;
+  2026-06-29; 2023-03-07; 2016-06-09; 2015-06-03 (15 in all; single dates are one-day windows).
+- **Overlap rule (primary):** a Ghana row matches a candidate if the closed interval [Start Date, End Date] intersects the candidate's closed window. The **full row** is reported for every match.
+  **Sensitivity, labelled as such:** rows that intersect the window widened by +/- 3 days. No other tolerance.
+- **Out of range:** a candidate date after the table's last date is reported "beyond the table's range", never as "no record" (2025-05-18 and 2026-06-29 are expected to be). A candidate with no match inside the
+  range is reported "no overlapping Ghana row", which is not evidence of no flooding: DFO lists large events, from news sources [E].
+- A match is a news-derived record, not an independent flood map, and does not change any rule (a) or rule (b) verdict.
+
+### A21.2 Lookup 2: Kotoka International Airport station rainfall, 1 to 15 June 2020
+
+- **Station ID:** found from NOAA's station list `https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv` (name containing KOTOKA, country GH); every match is listed with USAF, WBAN, coordinates and period of record,
+  and if there is more than one plausible station I list them and ask, rather than choose. Whether the station lies inside the Odaw AOI is reported (AOI mask, nearest pixel).
+- **Data:** NOAA GSOD, `https://www.ncei.noaa.gov/data/global-summary-of-the-day/access/2020/<USAF><WBAN>.csv` (NOAA's documented layout, built from the station ID found), one attempt; and NOAA ISD,
+  `https://www.ncei.noaa.gov/pub/data/noaa/2020/<USAF>-<WBAN>-2020.gz`, one attempt. GSOD `PRCP` is in inches (x 25.4 = mm); `99.99` means missing; the `PRCP_ATTRIBUTES` flag is reported **verbatim** for
+  every day and read against NOAA's own GSOD documentation, fetched at run time and quoted, not from memory. GSOD's day definition is read from the same documentation and stated. For ISD, precipitation
+  groups `AA1`-`AA4` (accumulation period in hours, depth, condition code, quality code) for **8 to 10 June 2020** are listed at their report times if present; if ISD has none for those days I say so.
+- **Stop rule:** if no June 2020 data exist, or the gauge value for any of **8, 9 or 10 June** is missing (`99.99`) or carries the GSOD flag "no precipitation data reported", I say so and **stop**; flags on other days are
+  shown in the table and are not a stop. Missing days are reported as missing and never filled.
+- **Comparison table (one table):** per day 1 to 15 June, gauge daily total (mm, with its GSOD flag) next to the IMERG V07 daily area mean over the Odaw AOI from A19-R3 (`results/accra_POSTHOC_rainfall.csv`,
+  table `A_daily_UTC`; the half-hourly A19-R4 file for 7-12 June is used only to cross-check that its daily sums equal the A19-R3 values). Different support (a point against an 11 km area mean) is stated beside the table.
+- **No interpretation beyond "which day had the most rain at the gauge".**
+
+### A21.3 Outputs and stop
+
+`scripts/17_accra_POSTHOC_dfo_and_kotoka.py`; `results/accra_POSTHOC_dfo_candidate_overlap.csv`; `results/accra_POSTHOC_kotoka_rainfall.csv`; a short summary
+`results/accra_POSTHOC_dfo_kotoka_summary.md`. Every output is labelled `POST-HOC, UNVALIDATED`. Commit hash and protocol SHA-256 are appended to `results/accra_followup_registration.txt`. After the summary I stop.
+
 ---
 `configs/config.yaml` sha256 history:
 
