@@ -60,3 +60,7 @@ evaluation_protocol.md sha256 at that commit: 28359164f993c55241d33953816507f993
 Amendment 21 (POST-HOC DFO overlap and Kotoka gauge lookups), written before either was run:
 a21_commit: 76418479d8eba88a2a3ee0e22cf6f5c81516868b
 evaluation_protocol.md sha256 at that commit: dfba2f86eaa1cdc9e0bc00996f88c421a5ca9824d5d8c0172b06b8cdc45b58a0
+
+Amendment 21 results (POST-HOC; protocol text unchanged since the a21_commit above, so its sha256 is unchanged):
+a21_results_commit: 51799c8fdbac2fc5f07b932ff9a45f6d1a491955
+evaluation_protocol.md sha256 now: dfba2f86eaa1cdc9e0bc00996f88c421a5ca9824d5d8c0172b06b8cdc45b58a0
