@@ -2023,6 +2023,40 @@ The 15th-candidate count is my count of distinct dates screened so far [M, from 
 `results/accra/candidate_2020_10_10_screening_summary.md`, and the updated ranking table in this protocol after the run. Registration: the commit hash and protocol SHA-256 are appended to
 `results/accra_followup_registration.txt`.
 
+### A20.8 Results (recorded 2026-10-20 after the queries; all [M] unless marked; full detail in `results/accra/candidate_2020_10_10_screening_summary.md`)
+
+- **Peak:** the FloodList article (published 10 October 2020) gives no clock time ("early on 10 October"; "just over 78 mm ... at Kotoka International Airport in 24 hours to 10 October"). A second named source, Citi Newsroom
+  (10 October 2020), says "rains from Friday night and Saturday morning" and also gives no clock time. Assumed peak 2020-10-10T06:00 UTC [A]; bounding window 00:00-12:00 UTC [A].
+- **Rule (a): FAIL.** Earth Engine lists two IW GRD scenes in 2020-10-07 to 2020-10-15 (both relative orbit 147 ascending, AOI fully in the footprint): 2020-10-07 18:18:11 (S1A, -59.70 h from the assumed peak) and
+  2020-10-13 18:17:31 (S1B, **+84.29 h**; +90.29 h from 00:00; +78.29 h from 12:00). FAIL at the assumed peak and at both window ends. No descending scene and no other orbit.
+- **Rule (b): not met by any route.** Sentinel-2 SR_HARMONIZED within +/-3 days: 4 scenes (two tiles x two dates), AOI-clipped cloud 64.93%, 59.91%, 100.00%, 100.00%; 0 below 20%. EMS Rapid Mapping: checked, out of range
+  (earliest activation 2023-03-24; no Ghana record). EMS Risk and Recovery: not checked. DFO live site `FloodRecords` (5,513 records, 1985 to March 2024): **checked, in range** (reachable this time, unlike earlier amendments);
+  29 rows name Ghana, none starts in September to November 2020. DFO HDX mirror: checked, out of range (1985-2010). UNOSAT: not re-queried (A17.6, A18).
+- **Decision (A20.6):** fails rule (a), so **recorded as the 15th candidate; stop.** The frozen pipeline was not run, no imagery was pulled, and the 9 June 2020 event is not replaced. Whether to run any candidate remains the owner's decision, in a separate amendment.
+- **Not done, flagged:** DFO's live table could now be applied to the earlier candidates (earlier labels "not checked" are unchanged); not re-run here.
+
+**Updated ranking, all 15 candidates (A14.4 style; older rows copied from A10, A14, A17, A10.1, not re-measured; the 2020-10-10 row measured now with an assumed peak):**
+
+| # | Candidate | Rule (a) | Best rule (b) evidence found |
+|---|---|---|---|
+| 1 | **2020-06-09 (selected, A12.1)** | **PASS** (+12.3 to +20.3 h) | S2 cloud-free at 16.63% (A12.2) |
+| 2 | 2025-05-18 | FAIL (+49.3 h) | S2 cloud-free at 11.4% (A10) |
+| 3 | 2018-06-18 | FAIL (+54.3 h) | S2 80-100% cloudy over the AOI (A14.3) -- fails |
+| 4 | 2019-04-14 | FAIL (+54.3 h) | S2 23.3% cloud, borderline (A10) |
+| 5 | 2023-10 UNOSAT FL20231018GHA (A17; onset window 11-14 Oct) | FAIL (+66.3 h to +138.3 h) | product exists but its geometry has zero overlap with the Odaw AOI (A17.3) |
+| 6 | 2019-04-07 | FAIL (+70.3 h) | S2 cloud-free at 18.7% (A10) |
+| 7 | 2019-10-28 | FAIL (+75.3 h) | S2 cloud-free at 5.2% (A10) |
+| 8 | 2019-10-10 | FAIL (+84.3 h) | S2 75.8% cloud, fails (A14.3) |
+| 9 | **2020-10-10 (this screening, assumed peak 06:00 UTC [A])** | **FAIL (+84.3 h; +78.3 to +90.3 h across the window)** | **S2 0 of 4 below 20% (lowest 59.9%); EMS Rapid Mapping out of range; DFO live table: no Ghana record starting Sep-Nov 2020** |
+| 10 | 2018-06-28 (Kumasi, per A14.1) | FAIL (+102.3 h) | S2 80-100% cloudy over the AOI (A14.3) -- fails |
+| 11 | 2019-05-30 | FAIL (+102.3 h) | S2 all >80% cloud -- fails (A10) |
+| 12 | 2026-06-29 | FAIL (+108.3 h) | not assessed (rule (a) fails, A10.1) |
+| 13 | 2023-03-07 | FAIL, badly (no pass in window) | S2 23-29% cloud, borderline (A10) |
+| 14 | 2016-06-09 | FAIL, badly (24-day S1 gap) | S2 all >97% cloud -- fails (A10) |
+| 15 | 2015-06-03 | FAIL, badly (no pass in window) | S2 did not exist yet (A10) |
+
+Numbering is by rule (a) offset, not by screening order. A14.4's table omitted 2026-06-29 and the 2023 UNOSAT product; they are included here. **No candidate beats 2020-06-09 on rule (a); it remains the selected event.**
+
 ---
 `configs/config.yaml` sha256 history:
 
