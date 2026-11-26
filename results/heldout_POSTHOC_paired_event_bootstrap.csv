@@ -1,0 +1,16 @@
+label,kind,first,second,point,ci95_lo,ci95_hi
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,b1,,0.3565007589069009,0.24186587410350507,0.48745112183952305
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,b2_vv,,0.14368041548674337,0.09736901127624713,0.21547041703364528
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,b2_vh,,0.17488352603056245,0.12237604260845233,0.24976238313514418
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,m1,,0.1976077645564011,0.13478550704173387,0.2794421594182694
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,m2,,0.1918537897094906,0.13426045840422324,0.26687538135508443
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,b2g_vv,,0.39026151966960043,0.25629823928520507,0.5303876711961621
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,b2g_vh,,0.39078752452478793,0.26004888895805406,0.5286097334362968
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,m1g,,0.3940727202410013,0.2598536558826821,0.5337970196931413
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",method,m2g,,0.3696931348288342,0.24141046449285133,0.505173431845803
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",paired_difference,m2g,b1,0.013192375921933286,-0.023960724480319547,0.06132234116448453
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",paired_difference,m1g,b1,0.0375719613341004,-0.0038462314821685766,0.0886282389254984
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",paired_difference,m2g,m1g,-0.024379585412167115,-0.044591570706075376,-0.010581941460258884
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",paired_difference,m2g,m2,0.1778393451193436,0.09798633738736405,0.2532290867910706
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",paired_difference,m1g,m1,0.1964649556846002,0.10775995866453855,0.28467337865849385
+"POST-HOC (not pre-declared); LOEO, primary criterion, flood-only",paired_difference,b1,m2,0.16464696919741031,0.09282430742984105,0.2385067563249531

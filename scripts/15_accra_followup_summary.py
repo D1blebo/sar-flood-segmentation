@@ -49,12 +49,17 @@ rec = cdb[(cdb.role == "recession")]
 rec_t = md(pd.DataFrame([{"rule": RULE_NAME[r], **{a: f2(rec[(rec.rule == r) & (rec.area == a)].flagged_ha.iloc[0]) for a in AREAS}} for r in RULES]))
 pairs = cdb[(cdb.rule == "cd") & (cdb.area == "full_Odaw_AOI") & (cdb.role != "event_minus_control")][["pair_set", "role", "first_date", "second_date"]]
 med = json.load(open(R / "accra" / "accra_cd_POSTHOC_median_dvv.json"))["full_AOI_domain"]
-med_t = md(pd.DataFrame([{"pair set | role | dates": k.replace("|", " / "), "median dVV (dB)": f"{v['median_dVV_dB']:+.3f}",
+# Keys look like 'headline|event|2020-06-03->2020-06-09'. They are split into three columns because a '|' inside a
+# markdown cell is read as a column break (corrected 2026-11-16: the earlier header had 5 cells over 3-cell rows).
+med_t = md(pd.DataFrame([{"pair set": k.split("|")[0], "role": k.split("|")[1], "dates": k.split("|")[2],
+                          "median dVV (dB)": f"{v['median_dVV_dB']:+.3f}",
                           "mean dVV (dB)": f"{v['mean_dVV_dB']:+.3f}"} for k, v in med.items()]))
 rain = pd.read_csv(R / "accra_POSTHOC_rainfall.csv")
 rb = rain[rain.table == "B_24h_before_pass"]
 rain_b = md(pd.DataFrame([{"pass (UTC)": r.pass_date, "window (UTC)": f"{r.window_start_utc[:16]} to {r.window_end_utc[:16]}",
-                           "slices": r.slices_found, "area-mean (mm)": f"{r.area_mean_mm:.2f}", "max pixel (mm)": f"{r.max_pixel_mm:.2f}",
+                           "slices": r.slices_found, "area-mean (mm)": f"{r.area_mean_mm:.2f}",
+                           # CSV column 'max_pixel_mm' (name kept so the committed CSV is unchanged); see the note under the table
+                           "pixel with centre in AOI (mm)": f"{r.max_pixel_mm:.2f}",
                            "rain / no rain (exactly 0.00 mm rule)": r.rain_or_no_rain} for r in rb.itertuples()]))
 ra = rain[rain.table == "A_daily_UTC"].set_index(rain[rain.table == "A_daily_UTC"].window_start_utc.str[:10])
 d8, d9, d10 = (ra.loc[f"2020-06-{d:02d}", "area_mean_mm"] for d in (8, 9, 10))
@@ -107,9 +112,17 @@ import hashlib, re, subprocess
 reg = (R / "accra_followup_registration.txt").read_text()
 recorded = re.findall(r"sha256 at that commit: ([0-9a-f]{64})", reg)
 cur = hashlib.sha256((R / "evaluation_protocol.md").read_bytes()).hexdigest()
-hash_chain = ("the current `results/evaluation_protocol.md` sha256 " + cur[:16] + "... " +
-              ("equals the last (R5) line of the registration record [M]." if cur == recorded[-1] else
-               "DOES NOT equal the last line of the registration record: the protocol changed after R5 [M]."))
+# Corrected 2026-11-16. The earlier text compared the CURRENT protocol hash with the last recorded hash and called
+# that line "(R5)". Once Amendments 20 to 22 were registered, the last line was no longer R5, so the label was wrong.
+# Now the R5 hash (the state at the Amendment 19 hand-back) is quoted from the record itself, and the current file
+# is compared with the latest hash recorded, whichever amendment that is.
+r5 = re.search(r"r5_commit: [0-9a-f]+\s+evaluation_protocol\.md sha256 at that commit: ([0-9a-f]{64})", reg).group(1)
+latest = re.findall(r"sha256 (?:at that commit|now): ([0-9a-f]{64})", reg)[-1]
+hash_chain = ("at the Amendment 19 hand-back the `results/evaluation_protocol.md` sha256 was " + r5[:16] +
+              "... (the R5 line of the registration record) [M]. Later amendments are registered after it; the "
+              "current file's sha256 " + cur[:16] + "... " +
+              ("equals the latest hash in the registration record [M]." if cur == latest else
+               "DOES NOT equal the latest hash in the registration record: the protocol changed without being registered [M]."))
 
 txt = f"""# Accra follow-up checks: summary (Amendment 19)
 
@@ -204,8 +217,13 @@ IMERG V07, area mean over the Odaw AOI, about 11 km pixels. **24 h before each p
 
 {rain_b}
 
-All five windows are labelled "rain" because the declared rule (exactly 0.00 mm) is met by none; the label does not separate the dates, and I did not change the rule. The `imerg_pixels_in_aoi`
-column of `results/accra_POSTHOC_rainfall.csv` is unreliable (reads 1 while mean and max differ) and is not used.
+All five windows are labelled "rain" because the declared rule (exactly 0.00 mm) is met by none; the label does not separate the dates, and I did not change the rule.
+
+Note on the two rain columns (corrected 2026-11-16; the CSV is unchanged). The column called `max_pixel_mm` in `results/accra_POSTHOC_rainfall.csv` is **not** the wettest pixel
+touching the basin. Earth Engine's `mean` reducer weights every IMERG pixel by the fraction of it that lies inside the AOI, but its `max` and `count` reducers use only pixels whose
+centre lies inside the AOI [A: Earth Engine's documented reducer behaviour, not re-tested here]. `imerg_pixels_in_aoi` reads 1 on every row [M], so exactly one pixel centre is inside the
+AOI and the "max" is simply that one pixel's value. That is why it is smaller than the area mean in three of the five rows above, which a true maximum could never be. Read the column
+as "the one IMERG pixel centred in the AOI"; the area mean is the number used everywhere else.
 
 Daily area-mean (UTC day) is {d8:.2f} mm on 8 June, {d9:.2f} mm on 9 June and {d10:.2f} mm on 10 June [M]. The six largest half-hour slices (mm per 30 min, 7-12 June) are {top6_txt} [M], all on 10 June, 15:30-18:00 UTC,
 about 21 h after the 9 June 18:18 pass. **IMERG neither confirms nor contradicts the 8 to 9 June reports:** an area mean over about 11 km pixels, smeared over a basin about 10 km wide, cannot settle
@@ -255,7 +273,7 @@ no single-buffer result should be read as a property of the named place.
 - **UN-SPIDER dB-versus-linear reading unverified [A].** The page does not say; its script returned HTTP 403. I used the literal reading (dB values divided) and ran no alternative.
 - **Neither pair set gives a clean control** (28 May level shift, section 3), and no offset-corrected CD was run, by the owner's decision.
 - **Sea mask is the WorldCover fallback** because Overpass returned 502; **Korle Lagoon (c) was not computed.**
-- **The rain/no-rain label is uninformative** (all five windows "rain" under the exact-zero rule); the IMERG pixel-count column is unreliable.
+- **The rain/no-rain label is uninformative** (all five windows "rain" under the exact-zero rule); the CSV's `max_pixel_mm` column is the single IMERG pixel centred in the AOI, not a maximum (section 5 note).
 - **The post-hoc median-dVV diagnostic was run before it was logged** in the protocol (logged in A19-R3). It is labelled POST-HOC in file name and header.
 - **Palette validator could not run** (Node 12 too old); the Okabe-Ito orange/blue pair used on the Step 2 map was not checked with the script. The Step 2 map legend overlaps the southern tip of the AOI, and the Step 3 figure has unused white space.
 - **Amendment naming:** revisions are called A19-R2 to R5, not "A19.2", because A19.2 already names the scene table. The protocol file also carried uncommitted Amendments 17 and 18, which were committed with A19.

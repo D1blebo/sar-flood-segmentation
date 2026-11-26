@@ -2,7 +2,8 @@
 
 SLIC superpixels + k-means (and baselines) on Sentinel-1 VV/VH, evaluated on the labelled Sen1Floods11 benchmark and applied,
 frozen, to the Odaw catchment in Accra. **Every Accra output is UNVALIDATED: no ground truth exists for the Accra event.**
-Hard rules, stages and the full protocol are in `CLAUDE.md` and `results/evaluation_protocol.md` (amendments A1 to A19 with revisions).
+Hard rules, stages and the full protocol are in `CLAUDE.md` and `results/evaluation_protocol.md` (amendments A1 to A22; A19 has revisions R2 to R5).
+`CLAUDE.md` is the original brief: it names 29 June 2026 as the Accra event, but that date failed the timing rule and the case study uses 8-9 June 2020 (protocol Amendments 10 to 12).
 
 ## Setup
 
@@ -26,7 +27,8 @@ python scripts/03_tune.py rank > results/tuning/stage1_report.txt
 python scripts/03b_select.py stage2-rank                       # then stage2-extend only after its cost is accepted
 python scripts/03b_select.py stage3-compute
 python scripts/03b_select.py freeze                            # writes results/frozen/**
-python scripts/04_evaluate.py                                  # test evaluation, run once
+python scripts/04_evaluate.py                                  # test evaluation, run once (refuses a second run: lock file)
+python scripts/04b_POSTHOC_paired_event_bootstrap.py           # POST-HOC paired event-level intervals; reads heldout_results.json only
 python scripts/05_accra_pooled_select.py                       # frozen `accra_pooled` configuration used for Accra
 ```
 
@@ -58,17 +60,41 @@ python scripts/15_accra_followup_summary.py                 # -> results/accra_f
 Order: `10a` before `10`; `12a` before `12` and `14`. Scripts 10, 10b, 14 and 15 import helpers from earlier scripts by path.
 Summary of results and everything that did not go to plan: `results/accra_followup_summary.md`.
 
+## Amendments 20 to 22 (lookups only: no imagery pulled, no method run)
+
+```bash
+python scripts/16_accra_candidate_2020_10_10_screening.py   # A20: 10 October 2020 candidate (Earth Engine catalogue) -> results/accra/candidate_2020_10_10_screening.*
+python scripts/17_accra_POSTHOC_dfo_and_kotoka.py           # A21 POST-HOC: DFO records vs the 15 candidates; Kotoka GSOD daily rain
+python scripts/18_accra_POSTHOC_kotoka_isd.py               # A22 POST-HOC: Kotoka ISD precipitation reports, 7-11 June 2020
+python scripts/19_thesis_figures.py                      # thesis Figures 1 and 3 to 8 -> results/figures/thesis/ (reads stored results; re-scores nothing; Figure 2, the world map, is not scripted)
+```
+
+These three query outside services (Earth Engine, the DFO website, NOAA), so their outputs depend on those services still answering as they did on 2026-10-20.
+
 ## Tests and integrity checks
 
 ```bash
-python -m pytest -q                                                       # 148 passed at the time of writing
+python -m pytest -q                                                       # 153 passed on 2026-11-16 (148 before the paired-bootstrap tests were added)
 grep -E '^[0-9a-f]{64}  ' results/accra_followup_registration.txt | sha256sum -c -
 ```
 
 The second command compares `configs/config.yaml`, `results/tuning/heldout_lock.json` and every `results/frozen/**/*.yaml` with the
 hashes recorded before the Amendment 19 checks ran (27 files; all matched at hand-back).
 
-## What was and was not re-run when this README was written (2026-10-19)
+## Reproducibility check, 2026-11-16
+
+Scripts 07, 08, 09, 10, 10b, 12 and 14 (the ones that need only the files already in `data/accra/`) were re-run. Every tracked output they write,
+CSV, JSON and PNG, came out byte-identical to the committed copy (`git status` showed no change). Script 15 was re-run after three corrections to
+its text (a malformed table, a mislabelled rain column and a mislabelled hash line); no number in it changed. Scripts that query Earth Engine or
+other services (06, 10a, 11, 12a, 13, 16, 17, 18) and the benchmark tuning scripts (02 to 05) were **not** re-run. `04_evaluate.py` was not re-run
+and must not be: held-out scoring runs once.
+
+Later on 2026-11-16, `scripts/19_thesis_figures.py` was added and run. It reproduced, from the frozen configurations, the stored
+Accra M2g areas (8.86 ha and 1.88 ha) and the two example-chip figures quoted in the thesis. It has no unit tests of its own. The
+remaining scripts (02, 02b, 03, 03b, 05, 13, 16, 17, 18 and the `verify_*` scripts) were read line by line on the same day; no
+error was found in them. `scripts/smoke_stage2.py` and the test files were not read line by line.
+
+## What was and was not re-run when this README was first written (2026-10-19)
 
 Re-run in that session: scripts 08, 09, 10a, 10, 10b, 11, 12a, 12, 13, 14, 15 and the test suite. Scripts 02 to 07 are listed from their
 docstrings and were not re-run then (06 and 07 were only imported). The new scripts 08 to 14 have no unit tests of their own.

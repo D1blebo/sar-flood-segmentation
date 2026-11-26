@@ -120,12 +120,12 @@ recession 9 to 15 June. Sensitivity (label "same-satellite sensitivity"): event 
 **POST-HOC median dVV per pair, full-AOI domain (not pre-declared) [M].**
 
 | pair set | role | dates | median dVV (dB) | mean dVV (dB) |
-|---|---|---|
-| headline / event / 2020-06-03->2020-06-09 | +0.346 | +0.355 |
-| headline / control / 2020-05-28->2020-06-03 | -1.464 | -1.562 |
-| headline / recession / 2020-06-09->2020-06-15 | -0.338 | -0.353 |
-| same-satellite sensitivity / event / 2020-05-28->2020-06-09 | -1.096 | -1.207 |
-| same-satellite sensitivity / control / 2020-05-22->2020-06-03 | +0.691 | +0.729 |
+|---|---|---|---|---|
+| headline | event | 2020-06-03->2020-06-09 | +0.346 | +0.355 |
+| headline | control | 2020-05-28->2020-06-03 | -1.464 | -1.562 |
+| headline | recession | 2020-06-09->2020-06-15 | -0.338 | -0.353 |
+| same-satellite sensitivity | event | 2020-05-28->2020-06-09 | -1.096 | -1.207 |
+| same-satellite sensitivity | control | 2020-05-22->2020-06-03 | +0.691 | +0.729 |
 
 **What this says.** In the headline pairs the event pair does **not** stand out from the control pair for decrease: CD event minus control is
 -5,344 ha in the full AOI (event 994 ha,
@@ -159,7 +159,7 @@ coastline query failed [A, A19-R2.4]; WorldCover class 80 also covers lagoons an
 
 IMERG V07, area mean over the Odaw AOI, about 11 km pixels. **24 h before each pass [M]:**
 
-| pass (UTC) | window (UTC) | slices | area-mean (mm) | max pixel (mm) | rain / no rain (exactly 0.00 mm rule) |
+| pass (UTC) | window (UTC) | slices | area-mean (mm) | pixel with centre in AOI (mm) | rain / no rain (exactly 0.00 mm rule) |
 |---|---|---|---|---|---|
 | 2020-05-22 18:17:24 UTC | 2020-05-21T18:00 to 2020-05-22T18:00 | 48 | 0.16 | 0.14 | rain |
 | 2020-05-28 18:18:04 UTC | 2020-05-27T18:00 to 2020-05-28T18:00 | 48 | 20.76 | 24.34 | rain |
@@ -167,8 +167,13 @@ IMERG V07, area mean over the Odaw AOI, about 11 km pixels. **24 h before each p
 | 2020-06-09 18:18:05 UTC | 2020-06-08T18:00 to 2020-06-09T18:00 | 48 | 4.13 | 3.39 | rain |
 | 2020-06-15 18:17:25 UTC | 2020-06-14T18:00 to 2020-06-15T18:00 | 48 | 0.88 | 0.35 | rain |
 
-All five windows are labelled "rain" because the declared rule (exactly 0.00 mm) is met by none; the label does not separate the dates, and I did not change the rule. The `imerg_pixels_in_aoi`
-column of `results/accra_POSTHOC_rainfall.csv` is unreliable (reads 1 while mean and max differ) and is not used.
+All five windows are labelled "rain" because the declared rule (exactly 0.00 mm) is met by none; the label does not separate the dates, and I did not change the rule.
+
+Note on the two rain columns (corrected 2026-11-16; the CSV is unchanged). The column called `max_pixel_mm` in `results/accra_POSTHOC_rainfall.csv` is **not** the wettest pixel
+touching the basin. Earth Engine's `mean` reducer weights every IMERG pixel by the fraction of it that lies inside the AOI, but its `max` and `count` reducers use only pixels whose
+centre lies inside the AOI [A: Earth Engine's documented reducer behaviour, not re-tested here]. `imerg_pixels_in_aoi` reads 1 on every row [M], so exactly one pixel centre is inside the
+AOI and the "max" is simply that one pixel's value. That is why it is smaller than the area mean in three of the five rows above, which a true maximum could never be. Read the column
+as "the one IMERG pixel centred in the AOI"; the area mean is the number used everywhere else.
 
 Daily area-mean (UTC day) is 0.11 mm on 8 June, 4.47 mm on 9 June and 76.84 mm on 10 June [M]. The six largest half-hour slices (mm per 30 min, 7-12 June) are 06-10 16:30=9.33, 06-10 15:30=9.22, 06-10 16:00=8.80, 06-10 17:00=6.97, 06-10 17:30=6.59, 06-10 18:00=6.42 [M], all on 10 June, 15:30-18:00 UTC,
 about 21 h after the 9 June 18:18 pass. **IMERG neither confirms nor contradicts the 8 to 9 June reports:** an area mean over about 11 km pixels, smeared over a basin about 10 km wide, cannot settle
@@ -255,7 +260,7 @@ no single-buffer result should be read as a property of the named place.
 - **UN-SPIDER dB-versus-linear reading unverified [A].** The page does not say; its script returned HTTP 403. I used the literal reading (dB values divided) and ran no alternative.
 - **Neither pair set gives a clean control** (28 May level shift, section 3), and no offset-corrected CD was run, by the owner's decision.
 - **Sea mask is the WorldCover fallback** because Overpass returned 502; **Korle Lagoon (c) was not computed.**
-- **The rain/no-rain label is uninformative** (all five windows "rain" under the exact-zero rule); the IMERG pixel-count column is unreliable.
+- **The rain/no-rain label is uninformative** (all five windows "rain" under the exact-zero rule); the CSV's `max_pixel_mm` column is the single IMERG pixel centred in the AOI, not a maximum (section 5 note).
 - **The post-hoc median-dVV diagnostic was run before it was logged** in the protocol (logged in A19-R3). It is labelled POST-HOC in file name and header.
 - **Palette validator could not run** (Node 12 too old); the Okabe-Ito orange/blue pair used on the Step 2 map was not checked with the script. The Step 2 map legend overlaps the southern tip of the AOI, and the Step 3 figure has unused white space.
 - **Amendment naming:** revisions are called A19-R2 to R5, not "A19.2", because A19.2 already names the scene table. The protocol file also carried uncommitted Amendments 17 and 18, which were committed with A19.
@@ -269,7 +274,7 @@ no single-buffer result should be read as a property of the named place.
 - Test suite: `PYTHONPATH=. python -m pytest -q` gave **148 passed** (11 s).
 - Frozen files unchanged: `sha256sum -c` of the 27 pre-run hashes in `results/accra_followup_registration.txt` (`configs/config.yaml`, `results/tuning/heldout_lock.json` and the 25 `results/frozen/**/*.yaml`)
   gave **27 OK, 0 failed**; `git status` shows nothing modified under `results/frozen`, `results/tuning` or `configs`.
-- Protocol hash chain: the current `results/evaluation_protocol.md` sha256 0e5de3e8534868dc... equals the last (R5) line of the registration record [M].
+- Protocol hash chain: at the Amendment 19 hand-back the `results/evaluation_protocol.md` sha256 was 0e5de3e8534868dc... (the R5 line of the registration record) [M]. Later amendments are registered after it; the current file's sha256 459861b528f5f731... equals the latest hash in the registration record [M].
 - `data/` is git-ignored, so the WorldCover raster is not in git; its SHA-256 is in `results/accra_followup_data_hashes.txt`.
 
 ## 9. Output index

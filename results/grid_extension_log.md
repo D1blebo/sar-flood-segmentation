@@ -75,3 +75,25 @@ Checked first that no other triple was at a reached edge, so nothing else could 
   `clip=medium,median=7`, SLIC 2000/0.00008, `vv_vh`, k=4) -- every other (criterion, tuning set,
   variant) is byte-identical.
 
+
+
+## 2026-11-16, correction to the 2026-09-22 entry above (audit; no code re-run, no configuration changed)
+
+The 2026-09-22 entry says the compactness optimum "remains unresolved for `loeo:India` and
+`loeo:Somalia` at 0.0004 from the earlier cap". That sentence contradicts the entry's own result and the
+selection file, and is corrected here (the original text is left in place above as the record of what
+was written at the time).
+
+- **Measured, from `results/tuning/stage2_selection.json` (primary criterion, variant `m2`):** for
+  `loeo:India`, `loeo:Somalia` and `loeo:Spain` the compactness grid searched is
+  `[0.00008, 0.0004, 0.002, 0.01, 0.05, 0.2, 1.0]` (`steps_c` = 3) and the winner is `n1000_c0.0004`.
+  The value below it, 0.00008, was computed in round `m2x3` and scored lower in all three (as the entry
+  above itself reports). So 0.0004 is an interior value for these three sets, not an edge.
+- **Only `loeo:Pakistan`** (winner `n2000_c8e-05`) still sits on the lowest compactness value tried.
+- **Corrected count:** the primary-M2 compactness optimum is unresolved for **1 of 12** tuning sets
+  (`loeo:Pakistan`), not 3 of 12. `RESULTS.md` section 1 was corrected to match on the same date.
+- Unchanged: this concerns unguarded primary M2 only. Primary M2g (the headline method) and both
+  sensitivity variants never had a winner at a compactness edge. The frozen configurations, the held-out
+  lock and every held-out number are untouched.
+- Caveat (an estimate, not a measurement): "interior" means one step lower was tried and lost. A
+  finer search around 0.0004 was never run, so this does not show 0.0004 is the true optimum.

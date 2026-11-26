@@ -24,7 +24,16 @@ PASSES = {"2020-05-22": "18:17:24", "2020-05-28": "18:18:04", "2020-06-03": "18:
 
 
 def accumulate(aoi, start, end):
-    """Area-mean and max-pixel accumulation (mm) over [start, end), plus slices found and IMERG pixels touched."""
+    """
+    Area-mean accumulation (mm) over [start, end), plus slices found.
+
+    CAUTION about 'max' and 'npx' (note added 2026-11-16; the code and its committed output are unchanged).
+    Earth Engine's mean reducer is WEIGHTED: every IMERG pixel counts by the fraction of it inside the AOI.
+    Its max and count reducers are UNWEIGHTED: they use only pixels whose centre lies inside the AOI (Earth
+    Engine's documented behaviour; assumed here, not re-tested). The committed CSV has npx = 1 on every row,
+    so 'max' is just the value of the one IMERG pixel centred in the AOI, not the wettest pixel touching the
+    basin. That is why 'max' is smaller than 'mean' on some rows. Use the mean; do not read 'max' as a maximum.
+    """
     col = (ee.ImageCollection("NASA/GPM_L3/IMERG_V07").filterDate(start.isoformat(), end.isoformat())
            .select("precipitation"))
     total = col.map(lambda i: i.multiply(0.5)).sum()  # mm/hr x 0.5 h per slice

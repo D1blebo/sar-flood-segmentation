@@ -1,0 +1,29 @@
+{
+ "versions": {
+  "numpy": "2.5.3",
+  "scipy": "1.18.1",
+  "scikit-image": "0.26.0",
+  "scikit-learn": "1.9.1",
+  "matplotlib": "3.11.2",
+  "pyyaml": "6.0.3"
+ },
+ "chips": {
+  "Mekong_16233": {
+   "n_superpixels": 2201,
+   "before_guard_pixels": 59028,
+   "flagged_pixels": 59028,
+   "tp": 58202,
+   "fp": 799,
+   "fn": 3982
+  },
+  "Paraguay_284928": {
+   "n_superpixels": 160,
+   "before_guard_pixels": 177788,
+   "flagged_pixels": 0,
+   "unguarded_m2_pixels": 90443,
+   "tp": 0,
+   "fp": 0,
+   "fn": 0
+  }
+ }
+}

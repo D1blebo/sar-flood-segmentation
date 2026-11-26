@@ -5,5 +5,9 @@ __pycache__/
 .pytest_cache/
 .claude/
 
+# thesis and presentation: kept out of the public repository (owner's request, 2026-11-26)
+Thesis_*.docx
+*.pptx
+
 # explicit entry (already covered by data/ above); SHA-256 recorded in results/accra_followup_data_hashes.txt
 data/accra/worldcover_v100.tif

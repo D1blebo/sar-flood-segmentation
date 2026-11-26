@@ -206,22 +206,31 @@ my per-event counts below for all 11 events. (`train_chip` is not interpreted he
 sum to 4,384 against the 4,385 weakly-labelled chips in the docs, an unexplained difference of
 one.)
 
-| Event (chip prefix) | Train | Valid | Test | Total | S1 date (metadata) |
-|---|---|---|---|---|---|
-| Bolivia | – | – | – | 15 (held out) | 2018-02-15 |
-| Ghana | 31 | 11 | 11 | 53 | 2018-09-18 |
-| India | 40 | 14 | 14 | 68 | 2016-08-12 |
-| Mekong | 18 | 6 | 6 | 30 | 2018-08-05 |
-| Nigeria | 10 | 4 | 4 | 18 | 2018-09-21 |
-| Pakistan | 16 | 6 | 6 | 28 | 2017-06-28 |
-| Paraguay | 39 | 14 | 14 | 67 | 2018-10-31 |
-| Somalia | 15 | 5 | 6 | 26 | 2018-05-07 |
-| Spain | 18 | 6 | 6 | 30 | 2019-09-17 |
-| Sri-Lanka | 24 | 9 | 9 | 42 | 2017-05-30 |
-| USA | 41 | 14 | 14 | 69 | 2019-05-22 |
-| **Total** | **252** | **89** | **90** | **446** | |
+| Event (chip prefix) | Train | Valid | Test | Total | S1 date (metadata) | Centroid of all chips (measured) |
+|---|---|---|---|---|---|---|
+| Bolivia | – | – | – | 15 (held out) | 2018-02-15 | 13.8181 S, 65.0183 W |
+| Ghana | 31 | 11 | 11 | 53 | 2018-09-18 | 9.8335 N, 1.1694 W |
+| India | 40 | 14 | 14 | 68 | 2016-08-12 | 26.4660 N, 93.1522 E |
+| Mekong | 18 | 6 | 6 | 30 | 2018-08-05 | 12.4842 N, 105.8837 E |
+| Nigeria | 10 | 4 | 4 | 18 | 2018-09-21 | 9.0965 N, 5.7697 E |
+| Pakistan | 16 | 6 | 6 | 28 | 2017-06-28 | 31.3283 N, 71.1786 E |
+| Paraguay | 39 | 14 | 14 | 67 | 2018-10-31 | 24.2377 S, 57.0758 W |
+| Somalia | 15 | 5 | 6 | 26 | 2018-05-07 | 3.6176 N, 45.3923 E |
+| Spain | 18 | 6 | 6 | 30 | 2019-09-17 | 38.1503 N, 0.7712 W |
+| Sri-Lanka | 24 | 9 | 9 | 42 | 2017-05-30 | 6.9363 N, 81.0432 E |
+| USA | 41 | 14 | 14 | 69 | 2019-05-22 | 39.0997 N, 95.0841 W |
+| **Total** | **252** | **89** | **90** | **446** | | |
 
-(Counts are chips listed in the split files, before the zero-valid-pixel exclusion.)
+(Counts are chips listed in the split files, before the zero-valid-pixel exclusion.) Centroid = mean of
+each chip's own GeoTIFF-bounds centre (EPSG:4326, read directly from the 440 valid `S1Hand.tif` files
+on disk, not from the metadata polygon, which is a much larger search-area box per event -- e.g. the
+metadata's own Ghana polygon spans 6.3-11.9 degrees N, well beyond the 8.279-10.809 degree N band the
+actual labelled chips occupy, below). Same method already used to confirm Mekong/Cambodia above;
+applied here to all 11 events for the first time (2026-10-03). The official metadata GeoJSON
+(`Sen1Floods11_Metadata.geojson`, fetched from `github.com/cloudtostreet/Sen1Floods11`, not previously
+downloaded into this project) is the source for the S1 date and event-polygon columns elsewhere in
+this report; it was re-checked against this centroid computation and agrees on which 12 named events
+exist (11 plus Colombia, already noted above) and on the Mekong/Cambodia correspondence.
 
 **Yes, Ghana is included (53 chips), but not near Accra:**
 
