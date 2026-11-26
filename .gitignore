@@ -5,6 +5,9 @@ __pycache__/
 .pytest_cache/
 .claude/
 
+# exception: the two demo chips the Jupyter/Colab notebook needs (data/ above would hide them)
+!demo/sar_flood_demo/data/
+
 # thesis and presentation: kept out of the public repository (owner's request, 2026-11-26)
 Thesis_*.docx
 *.pptx
