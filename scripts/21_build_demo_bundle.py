@@ -262,14 +262,15 @@ else:
 
 
 def notebook_json():
-    def cell(kind, src):
+    def cell(i, kind, src):
         lines = src.splitlines(keepends=True)
-        c = {"cell_type": kind, "metadata": {}, "source": lines}
+        # nbformat 4.5 requires a unique id per cell; newer Jupyter versions will refuse notebooks without one
+        c = {"id": f"cell-{i:02d}", "cell_type": kind, "metadata": {}, "source": lines}
         if kind == "code":
             c.update(execution_count=None, outputs=[])
         return c
 
-    return {"cells": [cell(k, s) for k, s in CELLS], "nbformat": 4, "nbformat_minor": 5,
+    return {"cells": [cell(i, k, s) for i, (k, s) in enumerate(CELLS)], "nbformat": 4, "nbformat_minor": 5,
             "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
                          "language_info": {"name": "python"}}}
 
